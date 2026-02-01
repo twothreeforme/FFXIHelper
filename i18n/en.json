@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"Shocks"
+		]
+	},
+	"ffxipackagehelper": "FFXIPackageHelper",
+	"ffxipackagehelper-desc": "Series of tools to support FFXI related queries and special pages",
+	"ffxipackagehelper-title": "FFXIPackageHelper",
+	"ffxipackagehelper-summary": "Supports special pages LSBSearch, WeatherForecast, DiggersWeatherForecast, and Equipsets",
+	"group-ffxipackagehelperrole": "",
+	"group-ffxipackagehelperrole-member": "",
+	"grouppage-ffxipackagehelperrole": "",
+	"action-ffxipackagehelper": "",
+	"right-ffxipackagehelper": "",
+
+	"LSBSearch": "LSBSearch",
+	"weatherforecast": "Weather Forecast",
+	"diggingweatherforecast": "Digging: Weather Forecast",
+	"diggingweatherforecast_retail": "Digging: Weather Forecast for Retail",
+	"equipsets": "Equipsets"
+
+}
