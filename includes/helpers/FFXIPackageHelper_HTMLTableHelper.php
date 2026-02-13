@@ -55,7 +55,7 @@ class FFXIPackageHelper_HTMLTableHelper {
 		 * Initial HTML for the table
 		 */
 		$html .= "<br>
-		<div ><i> All data and probabilities are based on AirSkyBoat. All earth times are based on your local timezone.</i></div>
+		<div ><i> All data and probabilities are based on LandSandBoat(base). All earth times are based on your local timezone.</i></div>
 		<div class=\"FFXIPH_weatherforecast\">
 		<table id=\"special-weatherforecast-table\" class=\"horizon-table general-table special-weatherforecast-table  sortable\">
             <tr><th>Zone Name</th>
@@ -79,8 +79,7 @@ class FFXIPackageHelper_HTMLTableHelper {
 
     public static function tableHeader_DropRates($showTH){
 		$html = "<br>
-		<div ><i><b>Disclosure:</b>  All data here is from AirSkyBoat, with minor additions/edits made based on direct feedback from Horizon Devs.<br>Any Horizon specific changes made to the table will be marked with the Template:Changes->{{Changes}} tag.<br><b>**</b> are nuanced drop rates. Please refer to that specific page for more details on how drop rates are calculated.
-		<strike>Item Name</strike><sup>(OOE)</sup> are Out of Era items, and are left in the table because it is still unknown how removing these has effected Group drop rates (mainly from BCNMs).
+		<div ><i><strike>Item Name</strike><sup>(OOE)</sup> are Out of Era items, and are left in the table because it is still unknown how removing these has effected Group drop rates (mainly from BCNMs).
 		<br><br>
 		</i> </div>
 		<div style=\"max-height: 900px; overflow: auto; display: inline-block; width: 100%;\">
@@ -286,7 +285,7 @@ class FFXIPackageHelper_HTMLTableHelper {
 	}
 
 	public static function tableHeader_MobDropRates($classname, $showTH = null){
-		// 	<div ><i><b>Disclosure:</b>  All data here is from AirSkyBoat, with minor additions/edits made based on direct feedback from Horizon Devs.<br>Any Horizon specific changes made to the table will be marked with the Template:Changes->{{Changes}} tag.<br><b>**</b> are nuanced drop rates. Please refer to that specific page for more details on how drop rates are calculated.
+		// 	<div ><i><b>Disclosure:</b>  All data here is from LandSandBoat(base), with minor additions/edits made based on direct feedback from Horizon Devs.<br>Any Horizon specific changes made to the table will be marked with the Template:Changes->{{Changes}} tag.<br><b>**</b> are nuanced drop rates. Please refer to that specific page for more details on how drop rates are calculated.
 		// <strike>Item Name</strike><sup>(OOE)</sup> are Out of Era items, and are left in the table because it is still unknown how removing these has effected Group drop rates (mainly from BCNMs).
 		// <br><br> <b>Mob Detection (true-sight/hearing are not added yet):</b> <b>S</b> Detects by Sight, <b>H</b> Detects by Sound, <b>HP</b> Detects Low HP, <b>M</b> Detects Magic, <b>Sc</b> Follows by Scent, <b>T(S)</b> True-sight, <b>T(H)</b> True-hearing, <b>JA</b> Detects job abilities, <b>WS</b> Detects weaponskills
 		// </i> </div>
@@ -490,7 +489,7 @@ class FFXIPackageHelper_HTMLTableHelper {
 	}
 
 	public static function table_RecipesQuery($array){
-		$html = "<br><div ><i><b>Disclosure:</b>  All data here is from AirSkyBoat, with minor additions/edits made based on direct feedback from Horizon Devs.<br>Any Horizon specific changes made to the table will be marked with the Template:Changes->{{Changes}} tag.</i></div>
+		$html = "<br><div ><i><b>Disclosure:</b>  All data here is from LandSandBoat(base), with minor additions/edits made based on direct feedback from Horizon Devs.<br>Any Horizon specific changes made to the table will be marked with the Template:Changes->{{Changes}} tag.</i></div>
 		<div style=\"max-height: 900px; overflow: auto; display: inline-block; width: 100%;\">
 		<table id=\"LSBSearch_recipestable\" class=\"horizon-table general-table sortable\">
 			<tr><th>Skill Lvl</th>
@@ -674,7 +673,7 @@ class FFXIPackageHelper_HTMLTableHelper {
 	}
 
 	public static function table_EquipmentQuery($array){
-		$html = "<br><div ><i><b>Disclosure:</b>  All data here is from AirSkyBoat, with minor additions/edits made based on direct feedback from Horizon Devs.<br>Any Horizon specific changes made to the table will be marked with the Template:Changes->{{Changes}} tag.</i></div>
+		$html = "<br><div ><i><b>Disclosure:</b>  All data here is from LandSandBoat(base), with minor additions/edits made based on direct feedback from Horizon Devs.<br>Any Horizon specific changes made to the table will be marked with the Template:Changes->{{Changes}} tag.</i></div>
 		<div style=\"max-height: 900px; overflow: auto; display: inline-block; width: 100%;\">
 		<table id=\"LSBSearch_equipmenttable\" class=\"horizon-table general-table sortable\">
 			<tr><th>Item Name</th>

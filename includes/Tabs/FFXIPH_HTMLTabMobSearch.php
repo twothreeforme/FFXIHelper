@@ -6,8 +6,7 @@ class FFXIPH_HTMLTabMobSearch {
 
     public function searchForm(){
         $html = "<div id=\"FFXIPackageHelper_tabs_combatsim_searchForm\">" .
-                "<span><i><b>This page not meant for NMs. Site very much under construction.<br>Data displayed is based on ASB/LSB code. Please reach out to us on discord if you feel the numbers
-                are incorrect so we can work to get them more accurate. </b></i></span>" .
+                "<span><i><b>This page not meant for NMs. Site very much under construction.</b></i></span>" .
                 "<table><tbody>
                     <tr><td>
                         <table><tbody>

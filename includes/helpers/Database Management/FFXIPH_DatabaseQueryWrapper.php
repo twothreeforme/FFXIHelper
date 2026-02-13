@@ -435,10 +435,10 @@ class DatabaseQueryWrapper {
 			array_push($query, "mob_pools.mobType != 18");
 		}
 		if ( $levelRangeMIN > 0){
-			array_push($query, "mob_groups.minLevel >= '$levelRangeMIN'");
+			array_push($query, "mob_groups_levels.minLevel >= '$levelRangeMIN'");
 		}
 		if ( $levelRangeMAX > 0){
-			array_push($query, "mob_groups.maxLevel <= '$levelRangeMAX'");
+			array_push($query, "mob_groups_levels.maxLevel <= '$levelRangeMAX'");
 		}
         if ( $includeSteal == 1 ){
 			array_push($query, "mob_droplist.dropType <= 2"); // steal = 2
@@ -454,8 +454,8 @@ class DatabaseQueryWrapper {
 						'mob_droplist.groupRate',
 						'zone_settings.name AS zoneName',
 						'mob_groups.name AS mobName',
-						'mob_groups.minLevel AS mobMinLevel',
-						'mob_groups.maxLevel AS mobMaxLevel',
+						'mob_groups_levels.minLevel AS mobMinLevel',
+						'mob_groups_levels.maxLevel AS mobMaxLevel',
                         'mob_groups.dropid',
 						'item_basic.name AS itemName', 
 						//'item_basic.sortname AS itemSortName',
@@ -475,6 +475,7 @@ class DatabaseQueryWrapper {
 			->join( 'zone_settings', null, 'zone_settings.zoneid=mob_groups.zoneid')
 			->join( 'mob_pools', null, 'mob_pools.poolid=mob_groups.poolid')
             ->join( 'mob_family_system', null, 'mob_family_system.familyID=mob_pools.familyid')
+            ->join( 'mob_groups_levels', null, 'mob_groups.dropid=mob_groups_levels.dropid' )
 			->orderBy( 'groupId', 'ASC' )
 			->where( $query	)
 			->limit( $queryLimit)
@@ -816,7 +817,7 @@ class DatabaseQueryWrapper {
             $itemArray[$item->itemid] = $item->name;
         }
 
-        $query = [ "( synth_recipes.ContentTag = 'COP' OR synth_recipes.ContentTag IS NULL )" ];
+        $query = [ "( synth_recipes.content_tag = 'COP' OR synth_recipes.content_tag IS NULL )" ];
 
         if ( isset($recipename) && $recipename != "" ){
             $recipeIDs = $this->getItemIDsFromDB($recipename, $dbr);
