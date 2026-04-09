@@ -1,9 +1,9 @@
------------------------------------
+-- ---------------------------------
 -- Mob drop list item removal module for Abyssea era
------------------------------------
+-- ---------------------------------
 -- Source: https://www.bg-wiki.com/ffxi/Version_Update_(12/06/2010)
 -- Source: https://www.bg-wiki.com/ffxi/Version_Update_(07/23/2012)
------------------------------------
+-- ---------------------------------
 
 -- Define rate variables
 SET @COMMON = 150;   -- Common, 15%

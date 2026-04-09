@@ -1,9 +1,9 @@
------------------------------------
+-- ---------------------------------
 -- Mob drop list item removal module
 -- This module removes or dds items for the ToAU era
------------------------------------
+-- ---------------------------------
 -- Source: http://www.playonline.com/pcd/update/ff11us/20070308c2bbd1/detail.html
------------------------------------
+-- ---------------------------------
 
 -- Define rate variables
 SET @COMMON = 150;   -- Common, 15%

@@ -1,9 +1,9 @@
-------------------------------------
+-- ----------------------------------
 -- Pre RMT Drops
 -- This module reverts RMT changes from a ToAU era Patch in 2007
-------------------------------------
+-- ----------------------------------
 -- Source : http://www.playonline.com/pcd/update/ff11us/20070308c2bbd1/detail.html
-------------------------------------
+-- ----------------------------------
 
 DROP PROCEDURE IF EXISTS replace_drop;
 DELIMITER $$
