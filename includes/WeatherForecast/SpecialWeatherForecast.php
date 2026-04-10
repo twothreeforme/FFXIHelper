@@ -28,7 +28,7 @@ class SpecialWeatherForecast extends SpecialPage {
         $request = $this->getRequest();
 		$output = $this->getOutput();
 		//$output->addModules(['inputHandler']);
-		$output->setPageTitle( $this->msg( 'weatherforecast' ) );
+		//$output->setPageTitle( $this->msg( 'weatherforecast' ) );
 
         //$host = $_SERVER['HTTP_HOST'];
         //print_r( $host . "/Special:DiggingWeatherForecast");

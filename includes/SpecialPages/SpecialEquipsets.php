@@ -20,7 +20,7 @@ class SpecialEquipsets extends SpecialPage {
 	function execute( $par ) {
 		$this->setHeaders();
 		$output = $this->getOutput();
-		$output->setPageTitle( $this->msg( 'equipsets' ) );
+		//$output->setPageTitle( $this->msg( 'equipsets' ) );
 		$request = $this->getRequest();
 
 		/**

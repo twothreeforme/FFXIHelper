@@ -6,7 +6,7 @@ class SpecialDiggingWeatherForecast_Retail extends SpecialPage {
         parent::__construct( 'DiggingWeatherForecast_Retail' );
     }
 
-    static function onBeforePageDisplay( $out, $skin ) : void  { 
+    static function onBeforePageDisplay( $out, $skin ) : void  {
        // if ( $out->getTitle() == "Special:DiggingWeatherForecast_Retail" )  $out->addModules(['inputHandler']);
     }
 
@@ -14,7 +14,7 @@ class SpecialDiggingWeatherForecast_Retail extends SpecialPage {
 
         $request = $this->getRequest();
 		$output = $this->getOutput();
-		$output->setPageTitle( $this->msg( 'diggingweatherforecast' ) );
+		//$output->setPageTitle( $this->msg( 'diggingweatherforecast' ) );
         $this->setHeaders();
 
         $time = new VanaTime();

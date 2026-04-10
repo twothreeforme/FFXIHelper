@@ -20,7 +20,7 @@ class SpecialLSBSearch extends SpecialPage {
 		$this->setHeaders();
 		$request = $this->getRequest();
 		$output = $this->getOutput();
-		$output->setPageTitle( "LSBSearch");
+		//$output->setPageTitle( "LSBSearch");
 		// $output->setPageTitle( $this->msg( 'LSBSearch' )->text() );
 
 		// # Get request data
@@ -98,7 +98,7 @@ class SpecialLSBSearch extends SpecialPage {
 			Please reach out to the Wiki team on <a href=\"https://discord.com/channels/1078846428736147507/1159433939136553030\">Discord HERE</a> if you feel the data is incorrect or have suggestions. </b></i></span>";
 
         $html .= "<div id=\"initialHide\" style=\"display: none;\">" .
-					$tabs->header() . 
+					$tabs->header() .
 					$tabs->tab1($tabDropRates->searchForm()) .
 					$tabs->tab2($tabRecipes->searchForm()) .
 					$tabs->tab3($tabEquipment->searchForm()) .
