@@ -339,7 +339,7 @@ class DatabaseQueryWrapper {
             else $temp = ParserHelper::zoneERA_forList($row->name);
 			if ( !isset($temp) || ExclusionsHelper::zoneIsTown($temp)) { continue; }
 
-            $dayCount = 30;
+            $dayCount = 60;
             //check if on the diggers special page
             //should only include the weather for the zones listed in ExclusionsHelper::$diggingRelevantZones
             if ( $forDiggersPage == true) {
