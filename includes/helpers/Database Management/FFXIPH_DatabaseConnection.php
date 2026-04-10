@@ -19,7 +19,7 @@ class DatabaseConnection {
         // wfDebugLog( 'LSBSearch', get_called_class() . ":dbServer: " .  $this->dbServer . " : " . $wgDBserver );
     }
 
-    private function getDatabaseFactory(mixed $database = null): DatabaseMysqli{
+    private function getDatabaseFactory(mixed $database = null): mixed{
         return ( new DatabaseFactory() )->create( 'mysql', [
                 'host' => $this->dbServer,
                 'user' => $this->dbUsername,
