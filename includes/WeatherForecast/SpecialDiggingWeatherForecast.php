@@ -15,7 +15,7 @@ class SpecialDiggingWeatherForecast extends SpecialPage {
 
         $request = $this->getRequest();
 		$output = $this->getOutput();
-		$output->setPageTitle( $this->msg( 'diggingweatherforecast' ) );
+		//$output->setPageTitle( $this->msg( 'diggingweatherforecast' ) );
         $this->setHeaders();
 
         $time = new VanaTime();
