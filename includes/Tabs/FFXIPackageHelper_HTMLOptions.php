@@ -23,9 +23,9 @@ class FFXIPackageHelper_HTMLOptions {
         $html .= "<option value=\"13\">Ninja</option>";
         $html .= "<option value=\"14\">Dragoon</option>";
         $html .= "<option value=\"15\">Summoner</option>";
-        // $html .= "<option value=\"16\">Blue Mage</option>";
-        // $html .= "<option value=\"17\">Scholar</option>";
-        // $html .= "<option value=\"18\">Puppetmaster</option>";
+        $html .= "<option value=\"16\">Blue Mage</option>";
+        $html .= "<option value=\"17\">Corsair</option>";
+        $html .= "<option value=\"18\">Puppetmaster</option>";
         // $html .= "<option value=\"19\">Dancer</option>";
         // $html .= "<option value=\"20\">Scholar</option>";
         // $html .= "<option value=\"21\">Geomancer</option>";
