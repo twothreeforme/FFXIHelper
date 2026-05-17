@@ -1,6 +1,6 @@
 <?php
 
-use ApiBase;
+//use ApiBase;
 
 class APIModuleEquipsets extends ApiBase {
     public function __construct( $main, $action ) {

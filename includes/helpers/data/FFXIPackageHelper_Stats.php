@@ -276,6 +276,8 @@ class FFXIPackageHelper_Stats {
         $scaleOver60Column = 3; // Column number with modifier after level 60
         $scaleOver60       = 2; // Column number with modifier for MP calculation after level 60
 
+        $sJobStat = 0;
+        
         /**
          * HP Calculation
          */
@@ -326,7 +328,6 @@ class FFXIPackageHelper_Stats {
          */
         $raceStat = 0;
         $jobStat  = 0;
-        $sJobStat = 0;
 
         // Calculation of the MP race.
         $grade = $this->getRaceGrades($race, 1);

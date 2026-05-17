@@ -1,6 +1,6 @@
 <?php
 
-use ApiBase;
+//use ApiBase;
 
 class APIModuleDropRateSearch extends ApiBase {
     public function __construct( $main, $action ) {

@@ -1,6 +1,6 @@
 <?php
 
-use ApiBase;
+//use ApiBase;
 
 class APIModuleRecipeSearch extends ApiBase {
     public function __construct( $main, $action ) {
