@@ -557,7 +557,7 @@ class DatabaseQueryWrapper {
 
 		$query = [ 
 			//"zone_settings.name" => $zoneNameSearch,
-			"bcnm_info.name LIKE '%$bcnmNameSearch%'",
+			"bcnm_records.name LIKE '%$bcnmNameSearch%'",
 			"item_basic.name LIKE '%$itemNameSearch%'" ];
 
 			//up_property = 'enotifwatchlistpages'
@@ -575,7 +575,7 @@ class DatabaseQueryWrapper {
 						'hxi_bcnm_crate_list.groupId',
 						'hxi_bcnm_crate_list.groupRate',
 						'zone_settings.name AS zoneName',
-						'bcnm_info.name AS mobName',
+						'bcnm_records.name AS mobName',
 						//'mob_groups.minLevel AS mobMinLevel',
 						//'mob_groups.maxLevel AS mobMaxLevel',
 						'item_basic.name AS itemName', 
@@ -584,9 +584,9 @@ class DatabaseQueryWrapper {
 						'hxi_bcnm_crate_list.gilAmount AS gilAmt',
 						'hxi_bcnm_crate_list.itemId'  ] )
 			->from( 'hxi_bcnm_crate_list' )
-			->join( 'bcnm_info', null, 'bcnm_info.bcnmId=hxi_bcnm_crate_list.bcnmId' )
+			->join( 'bcnm_records', null, 'bcnm_records.bcnmId=hxi_bcnm_crate_list.bcnmId' )
 			->join( 'item_basic', null, 'item_basic.itemid=hxi_bcnm_crate_list.itemId')
-			->join( 'zone_settings', null, 'zone_settings.zoneid=bcnm_info.zoneId')
+			->join( 'zone_settings', null, 'zone_settings.zoneid=bcnm_records.zoneId')
 			->orderBy( 'groupId', 'ASC' )
 			->where( $query	)
 			->limit(500)
