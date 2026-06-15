@@ -413,8 +413,6 @@ class DatabaseQueryWrapper {
 
         if ( $mobNameSearch !=  '' ) {
             array_push($query, "mob_groups.name LIKE '%$mobNameSearch%'");
-            //wfDebugLog( 'LSBSearch', get_called_class() . ":" . json_encode($query) );
-            
 		}
 
         if ( $includeFished == 0 ){ $query = $this->exclude_MOBGROUPS_fished($query); }
@@ -423,10 +421,9 @@ class DatabaseQueryWrapper {
         if ( $itemNameSearch !=  '' ) {
 			array_push($query, "item_basic.name LIKE '%$itemNameSearch%' OR item_basic.sortname LIKE '%$itemNameSearch%'");
 		}   
-			//up_property = 'enotifwatchlistpages'
+
 		if ( $zoneNameSearch !=  'searchallzones' ) {
 			$zoneNameSearch = ParserHelper::replaceSpaces($zoneNameSearch);
-			//$str = "zone_settings.name => $zoneNameSearch';
 			array_push($query, "zone_settings.name = '$zoneNameSearch'");
 		}
 		if ( $excludeNMs == 1) {
@@ -445,15 +442,18 @@ class DatabaseQueryWrapper {
 		}
         else array_push($query, "mob_droplist.dropType <= 1"); // all other drops = 0
 
+        //wfDebugLog( 'LSBSearch', get_called_class() . ":" . json_encode($query) );
+
 		$dbr = $this->openLSBSearchConnection();
 		return $dbr->newSelectQueryBuilder()
 			->select( [ //'mob_droplist.name', 
-						'mob_droplist.itemRate',
+
+						'mob_groups.name AS mobName',
+                        'mob_droplist.itemRate',
 						'mob_droplist.dropType',
 						'mob_droplist.groupId',
 						'mob_droplist.groupRate',
 						'zone_settings.name AS zoneName',
-						'mob_groups.name AS mobName',
 						'mob_groups_levels.minLevel AS mobMinLevel',
 						'mob_groups_levels.maxLevel AS mobMaxLevel',
                         'mob_groups.dropid',
