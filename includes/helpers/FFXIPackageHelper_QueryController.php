@@ -17,7 +17,7 @@ class FFXIPackageHelper_QueryController {
 
 		$mobDropRatesData = $db->getDropRates($queryData);
 		//$mobDropRatesData = $db->testDropRates($queryData);
-		wfDebugLog( 'LSBSearch', get_called_class() . ":" . json_encode($mobDropRatesData) );
+		//wfDebugLog( 'LSBSearch', get_called_class() . ":" . json_encode($mobDropRatesData) );
 
         $dm->parseData($mobDropRatesData);
 
