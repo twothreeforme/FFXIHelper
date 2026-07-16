@@ -44,6 +44,7 @@ class FFXIPackageHelper_Stats {
         'magic' => 0,
         'JA' => 0
     );
+    public $RACC = 0;
 
     public $fastcast = 0;
     public $PDT = 0;
@@ -491,7 +492,9 @@ class FFXIPackageHelper_Stats {
             $this->PDT,        //30
             $this->MDT,         //31
             $this->conserve_mp, //32
-            $this->enmity //33
+            $this->enmity, //33
+
+            $this->RACC //34
         ];
 
         
@@ -529,6 +532,7 @@ class FFXIPackageHelper_Stats {
         $this->ATT += $this->getATT();
         $this->ACC += $this->getACC();
         $this->EVA += $this->getEVA();
+        $this->RACC += $this->getRACC();
 
         $this->haste["gear"] += $this->modifiers["HASTE_GEAR"];
         $this->haste["magic"] += $this->modifiers["HASTE_MAGIC"];
@@ -639,6 +643,17 @@ class FFXIPackageHelper_Stats {
         //throw new Exception ( $ACC );
         return max(0, floor($ACC));
     }
+
+    function getRACC(){
+        // Return 0 if ranged weapon but no ammo
+        //if ( intval($this->equipment[2][0]) == 0 || intval($this->equipment[3][0]) == 0 ) return 0;
+        $RACC = $this->getSkillCap( intval($this->equipment[0][4]) ) + $this->getWeaponSkillMerits();
+        $RACC = ($RACC > 200) ? floor(($RACC - 200) * 0.9) + 200 : $RACC;
+        $RACC += $this->AGI * 0.75;
+        $RACC += $this->modifiers["RACC"];
+        return max(0, floor($RACC));
+    }
+
 
     function getEVA(){
         //  From skills array, 29 => "EVASION",

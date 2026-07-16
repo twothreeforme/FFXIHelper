@@ -5,7 +5,13 @@
  * @param {$equipmentString} string, input from GET request, as itemid for each slot 0-15
  */
 class FFXIPackageHelper_Equipment {
+    
+    /**
+     * [ int id, int slot, int rslot, array mods, int skilltype, string name ]
+     * ex: $equipment[0][4] = equipment[slot 0][skilltype]
+     */
     private $equipment = [];
+
     private $incomingEquipmentList = [];
 
     public function __construct($equipment) {

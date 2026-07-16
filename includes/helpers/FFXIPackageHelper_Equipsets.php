@@ -79,6 +79,7 @@ class FFXIPackageHelper_Equipsets  {
                 "<tr><td>MDT&emsp;</td><td><span id=\"FFXIPackageHelper_Equipsets_statMDT\">" . ($stats ? $stats[31] : 0) . "</span></td><td>%</td></tr>" .
                 "<tr><td>Conserve MP&emsp;</td><td><span id=\"FFXIPackageHelper_Equipsets_statConserveMP\">" . ($stats ? $stats[32] : 0) . "</span></td></tr>" .
                 "<tr><td>Enmity&emsp;</td><td><span id=\"FFXIPackageHelper_Equipsets_statEnmity\">" . ($stats ? $stats[33] : 0) . "</span></td></tr>" .
+                "<tr><td>RACC&emsp;</td><td><span id=\"FFXIPackageHelper_Equipsets_statRACC\">" . ($stats ? $stats[34] : 0) . "</span></td></tr>" .
 
             "</table>";
             
