@@ -69,7 +69,14 @@ class DatabaseQueryWrapper {
     }
 
     function getWeatherHex($arr, $vanaDay){
-        $hexweatherdata =  $arr[(($vanaDay * 2)  + 1 )] . $arr[($vanaDay * 2) ];
+        $day1 = (($vanaDay * 2)  + 1 );
+        $day2 = ( $vanaDay * 2 );
+        if ( !array_key_exists( $day1 , $arr) || !array_key_exists( $day2 , $arr) ){
+            wfDebugLog( 'Weather', get_called_class() . ":vanaday1 " . $day1 . ":vanaday2 " . $day2 .":array " . json_decode($arr) );
+            return 0;
+        }
+        wfDebugLog( 'Weather', get_called_class() . ":vanaday1 " . $day1 . ":vanaday2 " . $day2 .":array " . json_decode($arr) );
+        $hexweatherdata =  $arr[ $day1 ] . $arr[ $day2 ];
         return $hexweatherdata;
     }
 
