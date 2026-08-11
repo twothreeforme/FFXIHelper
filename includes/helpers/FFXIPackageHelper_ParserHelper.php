@@ -247,8 +247,14 @@ class ParserHelper {
 
 
 	public static function getWeatherHex($arr, $vanaDay){
-        $hexweatherdata =  $arr[(($vanaDay * 2)  + 1 )] . $arr[($vanaDay * 2) ];
-        //print_r("<br/>" . "newHex: " . $hexweatherdata . "vanaDay: " . $vanaDay ."<br/>");
+        $day1 = (($vanaDay * 2)  + 1 );
+        $day2 = ( $vanaDay * 2 );
+        if ( !array_key_exists( $day1 , $arr) || !array_key_exists( $day2 , $arr) ){
+            wfDebugLog( 'Weather', get_called_class() . ":vanaday1 " . $day1 . ":vanaday2 " . $day2 .":array " . json_encode($arr) );
+            return 0;
+        }
+        wfDebugLog( 'Weather', get_called_class() . ":vanaday1 " . $day1 . ":vanaday2 " . $day2 .":array " . json_encode($arr) );
+        $hexweatherdata =  $arr[ $day1 ] . $arr[ $day2 ];
         return $hexweatherdata;
     }
 
