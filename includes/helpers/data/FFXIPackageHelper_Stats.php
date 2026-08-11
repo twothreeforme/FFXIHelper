@@ -645,8 +645,9 @@ class FFXIPackageHelper_Stats {
     }
 
     function getRACC(){
-        // Return 0 if ranged weapon but no ammo
+        // Return 0 if no ranged weapon or no ammo ??
         //if ( intval($this->equipment[2][0]) == 0 || intval($this->equipment[3][0]) == 0 ) return 0;
+
         $RACC = $this->getSkillCap( intval($this->equipment[0][4]) ) + $this->getWeaponSkillMerits();
         $RACC = ($RACC > 200) ? floor(($RACC - 200) * 0.9) + 200 : $RACC;
         $RACC += $this->AGI * 0.75;
