@@ -69,13 +69,8 @@ class DatabaseQueryWrapper {
     }
 
     function getWeatherHex($arr, $vanaDay){
-        $day1 = (($vanaDay * 2)  + 1 );
-        $day2 = ( $vanaDay * 2 );
-        if ( !array_key_exists( $day1 , $arr) || !array_key_exists( $day2 , $arr) ){
-            wfDebugLog( 'Weather', get_called_class() . ":vanaday1 " . $day1 . ":vanaday2 " . $day2 .":array size" . (is_array($arr) ? count($arr) : 0) );
-            return 0;
-        }
-        wfDebugLog( 'Weather', get_called_class() . ":vanaday1 " . $day1 . ":vanaday2 " . $day2 .":array size " . (is_array($arr) ? count($arr) : 0) );
+        $day1 = getValidWeatherDate((($vanaDay * 2)  + 1 ));
+        $day2 = getValidWeatherDate(( $vanaDay * 2 ));
         $hexweatherdata =  $arr[ $day1 ] . $arr[ $day2 ];
         return $hexweatherdata;
     }
@@ -83,7 +78,7 @@ class DatabaseQueryWrapper {
     function getLastWeatherHex($arr, $w_vanaDate){
         $hexweatherdata = 0;
         do {
-            $w_vanaDate = $w_vanaDate - 1;
+            $w_vanaDate = ($w_vanaDate - 1);
             $hexweatherdata = $this->getWeatherHex($arr,$w_vanaDate);
         }while ( $hexweatherdata == 0000 );
         return $hexweatherdata;
@@ -92,10 +87,16 @@ class DatabaseQueryWrapper {
     function getNextWeatherHex($arr, $w_vanaDate){
         $hexweatherdata = 0;
         do {
-            $w_vanaDate = $w_vanaDate + 1;
+            $w_vanaDate = ($w_vanaDate + 1);
             $hexweatherdata = $this->getWeatherHex($arr, $w_vanaDate);
         }while ( $hexweatherdata == 0000 );
         return $hexweatherdata;
+    }
+
+    function getValidWeatherDate(int $date){
+        if ( $date >= 4320 ) $date -= 4320; 
+        else if ( $date < 0 ) $date += 4320;
+        return $date;
     }
 
     function convertHexToSplitStrings($hex){
@@ -298,7 +299,7 @@ class DatabaseQueryWrapper {
             $weatherArray[$w_vanaDate - $m_vanaDate] = $dayArray;
             // $dayUpdate = $dayUpdate + 1;
             $hexweatherdata = 0;
-            $w_vanaDate = $w_vanaDate + 1;
+            $w_vanaDate = ($w_vanaDate + 1);
             $hexweatherdata = $this->getWeatherHex($arr, $w_vanaDate);
             //print_r(count($weatherArray));
             }while( count($weatherArray) < 16 );
