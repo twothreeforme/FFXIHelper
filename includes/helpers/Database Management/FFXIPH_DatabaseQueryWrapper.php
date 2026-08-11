@@ -69,8 +69,8 @@ class DatabaseQueryWrapper {
     }
 
     function getWeatherHex($arr, $vanaDay){
-        $day1 = getValidWeatherDate((($vanaDay * 2)  + 1 ));
-        $day2 = getValidWeatherDate(( $vanaDay * 2 ));
+        $day1 = $this->getValidWeatherDate((($vanaDay * 2)  + 1 ));
+        $day2 = $this->getValidWeatherDate(( $vanaDay * 2 ));
         $hexweatherdata =  $arr[ $day1 ] . $arr[ $day2 ];
         return $hexweatherdata;
     }
