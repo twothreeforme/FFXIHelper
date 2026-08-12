@@ -6,7 +6,8 @@
 //class DBConnection {
 class DatabaseQueryWrapper {
 
-    private $database; 
+    private $database;
+    private $mobContent = "( mob_groups.content_tag = 'COP' OR mob_groups.content_tag = 'TOAU' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')";
 
     public function __construct() {
         $this->database = new DatabaseConnection();
@@ -413,7 +414,7 @@ class DatabaseQueryWrapper {
 			//"zone_settings.name" => $zoneNameSearch,
 			"mob_droplist.dropid != 0 ",
             //"mob_droplist.dropType != 4",  // removing DESPOIL - as its OOE
-			"( mob_groups.content_tag = 'COP' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')",
+			$this->mobContent,
 			//"mob_groups.content_tag IS NULL ",
 		];
 
@@ -502,7 +503,7 @@ class DatabaseQueryWrapper {
         $query = [ 
                     "mob_droplist.dropid != 0 ",
                     //"mob_droplist.dropType != 4",  // removing DESPOIL - as its OOE
-                    "( mob_groups.content_tag = 'COP' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')",
+                    $content,
                     "mob_groups.name LIKE '%$mobNameSearch%'",
                 ];
 
@@ -604,7 +605,7 @@ class DatabaseQueryWrapper {
     public function getMobAndZone($mobname = null, $zonename = null, $moblevel = null){
         if ( $mobname == null && $zonename == null ) return;
 
-        $query = [  "( mob_groups.content_tag = 'COP' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')" ];
+        $query = [  $this->mobContent ];
         //array_push($query, $this->exclude_MOBGROUP_GARRISON);
 
         $query = $this->exclude_MOBGROUPS_OOE($query);
@@ -661,7 +662,7 @@ class DatabaseQueryWrapper {
         if ( !is_null($moblevel) ) $moblevel = intval($moblevel);
         else $moblevel = 0;
 
-        $query = [  "( mob_groups.content_tag = 'COP' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')" ];
+        $query = [  $this->mobContent ];
 
         $query = $this->exclude_MOBGROUPS_OOE($query);
 
@@ -749,7 +750,6 @@ class DatabaseQueryWrapper {
         $dbr = $this->openLSBSearchConnection();
         $query = [
             "( traits.job = '$mjob' AND traits.level <= '$mlvl') OR (traits.job = '$sjob' AND traits.level <= '$slvl')",
-            //"( traits.content_tag = 'COP' OR traits.content_tag IS NULL )",
         ];
 
         return $dbr->newSelectQueryBuilder()
@@ -825,7 +825,7 @@ class DatabaseQueryWrapper {
             $itemArray[$item->itemid] = $item->name;
         }
 
-        $query = [ "( synth_recipes.content_tag = 'COP' OR synth_recipes.content_tag IS NULL )" ];
+        $query = [ "( synth_recipes.content_tag = 'COP' OR synth_recipes.content_tag = 'TOAU' OR synth_recipes.content_tag IS NULL )" ];
 
         if ( isset($recipename) && $recipename != "" ){
             $recipeIDs = $this->getItemIDsFromDB($recipename, $dbr);
