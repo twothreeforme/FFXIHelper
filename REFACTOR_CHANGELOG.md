@@ -236,6 +236,15 @@ Classes whose file names still carry the old prefix but whose class names never 
 `ParserHelper`, `DataModel`, `VanaTime`, `ZoneForecast`, `WeatherForecast_ElementMaps`) were left
 alone — out of scope for a *class* rename.
 
+## 12. Post-rename smoke test: search broke, then didn't
+
+After importing `dat_details` and clearing the rename's cache lag, LSBSearch briefly returned no
+results on all searches. Root cause: stale MediaWiki extension-registration/opcache after the
+class rename — not a code bug. Confirmed fixed by a cache clear. Temporary `wfDebugLog('Other', ...)`
+instrumentation was added across the equipment search path to localize it, then removed once
+resolved. **Takeaway for next time:** clear MediaWiki's extension registration cache / reset
+opcache immediately after any class rename, before concluding something broke.
+
 ---
 
 ## Open / deferred items
