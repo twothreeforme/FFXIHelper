@@ -532,7 +532,6 @@ class HXI_HTMLTableHelper {
 
 		$parse = new ParserHelper($array[1]);
 		$effects = new HXI_Effects();
-		$vars = new HXI_Variables();
 
 		$totalRows = 0;
 		foreach ( $array[0] as $row ) {
@@ -632,7 +631,7 @@ class HXI_HTMLTableHelper {
 					$power = $e[1][$i][1];
 					if ( $power < 0 ) $power = "-" . $power;
 					else $power = "+" . $power;
-					$html .= $vars->modArray[$e[1][$i][0]] . ":" . $power . "<br>";
+					$html .= HXI_ModDictionary::getName($e[1][$i][0]) . ":" . $power . "<br>";
 				}
 			}
 			else $html .= "";
@@ -662,13 +661,12 @@ class HXI_HTMLTableHelper {
     }
 
 	private static function htmlModifier($mod){
-		$var = new HXI_Variables();
 		$html = "";
 		$val = ( $mod['value'] > 0 ) ? "+" . $mod['value'] : $mod['value'];
 		if ( $mod['id'] <= 14 ) {
-			$html .= "<br>{{Stat|" . $var->modArray[$mod['id']] ."|". $val ."}}";
+			$html .= "<br>{{Stat|" . HXI_ModDictionary::getName($mod['id']) ."|". $val ."}}";
 		}
-		else $html .= "<br>" . $var->modArray[$mod['id']] .": ". $val;
+		else $html .= "<br>" . HXI_ModDictionary::getName($mod['id']) .": ". $val;
 		return $html;
 	}
 

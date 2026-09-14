@@ -550,11 +550,9 @@ class HXI_CharacterStatCalculator {
     }
 
     private function applyToModifiers($mods){
-        $vars = new HXI_Variables();
-
         foreach ($mods as $m => $v) {
 
-            $mod = $vars->modArray[$m];
+            $mod = HXI_ModDictionary::getName($m);
             if ( !isset($this->modifiers[$mod]) ) $this->modifiers[$mod] = intval($v);
             else $this->modifiers[$mod] += intval($v);
             //if ( $m == 384 ) wfDebugLog( 'Equipsets', get_called_class() . ":applyToModifiers:" . $m . ":" . $v );
@@ -690,8 +688,7 @@ class HXI_CharacterStatCalculator {
     }
 
     function setModifierKeys(){
-        $vars = new HXI_Variables();
-        foreach ( $vars->modArray as $k => $v) {
+        foreach ( HXI_ModDictionary::all() as $k => $v) {
             $this->modifiers[$v] = 0;
         }
     }

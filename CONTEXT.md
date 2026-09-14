@@ -29,6 +29,13 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
 - Broader `FFXIPH_`/`FFXIPackageHelper_` → `HXI_` rename done: 21 classes outside Models/
   (Tabs/helpers/Page Directs), ~40 files. `FFXIPackageHelper_Equipment` → `HXI_EquipmentParser`
   (collision avoidance — `HXI_Equipment` already exists as the Models/ 16-slot container).
+- `sql/DAT_details.sql` imported by user; confirmed working (see cache-clear note below).
+- `HXI_Variables`' array-based pseudo-enums cleaned up: `$skill` → real `HXI_Skill` enum (was
+  dead/unused), `$mobType` → real `HXI_MobType` enum (bitmask flags — each case is one flag,
+  combine/check via `->value` against the raw int), `$modArray` (827 entries) → `HXI_ModDictionary`
+  class (`getName()`/`all()`) since it's DB-driven and not a fixed closed set.
+  `$jobArrayByID`/`$effectType`/`$mobModArray`/etc. left as-is in Variables (out of scope, though
+  `$effectType`/`$mobModArray` are similarly dictionary-shaped if this comes up again).
 
 ## Not done / open
 - `FFXIPH_ItemDescription` (`FFXIPH_Item.php`) — untouched, deferred by request.
@@ -38,16 +45,21 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
 - A handful of files still have old-prefixed filenames even though their class names never had
   the prefix (`ExclusionsHelper`, `ParserHelper`, `DataModel`, `VanaTime`, `ZoneForecast`,
   `WeatherForecast_ElementMaps`) — cosmetic, low priority.
-- **`sql/DAT_details.sql` needs manual import** into the live DB (user owns this) before
-  `getFullItem()` returns real display data — until then those columns come back NULL.
-- **Nothing has been executed/tested.** No PHP CLI or MediaWiki instance available in this
-  environment at any point. Manual smoke test still required before trusting this in production.
+- **After any class rename in this project, clear MediaWiki's extension-registration cache /
+  reset opcache** before assuming a resulting failure is a code bug — this already happened once
+  (LSBSearch briefly broke, cache clear fixed it, not a code issue).
+- No PHP CLI or MediaWiki instance available in this environment at any point this session — all
+  verification here is manual code review; the user has confirmed LSBSearch/DAT_details working
+  in their actual environment, but no full smoke test of the Equipsets/Character/Set flow yet.
 
 ## Commits (branch `major-rewrite`)
 - `d81689d` — Character/Mob split + Item/Weapon/Equipment classes + HXI_ renaming.
 - `c2a4775` — dat_details table + getFullItem() + HXI_ItemFactory + full array retirement.
 - `3ef7abd` — CONTEXT.md + changelog housekeeping.
-- (pending) — broader HXI_ rename, 21 classes.
+- `1689e09` — broader HXI_ rename, 21 classes.
+- `333042a`, `c6d403e`, `32b20f0`, `45c75bd`, `9bbd4c4`, `e708274` — DAT_details.sql INSERT-per-row
+  fix + search debug logging added/removed (root cause was cache staleness, not code).
+- (pending) — HXI_Skill/HXI_MobType/HXI_ModDictionary cleanup.
 
 ## Style note
 User wants terse, direct replies — minimal pleasantries, no padding.

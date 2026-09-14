@@ -30,6 +30,8 @@
         "HXI_MeritsCodec": "includes/Models/HXI_MeritsCodec.php",
         "HXI_Character": "includes/Models/HXI_Character.php",
         "HXI_EquipmentSet": "includes/Models/HXI_EquipmentSet.php",
+        "HXI_Skill": "includes/Models/HXI_Skill.php",
+        "HXI_MobType": "includes/Models/HXI_MobType.php",
 
         "APIModuleDropRateSearch" : "includes/APIModules/APIModuleDropRateSearch.php",
         "APIModuleRecipeSearch" : "includes/APIModules/APIModuleRecipeSearch.php",
@@ -43,6 +45,7 @@
         "HXI_Effects": "includes/helpers/HXI_Effects.php",
         "HXI_EquipmentParser": "includes/helpers/data/HXI_EquipmentParser.php",
         "HXI_Variables": "includes/helpers/data/HXI_Variables.php",
+        "HXI_ModDictionary": "includes/helpers/data/HXI_ModDictionary.php",
         "HXI_ItemDetails": "includes/helpers/data/HXI_ItemDetails.php",
         "HXI_HTMLTableHelper": "includes/helpers/HXI_HTMLTableHelper.php",
         "HXI_HTMLTabFishingSearch": "includes/Tabs/HXI_HTMLTabFishingSearch.php",

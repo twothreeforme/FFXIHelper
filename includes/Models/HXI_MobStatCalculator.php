@@ -15,14 +15,12 @@ class HXI_MobStatCalculator {
     }
 
     private function handleMods($mods){
-        $vars = new HXI_Variables();
-
         foreach ($mods as $mod) {
             // Pool and Family mods
             if ( isset($mod->is_mob_mod) && $mod->is_mob_mod == 1 ) {
                 $modlabel = HXI_Variables::$mobModArray[$mod->modid];
             }
-            else $modlabel = $vars->modArray[$mod->modid];
+            else $modlabel = HXI_ModDictionary::getName($mod->modid);
             $this->addMod( $modlabel, $mod->value );
         }
     }
@@ -31,8 +29,6 @@ class HXI_MobStatCalculator {
         //Trait mods
         //traits are treated a little different than pool and family mods
         //traits are prioritized based on highest trait, not added together
-        $vars = new HXI_Variables();
-
         $traits = [];
         foreach ( $SQLtraits as $row ) {
             if ( !isset($traits[$row->modid]) ) $traits[$row->modid] = $row->value;
@@ -40,7 +36,7 @@ class HXI_MobStatCalculator {
         }
 
         foreach ( $traits as $m => $v ) {
-            $modlabel = $vars->modArray[$m];
+            $modlabel = HXI_ModDictionary::getName($m);
             $this->addMod($modlabel, $v);
         }
     }

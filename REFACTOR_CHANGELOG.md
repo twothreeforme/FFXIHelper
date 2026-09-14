@@ -245,6 +245,39 @@ instrumentation was added across the equipment search path to localize it, then 
 resolved. **Takeaway for next time:** clear MediaWiki's extension registration cache / reset
 opcache immediately after any class rename, before concluding something broke.
 
+## 13. Real enums for HXI_Variables' skill/mobType; HXI_ModDictionary for the mod ID lookup
+
+`HXI_Variables.php` was a 1766-line grab-bag of legacy static lookup arrays (`$jobArrayByID`,
+`$skill`, `$modArray` ~830 entries, `$effectType` ~640 entries, `$mobModArray`, etc.) — not real
+PHP enums, just `public static $x = array(...)`. Asked whether to consolidate everything into that
+file as "enums"; pushed back since the two real enums built earlier (`HXI_Race`, `HXI_EquipSlot`)
+are a different construct (an actual `enum` declaration) than these array-based pseudo-enums, and
+merging them in would break the one-symbol-per-file convention plus separate them from the domain
+classes they belong next to.
+
+Agreed instead to convert what's actually enum-shaped, and formalize the rest:
+- `HXI_Skill` (new enum, `includes/Models/`): the 31 active combat/magic skill entries from
+  `$skill` (commented-out/unused ids skipped). This array turned out to be dead — grepped and
+  found zero live callers — so this is pure cleanup, zero call-site risk.
+- `HXI_MobType` (new enum, `includes/Models/`): the 6 mob-type flags from `$mobType`. This one
+  is a **bitmask**, not a discrete value — `FFXIPackageHelper_ParserHelper` checks
+  `HXI_Variables::$mobType["NOTORIOUS"] & $mobType` (a raw mob's mobType can have multiple bits
+  set). A plain enum still works fine for this: each case represents one named flag constant:
+  the runtime combined value stays a plain int outside the enum, and the bitwise check becomes
+  `HXI_MobType::Notorious->value & $mobType`. Updated all 3 call sites.
+- `HXI_ModDictionary` (new class, `includes/helpers/data/`): `$modArray` (827 entries, item/mob
+  modifier id -> name) extracted into its own class with `getName(int): string` (safe fallback
+  `"UNKNOWN_MOD_" . $id` instead of an undefined-index warning) and `all(): array` (for the one
+  caller that enumerates every mod name to zero-initialize a stat map). This is explicitly a
+  runtime dictionary, not an enum — ids come from the DB and aren't a fixed closed set. Updated 4
+  call sites across `HXI_CharacterStatCalculator`, `HXI_MobStatCalculator`, and
+  `HXI_HTMLTableHelper`, removing the now-unnecessary `new HXI_Variables()` instantiations at each.
+
+`$jobArrayByID`/`$jobArrayByName`/`$detectsBy`/`$effectStatus`/`$effectType`/`$mobModArray` were
+left untouched in `HXI_Variables` — out of scope for this pass (not asked for), though
+`$effectType` (~640 entries) and `$mobModArray` are similarly dictionary-shaped and could get the
+same `HXI_ModDictionary` treatment later if wanted.
+
 ---
 
 ## Open / deferred items

@@ -53,7 +53,7 @@ class ParserHelper {
 		//else $mobName = " [[$mobName]]<sup>($minLvl-$maxLvl)</sup> ";
 		
 		if ( $fished == true ) return " " . $mobName . " (fished) ";
-		else if ( HXI_Variables::$mobType["NOTORIOUS"] & $mobType ) return "[NM] " . $mobName;
+		else if ( HXI_MobType::Notorious->value & $mobType ) return "[NM] " . $mobName;
 
 		return $mobName;
 	}
@@ -62,11 +62,11 @@ class ParserHelper {
         $size = "14px";
         $detectsString = "<br>";
         if ( $aggro == 0 ) {
-            if ( HXI_Variables::$mobType["NOTORIOUS"] & $mobType ) $detectsString .= "[[File:Detect_PassiveHQ.png|" . $size . "|" . $size. "|Passive HQ]] ";
+            if ( HXI_MobType::Notorious->value & $mobType ) $detectsString .= "[[File:Detect_PassiveHQ.png|" . $size . "|" . $size. "|Passive HQ]] ";
             else $detectsString .= "[[File:Detect_PassiveNQ.png|" . $size . "|" . $size. "|Passive NQ]] ";
         }
         else if ( $aggro == 1 ) {
-            if ( HXI_Variables::$mobType["NOTORIOUS"] & $mobType ) $detectsString .= "[[File:Detect_AggroHQ.png|" . $size . "|" . $size. "|Aggressive HQ]] ";
+            if ( HXI_MobType::Notorious->value & $mobType ) $detectsString .= "[[File:Detect_AggroHQ.png|" . $size . "|" . $size. "|Aggressive HQ]] ";
             else $detectsString .= "[[File:Detect_AggroNQ.png|" . $size . "|" . $size. "|Aggressive NQ]] ";
         }
 
