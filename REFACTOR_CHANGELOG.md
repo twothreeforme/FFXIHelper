@@ -239,4 +239,5 @@ separate array shape via the old `getEquipment()`/`parseEquipment()`/`ItemDetail
 
 - `d81689d` — Character/Mob split + Item/Weapon/Equipment classes + HXI_ renaming (§§3-7, plus
   §2 sql_ASB removal).
-- (later changes in this log, from §8 onward, not yet committed as of this writing)
+- `c2a4775` — dat_details table + getFullItem() + HXI_ItemFactory, and the full
+  getEquipmentArray() retirement (§§8-10).
