@@ -27,34 +27,34 @@ class APIModuleEquipmentSearch extends ApiBase {
                         $params['slot'],
                      ];
 
-        wfDebugLog( 'Other', get_called_class() . ":execute: params=" . json_encode($params) );
+        wfDebugLog( 'LSBSearch', get_called_class() . ":execute: params=" . json_encode($params) );
 
         $finalHtml = $this->queryEquipment($queryData);
         $finalHtml = ParserHelper::wikiParse($finalHtml);
         $result->addValue($params['action'], "equipment", $finalHtml);
 
-        wfDebugLog( 'Other', get_called_class() . ":execute: final HTML length=" . strlen($finalHtml) );
+        wfDebugLog( 'LSBSearch', get_called_class() . ":execute: final HTML length=" . strlen($finalHtml) );
     }
 
     private function queryEquipment($queryData){
         $dm = new DataModel();
         $db = new DatabaseQueryWrapper();
 
-        wfDebugLog( 'Other', get_called_class() . ":queryEquipment: queryData=" . json_encode($queryData) );
+        wfDebugLog( 'LSBSearch', get_called_class() . ":queryEquipment: queryData=" . json_encode($queryData) );
 
         // USE THIS ONEs
         $initialQuery = $db->getEquipmentFromDB($queryData);
-        wfDebugLog( 'Other', get_called_class() . ":queryEquipment: getEquipmentFromDB returned " . count($initialQuery) . " row(s)" );
+        wfDebugLog( 'LSBSearch', get_called_class() . ":queryEquipment: getEquipmentFromDB returned " . count($initialQuery) . " row(s)" );
 
         if ( count($initialQuery) > 0 )  $db->incrementHitCounter("equipment");
 
         $initialQuery = $dm->parseEquipment($initialQuery, $queryData[1]);
-        wfDebugLog( 'Other', get_called_class() . ":queryEquipment: parseEquipment returned " . count($initialQuery ?? []) . " item(s)" );
+        wfDebugLog( 'LSBSearch', get_called_class() . ":queryEquipment: parseEquipment returned " . count($initialQuery ?? []) . " item(s)" );
 
         $html = "";
 
         $html .= HXI_HTMLTableHelper::table_EquipmentQuery($initialQuery);
-        wfDebugLog( 'Other', get_called_class() . ":queryEquipment: rendered HTML length=" . strlen($html) );
+        wfDebugLog( 'LSBSearch', get_called_class() . ":queryEquipment: rendered HTML length=" . strlen($html) );
         return $html;
 	}
 

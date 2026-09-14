@@ -285,11 +285,11 @@ class DataModel {
 
 	function parseEquipment($param, $job = null){
         if ( !$param ) {
-            wfDebugLog( 'Other', get_called_class() . ":parseEquipment: input param is empty/null, returning NULL" );
+            wfDebugLog( 'LSBSearch', get_called_class() . ":parseEquipment: input param is empty/null, returning NULL" );
             return NULL;
         }
 
-        wfDebugLog( 'Other', get_called_class() . ":parseEquipment: input row count=" . count($param) . " job=" . json_encode($job) );
+        wfDebugLog( 'LSBSearch', get_called_class() . ":parseEquipment: input row count=" . count($param) . " job=" . json_encode($job) );
 
 		$iDetails = new HXI_ItemDetails();
 
@@ -359,7 +359,7 @@ class DataModel {
 
 		}
 
-		wfDebugLog( 'Other', get_called_class() . ":parseEquipment: output item count=" . count($this->dataset) );
+		wfDebugLog( 'LSBSearch', get_called_class() . ":parseEquipment: output item count=" . count($this->dataset) );
 		return $this->dataset;
 	}
 

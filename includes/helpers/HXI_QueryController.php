@@ -97,18 +97,18 @@ class HXI_QueryController {
 		$db = new DatabaseQueryWrapper();
 		$dm = new DataModel();
 
-		wfDebugLog( 'Other', get_called_class() . ":queryEquipsetsSearchItems: queryData=" . json_encode($queryData) );
+		wfDebugLog( 'LSBSearch', get_called_class() . ":queryEquipsetsSearchItems: queryData=" . json_encode($queryData) );
 
 		$searchString = ParserHelper::replaceApostrophe($queryData['search']);
 		$searchString = ParserHelper::replaceSpaces($searchString);
 
-		wfDebugLog( 'Other', get_called_class() . ":queryEquipsetsSearchItems: searchString=" . $searchString . " mlvl=" . $queryData['mlvl'] . " slot=" . $queryData['slot'] );
+		wfDebugLog( 'LSBSearch', get_called_class() . ":queryEquipsetsSearchItems: searchString=" . $searchString . " mlvl=" . $queryData['mlvl'] . " slot=" . $queryData['slot'] );
 
 		$equipList = $db->getEquipment( $searchString, $queryData['mlvl'], $queryData['slot']); // get data from DB
-		wfDebugLog( 'Other', get_called_class() . ":queryEquipsetsSearchItems: getEquipment returned " . count($equipList) . " row(s)" );
+		wfDebugLog( 'LSBSearch', get_called_class() . ":queryEquipsetsSearchItems: getEquipment returned " . count($equipList) . " row(s)" );
 
 		$finalList = $dm->parseEquipment( $equipList, $queryData['mjob'] ); // build associative array with data so its easier to build list
-		wfDebugLog( 'Other', get_called_class() . ":queryEquipsetsSearchItems: parseEquipment returned " . count($finalList ?? []) . " item(s)" );
+		wfDebugLog( 'LSBSearch', get_called_class() . ":queryEquipsetsSearchItems: parseEquipment returned " . count($finalList ?? []) . " item(s)" );
 
 		$html = "";
 
