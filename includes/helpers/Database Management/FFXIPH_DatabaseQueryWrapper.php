@@ -992,7 +992,7 @@ class DatabaseQueryWrapper {
             array_push($query, $q);
         }
 
-        wfDebugLog( 'LSBSearch', get_called_class() . ":getEquipmentFromDB: where=" . json_encode($query) );
+        wfDebugLog( 'Other', get_called_class() . ":getEquipmentFromDB: where=" . json_encode($query) );
 
         $rows = $dbr->newSelectQueryBuilder()
         ->select( [ 'item_basic.name AS showname',
@@ -1010,7 +1010,7 @@ class DatabaseQueryWrapper {
         ->where( $query	)
         ->fetchResultSet();
 
-        wfDebugLog( 'LSBSearch', get_called_class() . ":getEquipmentFromDB: returned " . count($rows) . " row(s)" );
+        wfDebugLog( 'Other', get_called_class() . ":getEquipmentFromDB: returned " . count($rows) . " row(s)" );
         return $rows;
     }
 
@@ -1218,7 +1218,7 @@ class DatabaseQueryWrapper {
                 if ( !is_null($q) ) array_push ( $query, $q);
         }
 
-        wfDebugLog( 'LSBSearch', get_called_class() . ":getEquipment: name=" . $name . " mlvl=" . $mlvl . " gridSlot=" . json_encode($gridSlot) . " where=" . json_encode($query) );
+        wfDebugLog( 'Other', get_called_class() . ":getEquipment: name=" . $name . " mlvl=" . $mlvl . " gridSlot=" . json_encode($gridSlot) . " where=" . json_encode($query) );
 
         $rows = $dbr->newSelectQueryBuilder()
         ->select( [ 'item_equipment.itemId',
@@ -1241,7 +1241,7 @@ class DatabaseQueryWrapper {
         ->orderBy( 'showname', 'ASC' )
         ->fetchResultSet();
 
-        wfDebugLog( 'LSBSearch', get_called_class() . ":getEquipment: returned " . count($rows) . " row(s)" );
+        wfDebugLog( 'Other', get_called_class() . ":getEquipment: returned " . count($rows) . " row(s)" );
         return $rows;
     }
 

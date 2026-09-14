@@ -63,9 +63,9 @@ class APIModuleEquipsets extends ApiBase {
 
         }
         else if ( $params['action'] == "equipsets_search" ) {
-            wfDebugLog( 'LSBSearch', get_called_class() . ":equipsets_search: params=" . json_encode($params) );
+            wfDebugLog( 'Other', get_called_class() . ":equipsets_search: params=" . json_encode($params) );
             $resultsHTML = HXI_QueryController::queryEquipsetsSearchItems($params);
-            wfDebugLog( 'LSBSearch', get_called_class() . ":equipsets_search: resultsHTML length=" . strlen($resultsHTML) );
+            wfDebugLog( 'Other', get_called_class() . ":equipsets_search: resultsHTML length=" . strlen($resultsHTML) );
             //throw new Exception ( $resultsHTML  );
             $result->addValue($params['action'], "search", [$resultsHTML, $params['slot']]);
         }
