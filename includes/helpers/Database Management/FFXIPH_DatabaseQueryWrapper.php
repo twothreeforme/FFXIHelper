@@ -992,9 +992,7 @@ class DatabaseQueryWrapper {
             array_push($query, $q);
         }
 
-        wfDebugLog( 'Other', get_called_class() . ":getEquipmentFromDB: where=" . json_encode($query) );
-
-        $rows = $dbr->newSelectQueryBuilder()
+        return $dbr->newSelectQueryBuilder()
         ->select( [ 'item_basic.name AS showname',
                     'item_equipment.level',
                     'item_equipment.jobs',
@@ -1009,9 +1007,6 @@ class DatabaseQueryWrapper {
         ->orderBy( 'level', 'DESC' )
         ->where( $query	)
         ->fetchResultSet();
-
-        wfDebugLog( 'Other', get_called_class() . ":getEquipmentFromDB: returned " . count($rows) . " row(s)" );
-        return $rows;
     }
 
     public function getItem( $itemid ){
@@ -1218,9 +1213,7 @@ class DatabaseQueryWrapper {
                 if ( !is_null($q) ) array_push ( $query, $q);
         }
 
-        wfDebugLog( 'Other', get_called_class() . ":getEquipment: name=" . $name . " mlvl=" . $mlvl . " gridSlot=" . json_encode($gridSlot) . " where=" . json_encode($query) );
-
-        $rows = $dbr->newSelectQueryBuilder()
+        return $dbr->newSelectQueryBuilder()
         ->select( [ 'item_equipment.itemId',
                     'item_equipment.level',
                     'item_equipment.jobs',
@@ -1238,11 +1231,9 @@ class DatabaseQueryWrapper {
         //->leftjoin( 'item_basic', null, 'item_basic.itemid=item_equipment.itemId' )
         ->leftjoin( 'item_equipment', null, 'item_basic.itemid=item_equipment.itemId' )
         ->where( $query )
-        ->orderBy( 'showname', 'ASC' )
+        ->orderBy( 'showname', 'ASC' ) 
         ->fetchResultSet();
 
-        wfDebugLog( 'Other', get_called_class() . ":getEquipment: returned " . count($rows) . " row(s)" );
-        return $rows;
     }
 
 
