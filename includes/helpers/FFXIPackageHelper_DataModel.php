@@ -448,7 +448,7 @@ class DataModel {
 		for ( $lvl = $rangeMin; $lvl <= $rangeMax; $lvl++ ){
 			//$mobFromSQL = FFXIPH_MobUtils::mobArrayFromSQL( $SQLresultsMob, $lvl );
 			
-				$resultMob = new FFXIPH_Mob();
+				$resultMob = new HXI_Mob();
 				$resultMob->importSQL( $SQLresultsMob, $lvl );
 
 				// //Set properties that dont have any associated calcs

@@ -802,7 +802,7 @@ class FFXIPackageHelper_HTMLTableHelper {
 		return $html;
 	}
 
-	public static function characterSelectedHeader(FFXIPH_Character $character){
+	public static function characterSelectedHeader(HXI_Character $character){
 
 		/*backup*/ //$html = "<div class=\"FFXIPackageHelper_characterHeader\"><i><b id=\"FFXIPackageHelper_characterHeader_$charname\">No character selected</b></i><i id=\"FFXIPackageHelper_characterHeader_details\" style=\"font-color:light-grey;\"></i></div>";
 

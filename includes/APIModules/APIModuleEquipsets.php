@@ -52,7 +52,7 @@ class APIModuleEquipsets extends ApiBase {
             $equipmentModel = new FFXIPackageHelper_Equipment( $equipmentString );
             $newEquipmentArray = $equipmentModel->getEquipmentArray();
 
-            $newStats = new FFXIPackageHelper_Stats( $params['race'], $params['mlvl'], $params['slvl'], $params['mjob'], $params['sjob'], $meritsString, $newEquipmentArray );
+            $newStats = new HXI_CharacterStatCalculator( $params['race'], $params['mlvl'], $params['slvl'], $params['mjob'], $params['sjob'], $meritsString, $newEquipmentArray );
             $stats =  $newStats->getStats();
 
             $char = $this->createChar($params, $meritsString, $newEquipmentArray );
@@ -75,7 +75,7 @@ class APIModuleEquipsets extends ApiBase {
             $newEquipmentArray = $equipmentModel->getEquipmentArray();
             $char = $this->createChar($params, $meritsString, $newEquipmentArray);
 
-            $newStats = new FFXIPackageHelper_Stats( $params['race'], $params['mlvl'], $params['slvl'], $params['mjob'], $params['sjob'], $meritsString, $newEquipmentArray );
+            $newStats = new HXI_CharacterStatCalculator( $params['race'], $params['mlvl'], $params['slvl'], $params['mjob'], $params['sjob'], $meritsString, $newEquipmentArray );
             
             // send updated HTML back as result
             $incomingEquipmentList = $equipmentModel->getIncomingEquipmentList();
@@ -273,7 +273,7 @@ class APIModuleEquipsets extends ApiBase {
             $luaNamesArray = $updatedGridItems[1];
 
             $newEquipmentArray = $equipmentModel->getEquipmentArray();
-            $newStats = new FFXIPackageHelper_Stats( $fetchedSet['race'], $fetchedSet['mlvl'], $fetchedSet['slvl'], $fetchedSet['mjob'], $fetchedSet['sjob'], $meritsString, $newEquipmentArray );
+            $newStats = new HXI_CharacterStatCalculator( $fetchedSet['race'], $fetchedSet['mlvl'], $fetchedSet['slvl'], $fetchedSet['mjob'], $fetchedSet['sjob'], $meritsString, $newEquipmentArray );
             
             $stats = $newStats->getStats();
             // if ( $fetchedSet['mjob'] == 6 ) throw new Exception ( json_encode($fetchedSet) );
@@ -482,9 +482,8 @@ class APIModuleEquipsets extends ApiBase {
 
 
     private function createChar($params, $meritsURLSafe = null, $equipmentString = null){
-        //$user = RequestContext::getMain()->getUser();
-        return new FFXIPH_Character($params['race'], null, null, null, null,
-                            $meritsURLSafe, null, $params['def'], $params['charname'], null);
+        $user = RequestContext::getMain()->getUser();
+        return new HXI_Character($user->getId(), (int)$params['race'], $meritsURLSafe, (int)$params['def'], $params['charname']);
     }
 
     private function createSet($params){

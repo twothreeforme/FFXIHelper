@@ -16,6 +16,7 @@ class SpecialEquipsets extends SpecialPage {
 	private $userChars;
 	private $shouldLoadDefaultCharacter = true;
 	private $currentCharacter;
+	private $currentSet;
 
 	function execute( $par ) {
 		$this->setHeaders();
@@ -23,20 +24,20 @@ class SpecialEquipsets extends SpecialPage {
 		//$output->setPageTitle( $this->msg( 'equipsets' ) );
 		$request = $this->getRequest();
 
-		/**
-		 *	Equipsets Request Data
-		 */
-		$requestCharacter = new FFXIPH_Character( $request->getText( 'race' ),
-													$request->getText( 'mlvl' ),
-													$request->getText( 'slvl' ),
-													$request->getText( 'mjob' ),
-													$request->getText( 'sjob' ),
-													$request->getText( 'merits' ),
-													$request->getText( 'equipment' ) );
-
 		// Check for user logged in
 		$user = RequestContext::getMain()->getUser();
 		$uid = $user->getId();
+
+		/**
+		 *	Equipsets Request Data
+		 */
+		$requestCharacter = new HXI_Character( $uid, (int)$request->getText( 'race' ), $request->getText( 'merits' ) );
+		$requestSet = new HXI_EquipmentSet( (int)$request->getText( 'mlvl' ),
+											(int)$request->getText( 'slvl' ),
+											(int)$request->getText( 'mjob' ),
+											(int)$request->getText( 'sjob' ),
+											$request->getText( 'equipment' ) );
+
 		if ( $uid != 0 ) { // User is logged in
 			$db = new DatabaseQueryWrapper();
 			$this->userChars = $db->getUserCharactersFromUserID($uid);
@@ -45,14 +46,16 @@ class SpecialEquipsets extends SpecialPage {
 		/**
 		 * 	Determine which character to load on startup
 		 *  Either the request data (from shared link) or default char saved in DB
-		 */											
-		if ( !$requestCharacter->isDefault() ) {
+		 */
+		if ( !( $requestCharacter->isDefault() && $requestSet->isDefault() ) ) {
 			$this->currentCharacter = $requestCharacter;
+			$this->currentSet = $requestSet;
 			$this->shouldLoadDefaultCharacter = false;
 		}
 		else {
-				// Create blank model
-				$this->currentCharacter = new FFXIPH_Character();
+				// Create blank models
+				$this->currentCharacter = new HXI_Character($uid);
+				$this->currentSet = new HXI_EquipmentSet();
 				if ( $this->userChars){
 					foreach( $this->userChars as $char ){
 						/* If one of the chars in the users char array
@@ -64,7 +67,7 @@ class SpecialEquipsets extends SpecialPage {
 		}
 
 		//wfDebugLog( 'Equipsets', get_called_class() . ":execute:" . json_encode($this->currentCharacter ) );
-		$tabEquipsets = new FFXIPackageHelper_Equipsets($this->currentCharacter);
+		$tabEquipsets = new FFXIPackageHelper_Equipsets($this->currentCharacter, $this->currentSet);
 		
 		$tabMobs = new FFXIPH_HTMLTabMobSearch();
 		$apiHelper = new FFXIPH_APIHelper();

@@ -26,14 +26,18 @@ class FFXIPackageHelper_Equipsets  {
     private $sharedEquipmentModel;
     private $updatedEquipmentData;
 
-    public function __construct(FFXIPH_Character $query) {
-        if ( !is_null($query) && $query->isDefault() == false){
-            $this->sharedLink = $query->toArray();
+    public function __construct(HXI_Character $character, ?HXI_EquipmentSet $set = null) {
+        if ($set === null) $set = new HXI_EquipmentSet();
+
+        // Matches the old combined-model behavior: if there's no real request/saved
+        // data on either half, fall back to a fully blank character + set.
+        if ($character->isDefault() && $set->isDefault()) {
+            $character = new HXI_Character();
+            $set = new HXI_EquipmentSet();
         }
-        else {
-            $temp = new FFXIPH_Character(); 
-            $this->sharedLink = $temp->toArray();
-        }
+
+        $this->sharedLink = array_merge($character->toArray(), $set->toArray());
+        $this->sharedLink['isDefault'] = $character->isDefault() && $set->isDefault();
 
         $this->sharedEquipmentModel = new FFXIPackageHelper_Equipment(  $this->sharedLink['equipment'] );
         $this->updatedEquipmentData = $this->updateGridItems($this->sharedEquipmentModel->getIncomingEquipmentList());
@@ -262,7 +266,7 @@ class FFXIPackageHelper_Equipsets  {
             // $equipmentModel = new FFXIPackageHelper_Equipment(  $this->sharedLink['equipment'] );
             //$equipmentArray = $equipmentModel->getEquipmentArray();
 
-            $newStats = new FFXIPackageHelper_Stats( $this->sharedLink['race'], 
+            $newStats = new HXI_CharacterStatCalculator( $this->sharedLink['race'],
                                                     $this->sharedLink['mlvl'],
                                                     $this->sharedLink['slvl'], 
                                                     $this->sharedLink['mjob'], 
@@ -368,7 +372,7 @@ class FFXIPackageHelper_Equipsets  {
     }
 
 
-    public function showMerits(FFXIPH_Character $c){
+    public function showMerits(HXI_Character $c){
         $html = "<div class=\"FFXIPackageHelper_dynamiccontent_showMerits\" >
                     <table id=\"FFXIPackageHelper_dynamiccontent_showMerits_table\" class=\"FFXIPackageHelper_dynamiccontent_showMerits_table\">" . 
                         $this->showMeritsTable($c) .
@@ -377,7 +381,7 @@ class FFXIPackageHelper_Equipsets  {
         return $html;
     }
 
-    public function showMeritsTable(FFXIPH_Character $c){
+    public function showMeritsTable(HXI_Character $c){
 		$html = "";
 		$html = "<tr><td><h4>Stats</h4></td></tr>
 									<tr><td><span style=\"vertical-align:middle;\">HP (+10 per)</span></td><td style=\"\">" . $this->meritIncrement(2, $c->getMerit(2) ) . "</td></tr>
@@ -476,7 +480,7 @@ class FFXIPackageHelper_Equipsets  {
         }
     }
 
-    public function showCharacters($userChars, $shouldLoadDefaultCharacter, FFXIPH_Character $c){
+    public function showCharacters($userChars, $shouldLoadDefaultCharacter, HXI_Character $c){
         $html = "<span><i><b>Disclosure:</b>  Users must be logged in to save a character. Saving a character stores the RACE and MERITS set below. The character will be de-selected if any changes are made. Refresh button resets stats to default.</i></span>" .
 
 					"<div id=\"FFXIPackageHelper_equipsets_charTab\" >" .

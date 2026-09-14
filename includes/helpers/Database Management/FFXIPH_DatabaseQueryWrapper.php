@@ -1254,13 +1254,13 @@ class DatabaseQueryWrapper {
 	}
 
     public function getUserCharactersFromUserID($uid){
-        $char = new FFXIPH_Character();
+        $char = new HXI_Character($uid);
         return $this->getUserCharacters($char);
     }
 
     /**
-     * Returns an array of FFXIPH_Character objects
-     * @return FFXIPH_Character[]
+     * Returns an array of HXI_Character objects
+     * @return HXI_Character[]
      */
     public function getUserCharacters($char = null, $testForExistingChar = false){
         $dbr = $this->openEquipsetsConnection();
@@ -1284,10 +1284,10 @@ class DatabaseQueryWrapper {
                 return $row->charname;
             }
             else {
-                $newChar = new FFXIPH_Character();
+                $newChar = new HXI_Character($uid);
                     $newChar->charname = $row->charname;
                     $newChar->charid = $row->charid;
-                    $newChar->race = $row->race;
+                    $newChar->setRace((int)$row->race);
                     $newChar->setMerits($row->merits);
                     $newChar->def = $row->def;
                 $userCharacters[] = $newChar;
@@ -1347,8 +1347,7 @@ class DatabaseQueryWrapper {
         ->fetchResultSet();
 
         foreach($result as $row){
-            return new FFXIPH_Character($row->race, null, null, null, null,
-                            $row->merits, null, $row->def, $row->charname, $row->charid);
+            return new HXI_Character($char->userid, (int)$row->race, $row->merits, (int)$row->def, $row->charname, (int)$row->charid);
             // return [
             //     'charname' => $row->charname,
             //     'charid' => $row->charid,
@@ -1374,10 +1373,7 @@ class DatabaseQueryWrapper {
         if( count($result) == 0 ) return null;
 
         foreach($result as $row){
-            return new FFXIPH_Character(
-                $row->race, null, null, null, null, $row->merits, null,
-                $row->def, $row->charname, $row->charid
-            );         
+            return new HXI_Character($uid, (int)$row->race, $row->merits, (int)$row->def, $row->charname, (int)$row->charid);
             // return [
             //     'charname' => $row->charname,
             //     'charid' => $row->charid,

@@ -16,12 +16,19 @@
         "ZoneForecast": "includes/WeatherForecast/FFXIPackageHelper_ZoneForecast.php",
         "SpecialEquipsets": "includes/SpecialPages/SpecialEquipsets.php",
 
-        "FFXIPH_Character": "includes/Models/FFXIPH_Character.php",
-        "FFXIPH_Mob": "includes/Models/FFXIPH_Mob.php",
-        "FFXIPH_MobUtils": "includes/Models/FFXIPH_MobUtils.php",
+        "HXI_Mob": "includes/Models/HXI_Mob.php",
+        "HXI_MobStatCalculator": "includes/Models/HXI_MobStatCalculator.php",
         "FFXIPH_StatsUtils": "includes/helpers/data/FFXIPH_StatsUtils.php",
-        "FFXIPH_Races": "includes/Models/FFXIPH_Races.php",
-        "FFXIPH_ItemDescription": "includes/Models/FFXIPH_ItemDescription.php",
+        "FFXIPH_ItemDescription": "includes/Models/FFXIPH_Item.php",
+
+        "HXI_EquipSlot": "includes/Models/HXI_EquipSlot.php",
+        "HXI_Item": "includes/Models/HXI_Item.php",
+        "HXI_Weapon": "includes/Models/HXI_Weapon.php",
+        "HXI_Equipment": "includes/Models/HXI_Equipment.php",
+        "HXI_Race": "includes/Models/HXI_Race.php",
+        "HXI_MeritsCodec": "includes/Models/HXI_MeritsCodec.php",
+        "HXI_Character": "includes/Models/HXI_Character.php",
+        "HXI_EquipmentSet": "includes/Models/HXI_EquipmentSet.php",
 
         "APIModuleDropRateSearch" : "includes/APIModules/APIModuleDropRateSearch.php",
         "APIModuleRecipeSearch" : "includes/APIModules/APIModuleRecipeSearch.php",
@@ -31,7 +38,7 @@
 
         "FFXIPH_SkillGrades": "includes/helpers/data/FFXIPH_SkillGrades.php",
         "FFXIPH_MathHelper": "includes/helpers/data/FFXIPH_MathHelper.php",
-        "FFXIPackageHelper_Stats": "includes/helpers/data/FFXIPackageHelper_Stats.php",
+        "HXI_CharacterStatCalculator": "includes/helpers/data/HXI_CharacterStatCalculator.php",
         "FFXIPackageHelper_Effects": "includes/helpers/FFXIPackageHelper_Effects.php",
         "FFXIPackageHelper_Equipment": "includes/helpers/data/FFXIPackageHelper_Equipment.php",
         "FFXIPackageHelper_Variables": "includes/helpers/data/FFXIPackageHelper_Variables.php",

@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPackageHelper_Stats {
+class HXI_CharacterStatCalculator {
     
     // Base Stats
     public $HP = 0;
