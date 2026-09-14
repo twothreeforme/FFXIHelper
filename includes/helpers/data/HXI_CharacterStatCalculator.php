@@ -61,6 +61,10 @@ class HXI_CharacterStatCalculator {
     public $meritSkills = [];
     public $merits = [];
 
+    /**
+     * @param array<int, ?HXI_Item> $e equipped items keyed by HXI_EquipSlot value (0-15),
+     * e.g. from FFXIPackageHelper_Equipment::getItemObjects()
+     */
     public function __construct($race, $mlvl, $slvl, $mjob, $sjob, $merits, $e) {
 
 
@@ -582,11 +586,10 @@ class HXI_CharacterStatCalculator {
         //$vars = new FFXIPackageHelper_Variables();
 
         for ( $i = 0; $i <= 15; $i++ ){
-            if ( $this->equipment[$i][0] != 0 ) {
-                //throw new Exception(json_encode($this->equipment[$i])) ;
-                foreach( $this->equipment[$i][3] as $mod ){
-                    //throw new Exception($mod) ;
-                    $this->applyToModifiers([$mod["id"] => $mod["value"]] );
+            $item = $this->equipment[$i] ?? null;
+            if ( $item !== null ) {
+                foreach( $item->getMods() as $modId => $modValue ){
+                    $this->applyToModifiers([$modId => $modValue] );
                 }
             }
         }
@@ -600,20 +603,22 @@ class HXI_CharacterStatCalculator {
         $ATT = 8 + $this->modifiers["ATT"];
         $ATTP = 0;
 
-        if ( FFXIPackageHelper_Equipment::is2Handed($this->equipment[0]) ) {
+        $mainWeapon = ($this->equipment[0] instanceof HXI_Weapon) ? $this->equipment[0] : null;
+
+        if ( $mainWeapon && $mainWeapon->is2Handed() ) {
             $ATT += $this->STR * 0.70; //Horizon change
         }
-        else if ( FFXIPackageHelper_Equipment::isH2H($this->equipment[0]) ){
+        else if ( $mainWeapon && $mainWeapon->isH2H() ){
             $ATT += $this->STR * 0.625; //Horizon change
         }
         else {
             $ATT += ($this->STR) * 0.65; //Horizon change
         }
 
-        $ATT +=  $this->getSkillCap( intval($this->equipment[0][4]) ) + $this->getWeaponSkillMerits();
+        $ATT +=  $this->getSkillCap( $mainWeapon ? $mainWeapon->skill : 0 ) + $this->getWeaponSkillMerits();
 
          // Smite applies when using 2H or H2H weapons
-        if ( ( FFXIPackageHelper_Equipment::is2Handed($this->equipment[0]) || FFXIPackageHelper_Equipment::isH2H($this->equipment[0])) && isset($this->modifiers["SMITE"]) ) {
+        if ( $mainWeapon && ($mainWeapon->is2Handed() || $mainWeapon->isH2H()) && isset($this->modifiers["SMITE"]) ) {
             $ATTP += $this->modifiers["SMITE"] / 256; // Divide smite value by 256
         }
 
@@ -622,14 +627,16 @@ class HXI_CharacterStatCalculator {
     }
 
     function getACC(){
-        $ACC = $this->getSkillCap( intval($this->equipment[0][4]) ) + $this->getWeaponSkillMerits();
+        $mainWeapon = ($this->equipment[0] instanceof HXI_Weapon) ? $this->equipment[0] : null;
+
+        $ACC = $this->getSkillCap( $mainWeapon ? $mainWeapon->skill : 0 ) + $this->getWeaponSkillMerits();
 
         $ACC = ($ACC > 200) ? floor(($ACC - 200) * 0.9) + 200 : $ACC;
 
-        if ( FFXIPackageHelper_Equipment::is2Handed( $this->equipment[0] ) ) {
+        if ( $mainWeapon && $mainWeapon->is2Handed() ) {
             $ACC += ($this->DEX * 0.70); //Horizon change
         }
-        else if ( FFXIPackageHelper_Equipment::isH2H($this->equipment[0]) ){
+        else if ( $mainWeapon && $mainWeapon->isH2H() ){
             $ACC += $this->DEX * 0.65; //Horizon change
         }
         else{
@@ -651,7 +658,8 @@ class HXI_CharacterStatCalculator {
     }
 
     function getWeaponSkillMerits(){
-        switch( intval($this->equipment[0][4]) ) {
+        $mainWeapon = ($this->equipment[0] instanceof HXI_Weapon) ? $this->equipment[0] : null;
+        switch( $mainWeapon ? $mainWeapon->skill : 0 ) {
             case 1:
                 return ( $this->modifiers["H2H"] ) ? $this->modifiers["H2H"] : 0;
             case 2:

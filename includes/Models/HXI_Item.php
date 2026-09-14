@@ -27,6 +27,12 @@ class HXI_Item {
     public int $rslotlook = 0;
     public int $suLevel = 0;
 
+    // From dat_details (client DAT-derived display text; see sql/DAT_details.sql)
+    public string $longname = "";
+    public string $descr = "";
+    /** Comma-separated race codes, e.g. "HUME_M,HUME_F,GALKA" */
+    public string $races = "";
+
     /** @var array<int,int> modId => value, from item_mods */
     private array $mods = [];
 

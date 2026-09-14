@@ -23,6 +23,7 @@
 
         "HXI_EquipSlot": "includes/Models/HXI_EquipSlot.php",
         "HXI_Item": "includes/Models/HXI_Item.php",
+        "HXI_ItemFactory": "includes/Models/HXI_ItemFactory.php",
         "HXI_Weapon": "includes/Models/HXI_Weapon.php",
         "HXI_Equipment": "includes/Models/HXI_Equipment.php",
         "HXI_Race": "includes/Models/HXI_Race.php",

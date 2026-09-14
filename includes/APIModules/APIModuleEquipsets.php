@@ -50,7 +50,7 @@ class APIModuleEquipsets extends ApiBase {
 
         if ( $params['action'] == "equipsets" ) {
             $equipmentModel = new FFXIPackageHelper_Equipment( $equipmentString );
-            $newEquipmentArray = $equipmentModel->getEquipmentArray();
+            $newEquipmentArray = $equipmentModel->getItemObjects();
 
             $newStats = new HXI_CharacterStatCalculator( $params['race'], $params['mlvl'], $params['slvl'], $params['mjob'], $params['sjob'], $meritsString, $newEquipmentArray );
             $stats =  $newStats->getStats();
@@ -72,7 +72,7 @@ class APIModuleEquipsets extends ApiBase {
             $equipmentModel = new FFXIPackageHelper_Equipment( $equipmentString );
             //throw new Exception ( json_encode($equipmentModel));
 
-            $newEquipmentArray = $equipmentModel->getEquipmentArray();
+            $newEquipmentArray = $equipmentModel->getItemObjects();
             $char = $this->createChar($params, $meritsString, $newEquipmentArray);
 
             $newStats = new HXI_CharacterStatCalculator( $params['race'], $params['mlvl'], $params['slvl'], $params['mjob'], $params['sjob'], $meritsString, $newEquipmentArray );
@@ -263,16 +263,17 @@ class APIModuleEquipsets extends ApiBase {
             $decodedMerits = urldecode($fetchedSet['merits']);
             $meritsString = base64_decode($decodedMerits);
 
+            $equipmentModel = new FFXIPackageHelper_Equipment( $equipmentString );
+            $newEquipmentArray = $equipmentModel->getItemObjects();
+
             $char = $this->createChar($params, $params['merits'], $newEquipmentArray);
             $tabEquipsets = new FFXIPackageHelper_Equipsets($char);
 
-            $equipmentModel = new FFXIPackageHelper_Equipment( $equipmentString );
             $incomingEquipmentList = $equipmentModel->getIncomingEquipmentList();
             $updatedGridItems = $tabEquipsets->updateGridItems($incomingEquipmentList, true);
             $updatedGrid = $updatedGridItems[0];
             $luaNamesArray = $updatedGridItems[1];
 
-            $newEquipmentArray = $equipmentModel->getEquipmentArray();
             $newStats = new HXI_CharacterStatCalculator( $fetchedSet['race'], $fetchedSet['mlvl'], $fetchedSet['slvl'], $fetchedSet['mjob'], $fetchedSet['sjob'], $meritsString, $newEquipmentArray );
             
             $stats = $newStats->getStats();
@@ -470,11 +471,12 @@ class APIModuleEquipsets extends ApiBase {
 
 
 
-    private function parseEquipmentLabels($equipmentArray){
+    private function parseEquipmentLabels($items){
         $equipLabelsArray = [ ];
         for ( $i = 0; $i <= 15; $i++ ){
             $labelHtml = " - ";
-            if ( $equipmentArray[$i][5] != null && $equipmentArray[$i][5] != "" ) $labelHtml = ParserHelper::wikiParse( "[[" . $equipmentArray[$i][5] . "]]" );
+            $item = $items[$i] ?? null;
+            if ( $item !== null && $item->name != null && $item->name != "" ) $labelHtml = ParserHelper::wikiParse( "[[" . $item->name . "]]" );
             $equipLabelsArray[$i] = $labelHtml;
         }
         return $equipLabelsArray;

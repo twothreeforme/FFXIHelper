@@ -1033,6 +1033,65 @@ class DatabaseQueryWrapper {
         ->fetchResultSet();
     }
 
+    /**
+     * Returns every column needed to build a complete item/weapon (item_basic + item_equipment +
+     * item_weapon + item_mods + dat_details), for one itemid. One row per mod (due to the item_mods
+     * join), same shape as getItem() - a caller building a single object should aggregate mod rows.
+     */
+    public function getFullItem( $itemid ){
+        $dbr = $this->openLSBSearchConnection();
+        $query = [ "item_basic.itemId = '$itemid'" ];
+
+        return $dbr->newSelectQueryBuilder()
+        ->select( [ 'item_basic.itemid',
+                    'item_basic.subid',
+                    'item_basic.name AS showname',
+                    'item_basic.sortname',
+                    'item_basic.type',
+                    'item_basic.stackSize',
+                    'item_basic.flags',
+                    'item_basic.aH',
+                    'item_basic.BaseSell',
+
+                    'item_equipment.level',
+                    'item_equipment.ilevel',
+                    'item_equipment.jobs',
+                    'item_equipment.MId',
+                    'item_equipment.shieldSize',
+                    'item_equipment.scriptType',
+                    'item_equipment.slot',
+                    'item_equipment.rslot',
+                    'item_equipment.rslotlook',
+                    'item_equipment.su_level',
+
+                    'item_weapon.skill AS skilltype',
+                    'item_weapon.subskill',
+                    'item_weapon.ilvl_skill',
+                    'item_weapon.ilvl_parry',
+                    'item_weapon.ilvl_macc',
+                    'item_weapon.dmgType',
+                    'item_weapon.hit',
+                    'item_weapon.delay',
+                    'item_weapon.dmg',
+                    'item_weapon.unlock_points',
+
+                    'item_mods.modId AS modid',
+                    'item_mods.value AS modValue',
+
+                    'dat_details.name AS displayName',
+                    'dat_details.longname',
+                    'dat_details.descr',
+                    'dat_details.races',
+                    ] )
+        ->from( 'item_basic' )
+        ->leftjoin( 'item_mods', null, 'item_mods.itemId=item_basic.itemid' )
+        ->leftjoin( 'item_equipment', null, 'item_equipment.itemId=item_basic.itemid' )
+        ->leftjoin( 'item_weapon', null, 'item_basic.itemid=item_weapon.itemId' )
+        ->leftjoin( 'dat_details', null, 'dat_details.itemid=item_basic.itemid' )
+        ->where( $query	)
+        ->fetchResultSet();
+    }
+
     public function getSkillRanks( $mjob, $sjob ){
         $dbr = $this->openLSBSearchConnection();
 
@@ -1162,7 +1221,7 @@ class DatabaseQueryWrapper {
                     'item_equipment.rslot',
                     'item_mods.modId AS modid',
                     'item_mods.value AS modValue',
-                    'item_weapon.skill AS skill',
+                    'item_weapon.skill AS skilltype',
                     'item_basic.name AS showname',
                     ] )
         ->from( 'item_basic' )

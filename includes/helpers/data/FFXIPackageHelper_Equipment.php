@@ -5,8 +5,9 @@
  * @param {$equipmentString} string, input from GET request, as itemid for each slot 0-15
  */
 class FFXIPackageHelper_Equipment {
-    private $equipment = [];
     private $incomingEquipmentList = [];
+    /** @var array<int, ?HXI_Item> real typed item/weapon per slot, built via HXI_ItemFactory */
+    private $itemObjects = [];
 
     public function __construct($equipment) {
         if ($equipment == null || $equipment == '' ) return;
@@ -25,10 +26,10 @@ class FFXIPackageHelper_Equipment {
             $incItemID = intval($temp[0]);
             $incItemChangeFlag = intval($temp[1]);
 
-            $model = null;
             //if ( $incItemID != 0 ) {
-                $model = $this->queryItem( $incItemID );
-                $name = ($model["name"] == null) ? "" : $model["name"];
+                $itemObject = $this->queryItem( $incItemID );
+                $this->itemObjects[$i] = $itemObject;
+                $name = ($itemObject === null || $itemObject->name == null) ? "" : $itemObject->name;
 
                 $this->incomingEquipmentList[$i] = [
                     $incItemID,
@@ -36,78 +37,32 @@ class FFXIPackageHelper_Equipment {
                     $incItemChangeFlag,
                     $name
                 ];
-                
-                //if ( $model != null )  throw new Exception ( json_encode($model));
-                if ( $incItemID == 0 ) {
-                    $this->equipment[$i] = [0,0,0,array(),0,""];
-                }
-                else {
-                    $this->equipment[$i] = [
-                        intval($model["id"]),
-                        intval($model["slot"]),
-                        intval($model["rslot"]),
-                        $model["mods"],
-                        intval($model["skilltype"]),
-                        $name
-                    ];
-
-                    // $this->equipment[$i] = [
-                    //     "id" => intval($model["id"]),
-                    //     "slot" => intval($model["slot"]),
-                    //     "rslot" => intval($model["rslot"]),
-                    //     "mods" => $model["mods"],
-                    //     "skilltype" => intval($model["skilltype"]),
-                    //     "name" => $name
-                    // ];
-                }
         }
-
-        //throw new Exception(json_encode($this->equipment));
     }
 
-    private function queryItem($item){
-        $dm = new DataModel();
+    /**
+     * Builds the real typed item/weapon for one itemid via a single joined query
+     * (DatabaseQueryWrapper::getFullItem + HXI_ItemFactory), replacing the old
+     * getItem() + DataModel::parseEquipment() + FFXIPackageHelper_ItemDetails lookup.
+     */
+    private function queryItem($item): ?HXI_Item {
         $db = new DatabaseQueryWrapper();
-
-        $results = $db->getItem($item);
-        return $dm->parseEquipment($results)[0];
-    }
-
-    public function getEquipmentArray(){
-        return $this->equipment;
+        $results = $db->getFullItem($item);
+        return HXI_ItemFactory::fromFullItemRows($results);
     }
 
     public function getIncomingEquipmentList(){
         return $this->incomingEquipmentList;
     }
 
-    public static function isH2H($weapon){
-        //if( isset($weapon['skilltype']) && $weapon['skilltype'] == 1 ) return true;
-        if( isset($weapon[4]) && $weapon[4] == 1 ) return true;
-
-        return false;
+    /** @return array<int, ?HXI_Item> real typed item/weapon per slot (0-15) */
+    public function getItemObjects(): array {
+        return $this->itemObjects;
     }
 
-    public static function is2Handed($weapon){
-        // if( isset($weapon['skilltype']) && (
-        //     $weapon['skilltype'] == 4 || // G. Sword
-        //     $weapon['skilltype'] == 6 || // G. Axe
-        //     $weapon['skilltype'] == 7 || // Scythe
-        //     $weapon['skilltype'] == 8 || // Polearm
-        //     $weapon['skilltype'] == 10 || // G. Katana
-        //     $weapon['skilltype'] == 12 ) // Staff
-        //     )return true;
-
-        if( isset($weapon[4]) && (
-            $weapon[4] == 4 || // G. Sword
-            $weapon[4] == 6 || // G. Axe
-            $weapon[4] == 7 || // Scythe
-            $weapon[4] == 8 || // Polearm
-            $weapon[4] == 10 || // G. Katana
-            $weapon[4] == 12 ) // Staff
-            )return true;
-
-            return false;
+    public function getWeaponInSlot(int $slot): ?HXI_Weapon {
+        $item = $this->itemObjects[$slot] ?? null;
+        return ($item instanceof HXI_Weapon) ? $item : null;
     }
 
     protected function detectDelimiter($line) {

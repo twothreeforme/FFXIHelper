@@ -272,7 +272,7 @@ class FFXIPackageHelper_Equipsets  {
                                                     $this->sharedLink['mjob'], 
                                                     $this->sharedLink['sjob'], 
                                                     $this->sharedLink['merits'], 
-                                                    $this->sharedEquipmentModel->getEquipmentArray() );
+                                                    $this->sharedEquipmentModel->getItemObjects() );
             $stats =  $newStats->getStats();
         }
         
