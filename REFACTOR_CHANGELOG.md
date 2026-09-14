@@ -220,6 +220,22 @@ array.
 Not migrated (deliberately out of scope): the equipment **search** feature still builds its own
 separate array shape via the old `getEquipment()`/`parseEquipment()`/`ItemDetails` path — untouched.
 
+## 11. Broader `FFXIPH_`/`FFXIPackageHelper_` → `HXI_` rename
+
+Renamed the remaining 21 classes outside Models/ (Tabs/, helpers/, helpers/data/, Page Directs/) —
+file + class name + extension.json + all call sites (~40 files touched). Scripted (Node.js,
+word-boundary regex per class name) rather than done by hand given the size. `FFXIPH_ItemDescription`
+still excluded (deferred, §9).
+
+**Naming collision:** `FFXIPackageHelper_Equipment` (the old equipment-string-parsing helper) would
+have collided with `HXI_Equipment` (the Models/ 16-slot container built earlier this session).
+Renamed it to `HXI_EquipmentParser` instead — distinct from, and unrelated in role to, the domain
+`HXI_Equipment` class.
+
+Classes whose file names still carry the old prefix but whose class names never did (`ExclusionsHelper`,
+`ParserHelper`, `DataModel`, `VanaTime`, `ZoneForecast`, `WeatherForecast_ElementMaps`) were left
+alone — out of scope for a *class* rename.
+
 ---
 
 ## Open / deferred items
@@ -229,9 +245,8 @@ separate array shape via the old `getEquipment()`/`parseEquipment()`/`ItemDetail
 - Migrate the equipment **search** feature to the new factory/objects too.
 - `HXI_StatCalculator` interface / `HXI_BaseStatCalculator` abstract base — not built. Worth
   revisiting only once both Mob and Character calculators are ready to share real code.
-- Broader `FFXIPH_`/`FFXIPackageHelper_` → `HXI_` rename across the rest of the codebase (Tabs,
-  APIModules, remaining helpers) — out of scope for this refactor, planned as a separate future
-  pass.
+- Filename-only cleanup for the classes noted in §11 (file still says `FFXIPackageHelper_X.php`/
+  `FFXIPH_X.php` even though the class inside never had that prefix) — cosmetic, low priority.
 - No PHP CLI or live MediaWiki/DB available in this environment at any point — nothing in this log
   has been executed/tested end-to-end. Manual smoke test still needed.
 
@@ -241,3 +256,5 @@ separate array shape via the old `getEquipment()`/`parseEquipment()`/`ItemDetail
   §2 sql_ASB removal).
 - `c2a4775` — dat_details table + getFullItem() + HXI_ItemFactory, and the full
   getEquipmentArray() retirement (§§8-10).
+- `3ef7abd` — CONTEXT.md + changelog housekeeping.
+- (pending) — broader HXI_ rename, 21 classes (§11).

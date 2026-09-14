@@ -1,6 +1,6 @@
 <?php
 
-class FFXIPackageHelper_HTMLTableHelper {
+class HXI_HTMLTableHelper {
 
 	public static function selectLvlDropDown($classname, $lvlMax){
         // <select id=\"FFXIPackageHelper_dynamiccontent_selectLvlMIN\"></select> FFXIPackageHelper_dynamiccontent_selectMinCraftLvl
@@ -103,7 +103,7 @@ class FFXIPackageHelper_HTMLTableHelper {
 
     public static function table_DropRates($dropRatesArray, $showTH)
 	{		
-		$html = FFXIPackageHelper_HTMLTableHelper::tableHeader_DropRates($showTH);
+		$html = HXI_HTMLTableHelper::tableHeader_DropRates($showTH);
 		
 		function thAdjust($rate, $multiplier){
 			$num = round(($rate * $multiplier) / 10, 2);
@@ -306,7 +306,7 @@ class FFXIPackageHelper_HTMLTableHelper {
     }
 	
 	public static function table_MobDropRates($dropRatesArray, $classname){
-		$html = FFXIPackageHelper_HTMLTableHelper::tableHeader_MobDropRates($classname, null);
+		$html = HXI_HTMLTableHelper::tableHeader_MobDropRates($classname, null);
         
 		//wfDebugLog( 'ShowMobDrops', get_called_class() . ":"  . json_encode( $dropRatesArray) );
 
@@ -531,8 +531,8 @@ class FFXIPackageHelper_HTMLTableHelper {
 			// 	'ResultName' => $row->ResultName,
 
 		$parse = new ParserHelper($array[1]);
-		$effects = new FFXIPackageHelper_Effects();
-		$vars = new FFXIPackageHelper_Variables();
+		$effects = new HXI_Effects();
+		$vars = new HXI_Variables();
 
 		$totalRows = 0;
 		foreach ( $array[0] as $row ) {
@@ -662,7 +662,7 @@ class FFXIPackageHelper_HTMLTableHelper {
     }
 
 	private static function htmlModifier($mod){
-		$var = new FFXIPackageHelper_Variables();
+		$var = new HXI_Variables();
 		$html = "";
 		$val = ( $mod['value'] > 0 ) ? "+" . $mod['value'] : $mod['value'];
 		if ( $mod['id'] <= 14 ) {
@@ -685,8 +685,8 @@ class FFXIPackageHelper_HTMLTableHelper {
 			";
 		//$parse = new ParserHelper($array[1]);
 
-		$var = new FFXIPackageHelper_Variables();
-		$details = new FFXIPackageHelper_ItemDetails();
+		$var = new HXI_Variables();
+		$details = new HXI_ItemDetails();
 
 		$totalRows = 0;		
 		foreach ( $array as $row ) {
@@ -858,9 +858,9 @@ class FFXIPackageHelper_HTMLTableHelper {
 
 		// $html .= "<div id=\"FFXIPackageHelper_dynamiccontent_moblevelincrement\" style=\"height: 35px; overflow: auto; display: inline-block; width: 100%; visibility: hidden;\">";
 		// $html .=	"<div class=\"FFXIPackageHelper_dynamiccontent_counterbox\">" . 
-		// 		FFXIPackageHelper_HTMLTableHelper::incrementMinus() .
+		// 		HXI_HTMLTableHelper::incrementMinus() .
 		// 		"<input id=\"FFXIPackageHelper_equipsets_moblevelincrement\" class=\"FFXIPackageHelper_dynamiccontent_incrementInput\" type=\"text\" value=\"0\" readonly >" . 
-		// 		FFXIPackageHelper_HTMLTableHelper::incrementPlus() .
+		// 		HXI_HTMLTableHelper::incrementPlus() .
 		// 		"</div>";
 		// $html .= "</div>";
 		
@@ -874,8 +874,8 @@ class FFXIPackageHelper_HTMLTableHelper {
 
 		$zone = ParserHelper::zoneName( $moblist[0]->getZone() );
 		$name = ParserHelper::brackets( $moblist[0]->getName() );
-		$mjob = FFXIPackageHelper_Variables::$jobArrayByID[ $moblist[0]->getMjob() ];
-		$sjob = FFXIPackageHelper_Variables::$jobArrayByID[ $moblist[0]->getSjob() ];
+		$mjob = HXI_Variables::$jobArrayByID[ $moblist[0]->getMjob() ];
+		$sjob = HXI_Variables::$jobArrayByID[ $moblist[0]->getSjob() ];
 
 		/*
 				$statsmap[x][y]

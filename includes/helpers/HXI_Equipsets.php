@@ -20,7 +20,7 @@ use MediaWiki\MediaWikiServices;
 // feet 256
 
 
-class FFXIPackageHelper_Equipsets  {
+class HXI_Equipsets  {
 
     private $sharedLink;
     private $sharedEquipmentModel;
@@ -39,7 +39,7 @@ class FFXIPackageHelper_Equipsets  {
         $this->sharedLink = array_merge($character->toArray(), $set->toArray());
         $this->sharedLink['isDefault'] = $character->isDefault() && $set->isDefault();
 
-        $this->sharedEquipmentModel = new FFXIPackageHelper_Equipment(  $this->sharedLink['equipment'] );
+        $this->sharedEquipmentModel = new HXI_EquipmentParser(  $this->sharedLink['equipment'] );
         $this->updatedEquipmentData = $this->updateGridItems($this->sharedEquipmentModel->getIncomingEquipmentList());
 
     }
@@ -48,9 +48,9 @@ class FFXIPackageHelper_Equipsets  {
         $maxedSub = "<label class=\"FFXIPackageHelper_dynamiccontent_checkContainer\"><input id=\"FFXIPackageHelper_dynamiccontent_checkboxMaxSub\" type=\"checkbox\" checked=\"checked\"><i>(max)</i></input></label>";
         $html = "<div class=\"FFXIPackageHelper_Equipsets_selectOptions\">" .
                     "<br>" .
-                    //"<span>Saved Sets  " . FFXIPackageHelper_HTMLOptions::setsDropDown("FFXIPackageHelper_equipsets_selectSet") . "</span><br>" .
-                    "<span>Main " . FFXIPackageHelper_HTMLOptions::jobDropDown("FFXIPackageHelper_equipsets_selectMJob", $this->sharedLink['mjob']) . FFXIPackageHelper_HTMLOptions::levelRange("FFXIPackageHelper_equipsets_selectMLevel", $this->sharedLink['mlvl']) . "</span><br>
-                    <span>Sub " . FFXIPackageHelper_HTMLOptions::jobDropDown("FFXIPackageHelper_equipsets_selectSJob", $this->sharedLink['sjob']) . FFXIPackageHelper_HTMLOptions::subLevelRange("FFXIPackageHelper_equipsets_selectSLevel", $this->sharedLink['slvl']) . $maxedSub ."</span><br>
+                    //"<span>Saved Sets  " . HXI_HTMLOptions::setsDropDown("FFXIPackageHelper_equipsets_selectSet") . "</span><br>" .
+                    "<span>Main " . HXI_HTMLOptions::jobDropDown("FFXIPackageHelper_equipsets_selectMJob", $this->sharedLink['mjob']) . HXI_HTMLOptions::levelRange("FFXIPackageHelper_equipsets_selectMLevel", $this->sharedLink['mlvl']) . "</span><br>
+                    <span>Sub " . HXI_HTMLOptions::jobDropDown("FFXIPackageHelper_equipsets_selectSJob", $this->sharedLink['sjob']) . HXI_HTMLOptions::subLevelRange("FFXIPackageHelper_equipsets_selectSLevel", $this->sharedLink['slvl']) . $maxedSub ."</span><br>
                     </div>";
         return $html;
     }
@@ -170,8 +170,8 @@ class FFXIPackageHelper_Equipsets  {
     public function userSetsData(){
         $html = "<div style=\"width:100%;text-align: center; padding: 12px;\">
                     <span>". 
-                    FFXIPackageHelper_HTMLTableHelper::shareButton("FFXIPackageHelper_dynamiccontent_shareEquipset") .
-                    FFXIPackageHelper_HTMLTableHelper::shareDiscordButton("FFXIPackageHelper_dynamiccontent_shareDiscordEquipset") .
+                    HXI_HTMLTableHelper::shareButton("FFXIPackageHelper_dynamiccontent_shareEquipset") .
+                    HXI_HTMLTableHelper::shareDiscordButton("FFXIPackageHelper_dynamiccontent_shareDiscordEquipset") .
                     "</span>
                 </div>";
         return $html;
@@ -235,7 +235,7 @@ class FFXIPackageHelper_Equipsets  {
                                 <td>Feet</td><td id=\"FFXIPackageHelper_Equipsets_gridLabel15\">" . (( !is_null($luaNamesArray) && $luaNamesArray[15] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[15] . "]]") ) : "- ") . "</td>
                             </tr>
                         </table><br>" .
-                        FFXIPackageHelper_HTMLOptions::saveButton("FFXIPackageHelper_newSetButton") .
+                        HXI_HTMLOptions::saveButton("FFXIPackageHelper_newSetButton") .
                         "<br><div style=\"background: #202122; height: 1px; width: 70%;\"></div>" .
                         //"<button id=\"FFXIPackageHelper_editSetsButton\" class=\"FFXIPackageHelper_editSetsButton\">Edit</button>" .
 
@@ -252,7 +252,7 @@ class FFXIPackageHelper_Equipsets  {
     public function luaContent(){
         $html = "<div class=\"FFXIPackageHelper_Equipsets_container\" >
                     <span id=\"FFXIPackageHelper_Equipsets_showLuaSets\">";
-        $setsHTML = new FFXIPackageHelper_LuaSetsHelper();
+        $setsHTML = new HXI_LuaSetsHelper();
         $html .= $setsHTML->__getSetsHTML( $this->updatedEquipmentData[1] );    
                     
         $html .=  "</span></div>";
@@ -263,7 +263,7 @@ class FFXIPackageHelper_Equipsets  {
         $stats = null;
         if ( $this->sharedLink['canGenerateStats'] ) {
             //throw new Exception (  json_encode($this->sharedLink) ) ;
-            // $equipmentModel = new FFXIPackageHelper_Equipment(  $this->sharedLink['equipment'] );
+            // $equipmentModel = new HXI_EquipmentParser(  $this->sharedLink['equipment'] );
             //$equipmentArray = $equipmentModel->getEquipmentArray();
 
             $newStats = new HXI_CharacterStatCalculator( $this->sharedLink['race'],
@@ -297,7 +297,7 @@ class FFXIPackageHelper_Equipsets  {
                         "</table></div><br><br>" .
                     $this->additionalData( $this->updatedEquipmentData[1] ) . 
                 "</div>" .
-                FFXIPackageHelper_HTMLOptions::setsList().
+                HXI_HTMLOptions::setsList().
                 $this->luaContent()  ;
 
         return $html;
@@ -339,7 +339,7 @@ class FFXIPackageHelper_Equipsets  {
         $parser = $wParser[1];
         $parserOptions = $wParser[2];
 
-        $iDetails = new FFXIPackageHelper_ItemDetails();
+        $iDetails = new HXI_ItemDetails();
 
 
         $updatedGrid = array();
@@ -447,16 +447,16 @@ class FFXIPackageHelper_Equipsets  {
 		else $type = "skill";
 
         $html = "<div id=\"FFXIPackageHelper_dynamiccontent_counterbox\" class=\"FFXIPackageHelper_dynamiccontent_counterbox\">" . 
-            FFXIPackageHelper_HTMLTableHelper::incrementMinus() .
+            HXI_HTMLTableHelper::incrementMinus() .
             "<input id=\"FFXIPackageHelper_equipsets_merits_$type$merit\" class=\"FFXIPackageHelper_dynamiccontent_incrementInput\" type=\"text\" value=\"$value\" readonly >" . 
-            FFXIPackageHelper_HTMLTableHelper::incrementPlus() .
+            HXI_HTMLTableHelper::incrementPlus() .
             "</div>";
 
 			return $html;
     }
 
     // private function showShareButton($id){
-    //     return FFXIPackageHelper_HTMLTableHelper::shareButton($id);
+    //     return HXI_HTMLTableHelper::shareButton($id);
     // }
 
     private function getDefaultImageName($s){
@@ -484,7 +484,7 @@ class FFXIPackageHelper_Equipsets  {
         $html = "<span><i><b>Disclosure:</b>  Users must be logged in to save a character. Saving a character stores the RACE and MERITS set below. The character will be de-selected if any changes are made. Refresh button resets stats to default.</i></span>" .
 
 					"<div id=\"FFXIPackageHelper_equipsets_charTab\" >" .
-						FFXIPackageHelper_HTMLOptions::selectableButtonsBar("FFXIPackageHelper_equipsets_charSelect", $userChars, $shouldLoadDefaultCharacter) .
+						HXI_HTMLOptions::selectableButtonsBar("FFXIPackageHelper_equipsets_charSelect", $userChars, $shouldLoadDefaultCharacter) .
 						
 						"<div id=\"FFXIPackageHelper_equipsets_charSelectMerits\">" .
 
@@ -504,7 +504,7 @@ class FFXIPackageHelper_Equipsets  {
 								$html .= "></input>" .
 									"<span class=\"FFXIPackageHelper_dynamiccontent_addCharDefaultSpan FFXIPackageHelper_dynamiccontent_addCharDefaultSpanround\"></span>" .
 								"</label>" .
-								"<br><p id=\"FFXIPackageHelper_dynamiccontent_raceLabel\">Race</p>" . FFXIPackageHelper_HTMLOptions::raceDropDown("FFXIPackageHelper_equipsets_selectRace", $c->race) . "<br>" .
+								"<br><p id=\"FFXIPackageHelper_dynamiccontent_raceLabel\">Race</p>" . HXI_HTMLOptions::raceDropDown("FFXIPackageHelper_equipsets_selectRace", $c->race) . "<br>" .
 							"</div>" .
 							"<div>" .
 								"<p id=\"FFXIPackageHelper_dynamiccontent_raceLabel\">Merits</p>" .

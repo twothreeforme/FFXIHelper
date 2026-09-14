@@ -15,7 +15,7 @@ class HXI_EquipmentSet {
     /** Raw urlencoded/delimited equipment string as stored on user_sets.equipment. */
     public string $equipmentString = "";
 
-    /** Populated on demand by callers that need typed slot data (e.g. FFXIPackageHelper_Equipment). */
+    /** Populated on demand by callers that need typed slot data (e.g. HXI_EquipmentParser). */
     public ?HXI_Equipment $equipment = null;
 
     public function __construct(int $mlvl = 0, int $slvl = 0, int $mjob = 0, int $sjob = 0, string $equipmentString = "", string $setname = "", int $usersetid = 0) {

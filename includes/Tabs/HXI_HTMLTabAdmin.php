@@ -1,14 +1,14 @@
 <?php
 
 
-class FFXIPackageHelper_HTMLTabAdmin {
+class HXI_HTMLTabAdmin {
     public function __construct() {
     }
 
     public function showAdmin(){
         $html = "<div id=\"FFXIPackageHelper_tabs_admin_display\">";
 
-        $apiHelper = new FFXIPH_APIHelper();
+        $apiHelper = new HXI_APIHelper();
         if ( $apiHelper->userIsAuth() == false ) return $html . "This page is restricted to administrators and senior-editors.</div>";
 
         $db = new DatabaseQueryWrapper();

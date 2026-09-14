@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPackageHelper_Variables {
+class HXI_Variables {
     public function __construct() {
     }
 

@@ -2,7 +2,7 @@
 
 use MediaWiki\MediaWikiServices;
 
-class FFXIPH_APIHelper {
+class HXI_APIHelper {
 
     private $adminArray = [ "bureaucrat","interface-admin","sysop","senior-editor"];
 

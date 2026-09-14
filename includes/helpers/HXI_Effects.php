@@ -1,6 +1,6 @@
 <?php
 
-class FFXIPackageHelper_Effects {
+class HXI_Effects {
 
 public $food = array(
     4510 => [ 3 , [ [228,10 ], [244,10 ], [71,3 ] ] ],

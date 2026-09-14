@@ -1,6 +1,6 @@
 <?php
 
-class FFXIPackageHelper_ItemDetails {
+class HXI_ItemDetails {
     public function __construct() {
     }
 

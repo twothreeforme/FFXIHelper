@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPackageHelper_HTMLTabDropRates {
+class HXI_HTMLTabDropRates {
 
         private $query_limit;
         private $mobName;
@@ -43,13 +43,13 @@ class FFXIPackageHelper_HTMLTabDropRates {
                             <td>Item Name<br><input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"itemNameSearch\" value=\"$this->itemName\" size=\"25\"></td>
                         </tr>
                         <tr>
-                            <td>Zone<br>" . FFXIPackageHelper_HTMLOptions::zonesDropDown() . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchDropRatesSubmit\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button></td>
+                            <td>Zone<br>" . HXI_HTMLOptions::zonesDropDown() . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchDropRatesSubmit\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button></td>
                             </tr>
                         </tbody></table>
                         </td>
                         <td style=\"vertical-align:top;\">".$this->showShareButton("FFXIPackageHelper_dynamiccontent_shareDropRateQuery") . 
-                            "<br><br>Level: Min->". FFXIPackageHelper_HTMLTableHelper::selectLvlDropDown("FFXIPackageHelper_dynamiccontent_selectLvlMIN", 85) .
-                            " Max->". FFXIPackageHelper_HTMLTableHelper::selectLvlDropDown("FFXIPackageHelper_dynamiccontent_selectLvlMAX", 85) .
+                            "<br><br>Level: Min->". HXI_HTMLTableHelper::selectLvlDropDown("FFXIPackageHelper_dynamiccontent_selectLvlMIN", 85) .
+                            " Max->". HXI_HTMLTableHelper::selectLvlDropDown("FFXIPackageHelper_dynamiccontent_selectLvlMAX", 85) .
                             "<br><br>" . $this->selectionOptions() . 
                         "</td>
                     </tr></tbody></table>
@@ -113,13 +113,13 @@ class FFXIPackageHelper_HTMLTabDropRates {
     }
 
     private function showShareButton($id){
-        return FFXIPackageHelper_HTMLTableHelper::shareButton($id);
+        return HXI_HTMLTableHelper::shareButton($id);
     }
 
     private function postQueryResults(){
         if ( $this->mobName != "" || $this->itemName != "" || $this->zoneName != "") {
 
-            $html = FFXIPackageHelper_QueryController::queryDropRates([
+            $html = HXI_QueryController::queryDropRates([
                 $this->query_limit,
                 $this->mobName,
                 $this->itemName,

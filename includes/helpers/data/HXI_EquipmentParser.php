@@ -4,7 +4,7 @@
  *
  * @param {$equipmentString} string, input from GET request, as itemid for each slot 0-15
  */
-class FFXIPackageHelper_Equipment {
+class HXI_EquipmentParser {
     private $incomingEquipmentList = [];
     /** @var array<int, ?HXI_Item> real typed item/weapon per slot, built via HXI_ItemFactory */
     private $itemObjects = [];
@@ -43,7 +43,7 @@ class FFXIPackageHelper_Equipment {
     /**
      * Builds the real typed item/weapon for one itemid via a single joined query
      * (DatabaseQueryWrapper::getFullItem + HXI_ItemFactory), replacing the old
-     * getItem() + DataModel::parseEquipment() + FFXIPackageHelper_ItemDetails lookup.
+     * getItem() + DataModel::parseEquipment() + HXI_ItemDetails lookup.
      */
     private function queryItem($item): ?HXI_Item {
         $db = new DatabaseQueryWrapper();

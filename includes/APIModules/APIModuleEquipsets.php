@@ -49,27 +49,27 @@ class APIModuleEquipsets extends ApiBase {
 
 
         if ( $params['action'] == "equipsets" ) {
-            $equipmentModel = new FFXIPackageHelper_Equipment( $equipmentString );
+            $equipmentModel = new HXI_EquipmentParser( $equipmentString );
             $newEquipmentArray = $equipmentModel->getItemObjects();
 
             $newStats = new HXI_CharacterStatCalculator( $params['race'], $params['mlvl'], $params['slvl'], $params['mjob'], $params['sjob'], $meritsString, $newEquipmentArray );
             $stats =  $newStats->getStats();
 
             $char = $this->createChar($params, $meritsString, $newEquipmentArray );
-            $equipsets = new FFXIPackageHelper_Equipsets($char);
+            $equipsets = new HXI_Equipsets($char);
 
             $result->addValue( $params['action'], "stats", $equipsets->statsSection($stats) );
             $result->addValue( $params['action'], "equipLabels", $this->parseEquipmentLabels($newEquipmentArray) );
 
         }
         else if ( $params['action'] == "equipsets_search" ) {
-            $resultsHTML = FFXIPackageHelper_QueryController::queryEquipsetsSearchItems($params);
+            $resultsHTML = HXI_QueryController::queryEquipsetsSearchItems($params);
             //throw new Exception ( $resultsHTML  );
             $result->addValue($params['action'], "search", [$resultsHTML, $params['slot']]);
         }
         else if ( $params['action'] == "equipsets_change" ) {
             //throw new Exception ( json_encode($equipmentString));
-            $equipmentModel = new FFXIPackageHelper_Equipment( $equipmentString );
+            $equipmentModel = new HXI_EquipmentParser( $equipmentString );
             //throw new Exception ( json_encode($equipmentModel));
 
             $newEquipmentArray = $equipmentModel->getItemObjects();
@@ -81,7 +81,7 @@ class APIModuleEquipsets extends ApiBase {
             $incomingEquipmentList = $equipmentModel->getIncomingEquipmentList();
 
 
-            $tabEquipsets = new FFXIPackageHelper_Equipsets($char);
+            $tabEquipsets = new HXI_Equipsets($char);
             $updatedGrid = $tabEquipsets->updateGridItems($incomingEquipmentList)[0];
             $luaNamesArray = $tabEquipsets->updateGridItems($incomingEquipmentList)[1];
 
@@ -219,7 +219,7 @@ class APIModuleEquipsets extends ApiBase {
             
             $userCharacters = $db->getUserCharacters($selectedChar, false);
 
-            $tabEquipsets = new FFXIPackageHelper_Equipsets($char);
+            $tabEquipsets = new HXI_Equipsets($char);
 
             $result->addValue( $params['action'], "selectchar", $selectedChar->toURLsafeArray() );
 
@@ -263,11 +263,11 @@ class APIModuleEquipsets extends ApiBase {
             $decodedMerits = urldecode($fetchedSet['merits']);
             $meritsString = base64_decode($decodedMerits);
 
-            $equipmentModel = new FFXIPackageHelper_Equipment( $equipmentString );
+            $equipmentModel = new HXI_EquipmentParser( $equipmentString );
             $newEquipmentArray = $equipmentModel->getItemObjects();
 
             $char = $this->createChar($params, $params['merits'], $newEquipmentArray);
-            $tabEquipsets = new FFXIPackageHelper_Equipsets($char);
+            $tabEquipsets = new HXI_Equipsets($char);
 
             $incomingEquipmentList = $equipmentModel->getIncomingEquipmentList();
             $updatedGridItems = $tabEquipsets->updateGridItems($incomingEquipmentList, true);
@@ -315,7 +315,7 @@ class APIModuleEquipsets extends ApiBase {
             else {
                 $newSetList = $db->getUserSetsFromUserID($newSet['userid']);
             }
-            $setList = FFXIPackageHelper_HTMLOptions::setsListTable($newSetList);
+            $setList = HXI_HTMLOptions::setsListTable($newSetList);
             $result->addValue( $params['action'], "getsets", $setList );
 
         }
@@ -334,7 +334,7 @@ class APIModuleEquipsets extends ApiBase {
                         //$sendSetList = $this->getHTMLSetsListTable($db, $newSet['userid']);
 
                         // $userSets = $db->getUserSetsFromUserID($newSet['userid']);
-                        // $sendSetList = FFXIPackageHelper_HTMLOptions::setsListTable($userSets);
+                        // $sendSetList = HXI_HTMLOptions::setsListTable($userSets);
 
                         $result->addValue( $params['action'], "getsets", $this->getHTMLSetsListTable($db, $newSet['userid']) );
                         $result->addValue( $params['action'], "status", ["Set removed from users set list."] );
@@ -354,7 +354,7 @@ class APIModuleEquipsets extends ApiBase {
             $dm->parseMobZoneList($mobandzone);
 
             // throw new Exception( json_encode( $dm->getDataSet() ) );
-            $final = FFXIPackageHelper_HTMLTableHelper::table_MobAndZoneList( $dm->getDataSet() );
+            $final = HXI_HTMLTableHelper::table_MobAndZoneList( $dm->getDataSet() );
             if ( strlen($final) > 0 ){
                 $finalHtml = ParserHelper::wikiParse($final);
                 $db->incrementHitCounter("mobsearch");
@@ -372,7 +372,7 @@ class APIModuleEquipsets extends ApiBase {
             $mobFromSQL = $db->getMobStats($params['mobname'], $params['zonename'], $params['moblevel']);
 
             $mobsArray = $dm->buildMobStatsArray($mobFromSQL,  $params['moblevel']);
-            $finalHtml = FFXIPackageHelper_HTMLTableHelper::table_mobDetails($mobsArray);
+            $finalHtml = HXI_HTMLTableHelper::table_mobDetails($mobsArray);
             $finalHtml = ParserHelper::wikiParse($finalHtml);
             //wfDebugLog( 'Equipsets', get_called_class() . ":" . $params['action'] . ":"  . json_encode($mobs) );
             $result->addValue( $params['action'], "mobstatstable", $finalHtml );
@@ -437,7 +437,7 @@ class APIModuleEquipsets extends ApiBase {
                 //wfDebugLog( 'Equipsets', get_called_class() . ":" . $params['action'] . ":"  .  json_encode($newSetResponse) );
             }
 
-            $html = FFXIPackageHelper_HTMLTableHelper::table_importLuaResults($equipmentArrayResponse);
+            $html = HXI_HTMLTableHelper::table_importLuaResults($equipmentArrayResponse);
             $finalHtml = ParserHelper::wikiParse($html);
             $result->addValue( $params['action'], "verifyresults", $finalHtml );
 
@@ -464,7 +464,7 @@ class APIModuleEquipsets extends ApiBase {
     private function getHTMLSetsListTable($db, $uid){
         $userSets = $db->getUserSetsFromUserID($uid);
         if ( count($userSets) > 0 ){
-            return FFXIPackageHelper_HTMLOptions::setsListTable($userSets);
+            return HXI_HTMLOptions::setsListTable($userSets);
         }
         else return "";
     }
@@ -511,12 +511,12 @@ class APIModuleEquipsets extends ApiBase {
             $db = new DatabaseQueryWrapper();
             $userChars = $db->getUserCharactersFromUserID($uid);
         }
-        return FFXIPackageHelper_HTMLOptions::charactersButtonsList($userChars );
+        return HXI_HTMLOptions::charactersButtonsList($userChars );
     }
 
     // div id=FFXIPackageHelper_equipsets_charSelect
     private function getCharSelectButtonsBar($userchars, $selectChar = null){
-        return FFXIPackageHelper_HTMLOptions::charactersButtonsList($userchars, $selectChar );
+        return HXI_HTMLOptions::charactersButtonsList($userchars, $selectChar );
     }
 
     private function getUserID(){

@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPackageHelper_HTMLTabRecipeSearch {
+class HXI_HTMLTabRecipeSearch {
     public function __construct() {
       }
 

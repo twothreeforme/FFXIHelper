@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPackageHelper_HTMLTabEquipSearch {
+class HXI_HTMLTabEquipSearch {
 
     public function __construct() {
       }
@@ -14,7 +14,7 @@ class FFXIPackageHelper_HTMLTabEquipSearch {
                             <td>Equipment <input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"equipmentNameSearch\" size=\"25\" />
                         </tr>
                         <tr>
-                            <td>Job " . FFXIPackageHelper_HTMLOptions::jobDropDown("FFXIPackageHelper_dynamiccontent_selectJob") . "
+                            <td>Job " . HXI_HTMLOptions::jobDropDown("FFXIPackageHelper_dynamiccontent_selectJob") . "
                             <br>Slot ". $this->slotTypeDropDown() . "
                             <br>Max Item Level " . $this->minItemLevel("FFXIPackageHelper_dynamiccontent_selectMinItemLvl") . "</td>
                         </tr>

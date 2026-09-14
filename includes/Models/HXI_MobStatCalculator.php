@@ -15,12 +15,12 @@ class HXI_MobStatCalculator {
     }
 
     private function handleMods($mods){
-        $vars = new FFXIPackageHelper_Variables();
+        $vars = new HXI_Variables();
 
         foreach ($mods as $mod) {
             // Pool and Family mods
             if ( isset($mod->is_mob_mod) && $mod->is_mob_mod == 1 ) {
-                $modlabel = FFXIPackageHelper_Variables::$mobModArray[$mod->modid];
+                $modlabel = HXI_Variables::$mobModArray[$mod->modid];
             }
             else $modlabel = $vars->modArray[$mod->modid];
             $this->addMod( $modlabel, $mod->value );
@@ -31,7 +31,7 @@ class HXI_MobStatCalculator {
         //Trait mods
         //traits are treated a little different than pool and family mods
         //traits are prioritized based on highest trait, not added together
-        $vars = new FFXIPackageHelper_Variables();
+        $vars = new HXI_Variables();
 
         $traits = [];
         foreach ( $SQLtraits as $row ) {
@@ -150,23 +150,23 @@ class HXI_MobStatCalculator {
             $baseMobHP = 0; // Define base mobs hp
             $sjHP      = 0; // Define base subjob hp
 
-            $mJobGrade = FFXIPH_SkillGrades::$JobGrades[$mJob][0]; // main jobs grade
-            $sJobGrade = FFXIPH_SkillGrades::$JobGrades[$sJob][0]; // subjobs grade
+            $mJobGrade = HXI_SkillGrades::$JobGrades[$mJob][0]; // main jobs grade
+            $sJobGrade = HXI_SkillGrades::$JobGrades[$sJob][0]; // subjobs grade
 
             $base     = 0; // Column for base hp
             $jobScale = 1; // Column for job scaling
             $scaleX   = 2; // Column for modifier scale
 
-            $BaseHP     = FFXIPH_SkillGrades::$MobHPScale[$mJobGrade][$base];     // Main job base HP
-            $JobScale   = FFXIPH_SkillGrades::$MobHPScale[$mJobGrade][$jobScale]; // Main job scaling
-            $ScaleXHP   = FFXIPH_SkillGrades::$MobHPScale[$mJobGrade][$scaleX];   // Main job modifier scale
-            $sjJobScale = FFXIPH_SkillGrades::$MobHPScale[$sJobGrade][$jobScale]; // Sub job scaling
-            $sjScaleXHP = FFXIPH_SkillGrades::$MobHPScale[$sJobGrade][$scaleX];   // Sub job modifier scale
+            $BaseHP     = HXI_SkillGrades::$MobHPScale[$mJobGrade][$base];     // Main job base HP
+            $JobScale   = HXI_SkillGrades::$MobHPScale[$mJobGrade][$jobScale]; // Main job scaling
+            $ScaleXHP   = HXI_SkillGrades::$MobHPScale[$mJobGrade][$scaleX];   // Main job modifier scale
+            $sjJobScale = HXI_SkillGrades::$MobHPScale[$sJobGrade][$jobScale]; // Sub job scaling
+            $sjScaleXHP = HXI_SkillGrades::$MobHPScale[$sJobGrade][$scaleX];   // Sub job modifier scale
 
             $RIgrade = min($mLvl, 5); // RI Grade
             $RIbase  = 1;                        // Column for RI base
 
-            $RI = FFXIPH_SkillGrades::$MobRBI[$RIgrade][$RIbase]; // Random Increment addition per grade vs. base
+            $RI = HXI_SkillGrades::$MobRBI[$RIgrade][$RIbase]; // Random Increment addition per grade vs. base
 
             $mLvlIf    = ($mLvl > 5 ? 1 : 0);
             $mLvlIf30  = ($mLvl > 30 ? 1 : 0);
@@ -236,14 +236,14 @@ class HXI_MobStatCalculator {
 
         switch ($mJob)
         {
-            case FFXIPackageHelper_Variables::$jobArrayByName["PLD"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["WHM"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["BLM"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["RDM"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["DRK"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["BLU"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["SCH"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["SMN"]:
+            case HXI_Variables::$jobArrayByName["PLD"]:
+            case HXI_Variables::$jobArrayByName["WHM"]:
+            case HXI_Variables::$jobArrayByName["BLM"]:
+            case HXI_Variables::$jobArrayByName["RDM"]:
+            case HXI_Variables::$jobArrayByName["DRK"]:
+            case HXI_Variables::$jobArrayByName["BLU"]:
+            case HXI_Variables::$jobArrayByName["SCH"]:
+            case HXI_Variables::$jobArrayByName["SMN"]:
                 $hasMp = true;
                 break;
             default:
@@ -252,14 +252,14 @@ class HXI_MobStatCalculator {
 
         switch ($sJob)
         {
-            case FFXIPackageHelper_Variables::$jobArrayByName["PLD"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["WHM"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["BLM"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["RDM"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["DRK"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["BLU"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["SCH"]:
-            case FFXIPackageHelper_Variables::$jobArrayByName["SMN"]:
+            case HXI_Variables::$jobArrayByName["PLD"]:
+            case HXI_Variables::$jobArrayByName["WHM"]:
+            case HXI_Variables::$jobArrayByName["BLM"]:
+            case HXI_Variables::$jobArrayByName["RDM"]:
+            case HXI_Variables::$jobArrayByName["DRK"]:
+            case HXI_Variables::$jobArrayByName["BLU"]:
+            case HXI_Variables::$jobArrayByName["SCH"]:
+            case HXI_Variables::$jobArrayByName["SMN"]:
                 $hasMp = true;
                 break;
             default:
@@ -283,29 +283,29 @@ class HXI_MobStatCalculator {
 
         }
 
-        $fSTR = FFXIPH_SkillGrades::baseToRank($SQLmob->STR, $mLvl);
-        $fDEX = FFXIPH_SkillGrades::baseToRank($SQLmob->DEX, $mLvl);
-        $fVIT = FFXIPH_SkillGrades::baseToRank($SQLmob->VIT, $mLvl);
-        $fAGI = FFXIPH_SkillGrades::baseToRank($SQLmob->AGI, $mLvl);
-        $fINT = FFXIPH_SkillGrades::baseToRank($SQLmob->INT, $mLvl);
-        $fMND = FFXIPH_SkillGrades::baseToRank($SQLmob->MND, $mLvl);
-        $fCHR = FFXIPH_SkillGrades::baseToRank($SQLmob->CHR, $mLvl);
+        $fSTR = HXI_SkillGrades::baseToRank($SQLmob->STR, $mLvl);
+        $fDEX = HXI_SkillGrades::baseToRank($SQLmob->DEX, $mLvl);
+        $fVIT = HXI_SkillGrades::baseToRank($SQLmob->VIT, $mLvl);
+        $fAGI = HXI_SkillGrades::baseToRank($SQLmob->AGI, $mLvl);
+        $fINT = HXI_SkillGrades::baseToRank($SQLmob->INT, $mLvl);
+        $fMND = HXI_SkillGrades::baseToRank($SQLmob->MND, $mLvl);
+        $fCHR = HXI_SkillGrades::baseToRank($SQLmob->CHR, $mLvl);
 
-        $mSTR = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$mJob][2], $mLvl );
-        $mDEX = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$mJob][3], $mLvl );
-        $mVIT = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$mJob][4], $mLvl );
-        $mAGI = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$mJob][5], $mLvl );
-        $mINT = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$mJob][6], $mLvl );
-        $mMND = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$mJob][7], $mLvl );
-        $mCHR = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$mJob][8], $mLvl );
+        $mSTR = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$mJob][2], $mLvl );
+        $mDEX = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$mJob][3], $mLvl );
+        $mVIT = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$mJob][4], $mLvl );
+        $mAGI = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$mJob][5], $mLvl );
+        $mINT = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$mJob][6], $mLvl );
+        $mMND = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$mJob][7], $mLvl );
+        $mCHR = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$mJob][8], $mLvl );
 
-        $sSTR = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$sJob][2], $sLvl );
-        $sDEX = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$sJob][3], $sLvl );
-        $sVIT = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$sJob][4], $sLvl );
-        $sAGI = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$sJob][5], $sLvl );
-        $sINT = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$sJob][6], $sLvl );
-        $sMND = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$sJob][7], $sLvl );
-        $sCHR = FFXIPH_SkillGrades::baseToRank( FFXIPH_SkillGrades::$JobGrades[$sJob][8], $sLvl );
+        $sSTR = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$sJob][2], $sLvl );
+        $sDEX = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$sJob][3], $sLvl );
+        $sVIT = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$sJob][4], $sLvl );
+        $sAGI = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$sJob][5], $sLvl );
+        $sINT = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$sJob][6], $sLvl );
+        $sMND = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$sJob][7], $sLvl );
+        $sCHR = HXI_SkillGrades::baseToRank( HXI_SkillGrades::$JobGrades[$sJob][8], $sLvl );
 
         if ($mLvl >= 45)
         {

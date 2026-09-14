@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPackageHelper_HTMLTabFishingSearch {
+class HXI_HTMLTabFishingSearch {
     
     private $query_limit = 0;
     private $baitName = "";
@@ -29,7 +29,7 @@ class FFXIPackageHelper_HTMLTabFishingSearch {
                             <td>Fish<br><input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"fishNameSearch\" value=\"$this->fishName\" size=\"25\"></td>
                         </tr>
                         <tr>
-                            <td>Zone<br>" . FFXIPackageHelper_HTMLOptions::fishZonesDropDown() . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchFishingSubmit\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button></td>
+                            <td>Zone<br>" . HXI_HTMLOptions::fishZonesDropDown() . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchFishingSubmit\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button></td>
                             </tr>
                         </tbody></table>
                         </td>

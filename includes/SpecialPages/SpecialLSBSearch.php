@@ -86,13 +86,13 @@ class SpecialLSBSearch extends SpecialPage {
 		// }
 
 
-        $tabs = new FFXIPH_LSBSearch_HTMLTabsHelper();
-        $tabDropRates = new FFXIPackageHelper_HTMLTabDropRates($queryDataDR);
-        $tabRecipes = new FFXIPackageHelper_HTMLTabRecipeSearch();
-		$tabEquipment = new FFXIPackageHelper_HTMLTabEquipSearch();
-        $tabFishing = new FFXIPackageHelper_HTMLTabFishingSearch();
-        $tabAdmin = new FFXIPackageHelper_HTMLTabAdmin();
-		$tabMobs = new FFXIPH_HTMLTabMobSearch();
+        $tabs = new HXI_LSBSearch_HTMLTabsHelper();
+        $tabDropRates = new HXI_HTMLTabDropRates($queryDataDR);
+        $tabRecipes = new HXI_HTMLTabRecipeSearch();
+		$tabEquipment = new HXI_HTMLTabEquipSearch();
+        $tabFishing = new HXI_HTMLTabFishingSearch();
+        $tabAdmin = new HXI_HTMLTabAdmin();
+		$tabMobs = new HXI_HTMLTabMobSearch();
 
 		$html = "<span><i><b>Disclosure:</b> All data here is from LandSandBoat(base), with minor additions/edits made based on direct feedback from players and Horizon Devs.
 			Please reach out to the Wiki team on <a href=\"https://discord.com/channels/1078846428736147507/1159433939136553030\">Discord HERE</a> if you feel the data is incorrect or have suggestions. </b></i></span>";

@@ -44,7 +44,7 @@ class APIModuleEquipmentSearch extends ApiBase {
 
         $html = "";
 
-        $html .= FFXIPackageHelper_HTMLTableHelper::table_EquipmentQuery($initialQuery);
+        $html .= HXI_HTMLTableHelper::table_EquipmentQuery($initialQuery);
         return $html;
 	}
 

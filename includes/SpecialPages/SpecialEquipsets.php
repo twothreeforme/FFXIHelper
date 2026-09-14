@@ -9,7 +9,7 @@ class SpecialEquipsets extends SpecialPage {
 	static function onBeforePageDisplay( $out, $skin ) : void  {
 		//$out->addModules(['FFXIPackageHelper_LSBSearch']);
 		if ( $out->getTitle() == "Special:Equipsets" )  {
-			$out->addModules(['FFXIPackageHelper_Equipsets']);
+			$out->addModules(['HXI_Equipsets']);
 		}
 	}
 
@@ -67,14 +67,14 @@ class SpecialEquipsets extends SpecialPage {
 		}
 
 		//wfDebugLog( 'Equipsets', get_called_class() . ":execute:" . json_encode($this->currentCharacter ) );
-		$tabEquipsets = new FFXIPackageHelper_Equipsets($this->currentCharacter, $this->currentSet);
+		$tabEquipsets = new HXI_Equipsets($this->currentCharacter, $this->currentSet);
 		
-		$tabMobs = new FFXIPH_HTMLTabMobSearch();
-		$apiHelper = new FFXIPH_APIHelper();
+		$tabMobs = new HXI_HTMLTabMobSearch();
+		$apiHelper = new HXI_APIHelper();
         if ( $apiHelper->userIsAuth() == false ) $combatsimContent = "This page is restricted to administrators and senior-editors while under continued construction.</div>";
 		else $combatsimContent = $tabMobs->searchForm();
 
-		$html = FFXIPackageHelper_HTMLTableHelper::characterSelectedHeader($this->currentCharacter) .
+		$html = HXI_HTMLTableHelper::characterSelectedHeader($this->currentCharacter) .
 			"<div id=\"initialHide\" style=\"display: none;\">" .
 				$this->header() .
 				$this->tabEquipsets( $tabEquipsets->showEquipsets() ) .

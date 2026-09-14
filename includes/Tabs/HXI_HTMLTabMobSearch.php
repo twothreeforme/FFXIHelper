@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPH_HTMLTabMobSearch {
+class HXI_HTMLTabMobSearch {
     public function __construct() { }
 
     public function searchForm(){
@@ -13,14 +13,14 @@ class FFXIPH_HTMLTabMobSearch {
                         <tr>" . 
                             //<td>Mob Name<br><input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"mobNameSearch\" value=\"$this->mobName\" size=\"25\"></td>
                             "<td>Mob Name<br><input id=\"FFXIPackageHelper_dynamiccontent_combatsim_mobsearch\" class=\"FFXIPackageHelper_dynamiccontent_textinput\" size=\"25\">" . 
-                                "<br>Level: " . FFXIPackageHelper_HTMLTableHelper::selectLvlDropDown("FFXIPackageHelper_dynamiccontent_selectLvlMob", 95) . 
+                                "<br>Level: " . HXI_HTMLTableHelper::selectLvlDropDown("FFXIPackageHelper_dynamiccontent_selectLvlMob", 95) . 
                             "</td>" .
                         "</tr>
                         <tr>
                             <td><b>AND / OR</b></td>
                         </tr>
                         <tr>
-                            <td>Zone<br>" . FFXIPackageHelper_HTMLOptions::zonesDropDown("FFXIPackageHelper_dynamiccontent_selectMobZoneName") . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchForMobAndZone\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Find Mob</button></td>
+                            <td>Zone<br>" . HXI_HTMLOptions::zonesDropDown("FFXIPackageHelper_dynamiccontent_selectMobZoneName") . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchForMobAndZone\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Find Mob</button></td>
                         </tr>
                         </tbody></table>
                         </td>

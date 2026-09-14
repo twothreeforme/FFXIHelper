@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPH_MathHelper {
+class HXI_MathHelper {
     public function __construct() {
     }
 

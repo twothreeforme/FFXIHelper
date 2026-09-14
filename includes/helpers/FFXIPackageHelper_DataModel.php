@@ -286,7 +286,7 @@ class DataModel {
 	function parseEquipment($param, $job = null){
         if ( !$param ) return NULL;
 
-		$iDetails = new FFXIPackageHelper_ItemDetails();
+		$iDetails = new HXI_ItemDetails();
 
 		foreach ( $param as $row ) {
 			//throw new Exception($row->jobs);

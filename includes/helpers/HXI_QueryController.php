@@ -1,10 +1,10 @@
 <?php
 
-class FFXIPackageHelper_QueryController {
+class HXI_QueryController {
 
 
     // public static function queryDropRates($queryData){
-    //     $finalHtml = FFXIPackageHelper_QueryController::buildDropRates($queryData);
+    //     $finalHtml = HXI_QueryController::buildDropRates($queryData);
     //     return ParserHelper::wikiParse($finalHtml);
     // }
 
@@ -61,7 +61,7 @@ class FFXIPackageHelper_QueryController {
 			if ( $totalRows == $queryData[0] ) $html .= "<i><b> $totalRows records (items) found, which is the search limit. Narrow search parameters.</i></b>";
 			else $html .= "<i><b> $totalRows records (items) found.</i></b>";
             
-            $html .= FFXIPackageHelper_HTMLTableHelper::table_DropRates($dropRatesArray, $showTH);
+            $html .= HXI_HTMLTableHelper::table_DropRates($dropRatesArray, $showTH);
 		}
 
 		$html .= '</table></div>';
@@ -82,7 +82,7 @@ class FFXIPackageHelper_QueryController {
 
 		if ( !$initialQuery[0] )  return "<i><b> No records (items) found</i></b>";
 
-        $html .= FFXIPackageHelper_HTMLTableHelper::table_RecipesQuery($initialQuery);
+        $html .= HXI_HTMLTableHelper::table_RecipesQuery($initialQuery);
 
 		return $html;
 	}

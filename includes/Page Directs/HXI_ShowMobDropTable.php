@@ -1,12 +1,12 @@
 <?php
 
 
-class FFXIPackageHelper_ShowMobDropTable  {
+class HXI_ShowMobDropTable  {
     public function __construct() {
     }
     
     static function onParserInit( Parser $parser ) {
-        $parser->setHook('ShowMobDropTable','FFXIPackageHelper_ShowMobDropTable::generateDropsTable' );
+        $parser->setHook('ShowMobDropTable','HXI_ShowMobDropTable::generateDropsTable' );
         return true;
 	}
 
@@ -41,7 +41,7 @@ class FFXIPackageHelper_ShowMobDropTable  {
 
         //wfDebugLog( 'ShowMobDrops', get_called_class() . ":" . json_encode( $mobDropsModel) );
 
-        $html .= FFXIPackageHelper_HTMLTableHelper::table_MobDropRates($mobDropsModel, $classname);
+        $html .= HXI_HTMLTableHelper::table_MobDropRates($mobDropsModel, $classname);
 
    
         $html = $parser->recursiveTagParse( $html, $frame );

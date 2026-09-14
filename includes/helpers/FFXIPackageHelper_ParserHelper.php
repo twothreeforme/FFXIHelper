@@ -53,7 +53,7 @@ class ParserHelper {
 		//else $mobName = " [[$mobName]]<sup>($minLvl-$maxLvl)</sup> ";
 		
 		if ( $fished == true ) return " " . $mobName . " (fished) ";
-		else if ( FFXIPackageHelper_Variables::$mobType["NOTORIOUS"] & $mobType ) return "[NM] " . $mobName;
+		else if ( HXI_Variables::$mobType["NOTORIOUS"] & $mobType ) return "[NM] " . $mobName;
 
 		return $mobName;
 	}
@@ -62,11 +62,11 @@ class ParserHelper {
         $size = "14px";
         $detectsString = "<br>";
         if ( $aggro == 0 ) {
-            if ( FFXIPackageHelper_Variables::$mobType["NOTORIOUS"] & $mobType ) $detectsString .= "[[File:Detect_PassiveHQ.png|" . $size . "|" . $size. "|Passive HQ]] ";
+            if ( HXI_Variables::$mobType["NOTORIOUS"] & $mobType ) $detectsString .= "[[File:Detect_PassiveHQ.png|" . $size . "|" . $size. "|Passive HQ]] ";
             else $detectsString .= "[[File:Detect_PassiveNQ.png|" . $size . "|" . $size. "|Passive NQ]] ";
         }
         else if ( $aggro == 1 ) {
-            if ( FFXIPackageHelper_Variables::$mobType["NOTORIOUS"] & $mobType ) $detectsString .= "[[File:Detect_AggroHQ.png|" . $size . "|" . $size. "|Aggressive HQ]] ";
+            if ( HXI_Variables::$mobType["NOTORIOUS"] & $mobType ) $detectsString .= "[[File:Detect_AggroHQ.png|" . $size . "|" . $size. "|Aggressive HQ]] ";
             else $detectsString .= "[[File:Detect_AggroNQ.png|" . $size . "|" . $size. "|Aggressive NQ]] ";
         }
 
@@ -505,10 +505,10 @@ class ParserHelper {
         if ( $jobsint == 4194303 ) return " All Jobs ";
         //if ( ParserHelper::checkJob(0, $jobsint) ) $html .= "None";
 
-        for ( $j = 1; $j < count(FFXIPackageHelper_Variables::$jobArrayByID); $j++){
+        for ( $j = 1; $j < count(HXI_Variables::$jobArrayByID); $j++){
             //OOE jobs - can change when content gets released
             if ( $j >= 16 ) continue;
-            if ( ParserHelper::checkJob($j, $jobsint) ) $html .= " [[". FFXIPackageHelper_Variables::$jobArrayByID[$j] ."]]";
+            if ( ParserHelper::checkJob($j, $jobsint) ) $html .= " [[". HXI_Variables::$jobArrayByID[$j] ."]]";
         }
 
         if ( $html == "" ) $html = "None";

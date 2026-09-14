@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPackageHelper_LuaSetsHelper {
+class HXI_LuaSetsHelper {
 
     public function __construct() {
     }

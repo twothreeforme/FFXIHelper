@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPackageHelper_HTMLOptions {
+class HXI_HTMLOptions {
     public function __construct() {
       }
 
@@ -68,7 +68,7 @@ class FFXIPackageHelper_HTMLOptions {
 
         if ( count($userSets) > 0 ){
             $html .= ">";
-            //$vars = new FFXIPackageHelper_Variables();
+            //$vars = new HXI_Variables();
 
             $currentJobType = 0;
             foreach ($userSets as $jobtype => $val ) {
@@ -289,7 +289,7 @@ class FFXIPackageHelper_HTMLOptions {
     public static function setsList(){
 
         $html = "<div id=\"FFXIPackageHelper_Equipsets_setManagement\" class=\"FFXIPackageHelper_Equipsets_setManagement\">";
-        //$html .= FFXIPackageHelper_HTMLOptions::selectableButtonsBar("FFXIPackageHelper_equipsets_setSelect");
+        //$html .= HXI_HTMLOptions::selectableButtonsBar("FFXIPackageHelper_equipsets_setSelect");
         
         $html .="<div style=\"width: 100%; flex-wrap: nowrap; display: flex;flex-direction: row;justify-content: space-between;\">";
         $html .="<h3 style=\"display:inline-block;margin-top:0em;padding:0px;\">Available Sets</h3>";

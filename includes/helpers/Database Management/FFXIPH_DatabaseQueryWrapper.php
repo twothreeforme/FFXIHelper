@@ -1095,8 +1095,8 @@ class DatabaseQueryWrapper {
     public function getSkillRanks( $mjob, $sjob ){
         $dbr = $this->openLSBSearchConnection();
 
-        $mjobLabel =  strtolower(FFXIPackageHelper_Variables::$jobArrayByID[$mjob]);
-        $sjobLabel =  strtolower(FFXIPackageHelper_Variables::$jobArrayByID[$sjob]);
+        $mjobLabel =  strtolower(HXI_Variables::$jobArrayByID[$mjob]);
+        $sjobLabel =  strtolower(HXI_Variables::$jobArrayByID[$sjob]);
 
         $query = [ "$mjobLabel > 0 OR $sjobLabel > 0" ];
 
@@ -1114,7 +1114,7 @@ class DatabaseQueryWrapper {
     public function getSkillRank( $skill, $mjob ){
         $dbr = $this->openLSBSearchConnection();
 
-        $mjobLabel = strtolower(FFXIPackageHelper_Variables::$jobArrayByID[$mjob]);
+        $mjobLabel = strtolower(HXI_Variables::$jobArrayByID[$mjob]);
 
         $query = [ "skill_ranks.skillid = '$skill'" ];        
 
@@ -1244,7 +1244,7 @@ class DatabaseQueryWrapper {
 
         
         $dbr = $this->openLSBSearchConnection();
-        //$vars = new FFXIPackageHelper_Variables();
+        //$vars = new HXI_Variables();
 
         $query = [];
 
@@ -1487,7 +1487,7 @@ class DatabaseQueryWrapper {
 
         $userSets = [];
         foreach($savedSets as $row){
-            $jobname = FFXIPackageHelper_Variables::$jobArrayByID[$row->mjob];
+            $jobname = HXI_Variables::$jobArrayByID[$row->mjob];
             $userSets[$jobname][] = [
                 'usersetid' => $row->usersetid,
                 // 'mlvl' => $row->mlvl,
@@ -1517,7 +1517,7 @@ class DatabaseQueryWrapper {
         //->orderBy( 'mjob', 'ASC' )
         ->fetchResultSet();
 
-        $jobname = FFXIPackageHelper_Variables::$jobArrayByID[$mjob];
+        $jobname = HXI_Variables::$jobArrayByID[$mjob];
 
         $userSets = [];
         foreach($savedSets as $row){

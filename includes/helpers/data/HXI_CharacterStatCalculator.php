@@ -63,7 +63,7 @@ class HXI_CharacterStatCalculator {
 
     /**
      * @param array<int, ?HXI_Item> $e equipped items keyed by HXI_EquipSlot value (0-15),
-     * e.g. from FFXIPackageHelper_Equipment::getItemObjects()
+     * e.g. from HXI_EquipmentParser::getItemObjects()
      */
     public function __construct($race, $mlvl, $slvl, $mjob, $sjob, $merits, $e) {
 
@@ -79,7 +79,7 @@ class HXI_CharacterStatCalculator {
 
         // Pull traits from SQL
         $traits = $this->getTraits( $mlvl, $slvl, $mjob, $sjob );
-        //$traits = FFXIPH_StatsUtils::getTraits( $mlvl, $slvl, $mjob, $sjob );
+        //$traits = HXI_StatsUtils::getTraits( $mlvl, $slvl, $mjob, $sjob );
         $this->applyToModifiers($traits);
 
         // Pull equipment from SQL
@@ -98,7 +98,7 @@ class HXI_CharacterStatCalculator {
         $this->setMerits($merits);
 
         // Apply modifiers to the base stats
-        $this->modifiers["DEF"] += $mlvl + FFXIPH_MathHelper::clamp($mlvl - 50, 0, 10);
+        $this->modifiers["DEF"] += $mlvl + HXI_MathHelper::clamp($mlvl - 50, 0, 10);
 
         // Apply modifiers from equipment
         $this->setStatsWithMods();
@@ -128,8 +128,8 @@ class HXI_CharacterStatCalculator {
         $rank = $rank - 1;
         if ( $rank < 0 ) $rank = 0;
         $levelTableIndex = $this->getSkillLevelIndex($level, $rank);
-        $multiplier = FFXIPH_SkillGrades::$SkillLevelTable[$levelTableIndex][$rank][0];
-        $additive = FFXIPH_SkillGrades::$SkillLevelTable[$levelTableIndex][$rank][1];
+        $multiplier = HXI_SkillGrades::$SkillLevelTable[$levelTableIndex][$rank][0];
+        $additive = HXI_SkillGrades::$SkillLevelTable[$levelTableIndex][$rank][1];
 
         return floor(( ($level - $levelTableIndex) * $multiplier) + $additive);
     }
@@ -156,28 +156,28 @@ class HXI_CharacterStatCalculator {
 // ASB/LSB functions
     function getJobGrade($job, $stat)
     {
-        return FFXIPH_SkillGrades::$JobGrades[$job][$stat];
+        return HXI_SkillGrades::$JobGrades[$job][$stat];
     }
 
     // shown as RANK in other formulas
     function getRaceGrades($race, $stat)
     {
-        return FFXIPH_SkillGrades::$RaceGrades[$race][$stat];
+        return HXI_SkillGrades::$RaceGrades[$race][$stat];
     }
 
     function getHPScale($rank, $scale)
     {
-        return FFXIPH_SkillGrades::$HPScale[$rank][$scale];
+        return HXI_SkillGrades::$HPScale[$rank][$scale];
     }
 
     function getMPScale($rank, $scale)
     {
-        return FFXIPH_SkillGrades::$MPScale[$rank][$scale];
+        return HXI_SkillGrades::$MPScale[$rank][$scale];
     }
 
     function getStatScale($rank, $scale)
     {
-        return FFXIPH_SkillGrades::$StatScale[$rank][$scale];
+        return HXI_SkillGrades::$StatScale[$rank][$scale];
     }
 
 
@@ -286,17 +286,17 @@ class HXI_CharacterStatCalculator {
          * HP Calculation
          */
         // HP Calculation from Main Job
-        $mainLevelOver30     = FFXIPH_MathHelper::clamp($mlvl - 30, 0, 30); // Calculation of the condition + 1HP each LVL after level 30
+        $mainLevelOver30     = HXI_MathHelper::clamp($mlvl - 30, 0, 30); // Calculation of the condition + 1HP each LVL after level 30
         $mainLevelUpTo60     = ($mlvl < 60 ? $mlvl - 1 : 59);  // The first time spent up to level 60 (is also used for MP)
-        $mainLevelOver60To75 = FFXIPH_MathHelper::clamp($mlvl - 60, 0, 15); // The second calculation mode after level 60
+        $mainLevelOver60To75 = HXI_MathHelper::clamp($mlvl - 60, 0, 15); // The second calculation mode after level 60
 
         // Calculation of the bonus amount of HP
         $mainLevelOver10           = ($mlvl < 10 ? 0 : $mlvl - 10);  // + 2hp at each level after 10
-        $mainLevelOver50andUnder60 = FFXIPH_MathHelper::clamp($mlvl - 50, 0, 10);  // + 2hp at each level between 50 to 60 level
+        $mainLevelOver50andUnder60 = HXI_MathHelper::clamp($mlvl - 50, 0, 10);  // + 2hp at each level between 50 to 60 level
         $mainLevelOver60           = ($mlvl < 60 ? 0 : $mlvl - 60);
 
         // HP calculation of an additional profession
-        $subLevelOver10 = FFXIPH_MathHelper::clamp($slvl - 10, 0, 20); // + 1HP for each level after 10 (/ 2)
+        $subLevelOver10 = HXI_MathHelper::clamp($slvl - 10, 0, 20); // + 1HP for each level after 10 (/ 2)
         $subLevelOver30 = ($slvl < 30 ? 0 : $slvl - 30);  // + 1HP for each level after 30
 
          // Calculation of race
@@ -405,7 +405,7 @@ class HXI_CharacterStatCalculator {
             }
 
             // Rank A Race + Rank A Job = 71 stat -> Clamp max base stat of 70
-            $totalStat = FFXIPH_MathHelper::clamp(($raceStat + $jobStat), 0, 70);
+            $totalStat = HXI_MathHelper::clamp(($raceStat + $jobStat), 0, 70);
 
             // get each merit bonus stat, str,dex,vit and so on...
             //MeritBonus = PChar->PMeritPoints->GetMeritValue(statMerit[StatIndex - 2], PChar);
@@ -550,7 +550,7 @@ class HXI_CharacterStatCalculator {
     }
 
     private function applyToModifiers($mods){
-        $vars = new FFXIPackageHelper_Variables();
+        $vars = new HXI_Variables();
 
         foreach ($mods as $m => $v) {
 
@@ -565,7 +565,7 @@ class HXI_CharacterStatCalculator {
 
     private function getTraits( $mlvl, $slvl, $mjob, $sjob ){
         $db = new DatabaseQueryWrapper();
-       // $vars = new FFXIPackageHelper_Variables();
+       // $vars = new HXI_Variables();
 
         $results = $db->getTraits( $mlvl, $slvl, $mjob, $sjob );
 
@@ -583,7 +583,7 @@ class HXI_CharacterStatCalculator {
 
     function applyEquipment( ){
        // $db = new DatabaseQueryWrapper();
-        //$vars = new FFXIPackageHelper_Variables();
+        //$vars = new HXI_Variables();
 
         for ( $i = 0; $i <= 15; $i++ ){
             $item = $this->equipment[$i] ?? null;
@@ -690,7 +690,7 @@ class HXI_CharacterStatCalculator {
     }
 
     function setModifierKeys(){
-        $vars = new FFXIPackageHelper_Variables();
+        $vars = new HXI_Variables();
         foreach ( $vars->modArray as $k => $v) {
             $this->modifiers[$v] = 0;
         }

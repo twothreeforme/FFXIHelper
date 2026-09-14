@@ -17,7 +17,7 @@ class HXI_Weapon extends HXI_Item {
     public int $unlockPoints = 0;
 
     // Skill ids, matching the numbering used elsewhere in this codebase
-    // (FFXIPH_MobUtils::getBaseSkill / FFXIPackageHelper_Equipment's legacy skilltype checks).
+    // (FFXIPH_MobUtils::getBaseSkill / HXI_EquipmentParser's legacy skilltype checks).
     private const SKILL_H2H          = 1;
     private const SKILL_GREAT_SWORD  = 4;
     private const SKILL_GREAT_AXE    = 6;

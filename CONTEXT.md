@@ -20,20 +20,24 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
   `HXI_ItemFactory::fromFullItemRows()` build a real item object instead of the old
   DB-row + 75k-line-static-array lookup.
 - Legacy `[id,slot,rslot,mods,skilltype,name]` positional equipment array is fully retired.
-  Everything (`HXI_CharacterStatCalculator`, `APIModuleEquipsets`, `FFXIPackageHelper_Equipsets`)
-  uses `FFXIPackageHelper_Equipment::getItemObjects()` (real `HXI_Item`/`HXI_Weapon`) now.
+  Everything (`HXI_CharacterStatCalculator`, `APIModuleEquipsets`, `HXI_Equipsets`)
+  uses `HXI_EquipmentParser::getItemObjects()` (real `HXI_Item`/`HXI_Weapon`) now.
 - `sql_ASB/` deleted (deprecated dupe of `sql/`).
 - Two pre-existing bugs fixed: `Character::setMerit()` wrote to the wrong array key; `getEquipment()`
   aliased the weapon-skill column differently than `getItem()`, so search results always showed
   skill type 0.
+- Broader `FFXIPH_`/`FFXIPackageHelper_` → `HXI_` rename done: 21 classes outside Models/
+  (Tabs/helpers/Page Directs), ~40 files. `FFXIPackageHelper_Equipment` → `HXI_EquipmentParser`
+  (collision avoidance — `HXI_Equipment` already exists as the Models/ 16-slot container).
 
 ## Not done / open
 - `FFXIPH_ItemDescription` (`FFXIPH_Item.php`) — untouched, deferred by request.
-- Equipment **search** feature (`FFXIPackageHelper_QueryController`/`APIModuleEquipmentSearch`) —
-  still on the old array + `ItemDetails` path, not migrated to the factory.
+- Equipment **search** feature (`HXI_QueryController`/`APIModuleEquipmentSearch`) — still on the
+  old array + `HXI_ItemDetails` path, not migrated to the factory.
 - No `HXI_StatCalculator` interface / `HXI_BaseStatCalculator` abstract base built.
-- Broader `FFXIPH_`/`FFXIPackageHelper_` → `HXI_` rename across the rest of the codebase — not
-  started, planned as its own future pass.
+- A handful of files still have old-prefixed filenames even though their class names never had
+  the prefix (`ExclusionsHelper`, `ParserHelper`, `DataModel`, `VanaTime`, `ZoneForecast`,
+  `WeatherForecast_ElementMaps`) — cosmetic, low priority.
 - **`sql/DAT_details.sql` needs manual import** into the live DB (user owns this) before
   `getFullItem()` returns real display data — until then those columns come back NULL.
 - **Nothing has been executed/tested.** No PHP CLI or MediaWiki instance available in this
@@ -42,6 +46,8 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
 ## Commits (branch `major-rewrite`)
 - `d81689d` — Character/Mob split + Item/Weapon/Equipment classes + HXI_ renaming.
 - `c2a4775` — dat_details table + getFullItem() + HXI_ItemFactory + full array retirement.
+- `3ef7abd` — CONTEXT.md + changelog housekeeping.
+- (pending) — broader HXI_ rename, 21 classes.
 
 ## Style note
 User wants terse, direct replies — minimal pleasantries, no padding.

@@ -1,7 +1,7 @@
 <?php
 
 
-class FFXIPH_SkillGrades {
+class HXI_SkillGrades {
 
     /**
      * 0 HP

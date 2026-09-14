@@ -19,7 +19,7 @@ enum HXI_EquipSlot: int {
     case Feet  = 15;
 
     /**
-     * Slot label matching the existing grid/lua ordering used throughout FFXIPackageHelper_Equipsets.
+     * Slot label matching the existing grid/lua ordering used throughout HXI_Equipsets.
      */
     public function label(): string {
         return match($this) {

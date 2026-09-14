@@ -4,7 +4,7 @@
  * Builds a single HXI_Item/HXI_Weapon from the rows returned by
  * DatabaseQueryWrapper::getFullItem() - one query joining item_basic, item_equipment,
  * item_weapon, item_mods and dat_details, instead of a DB row plus a separate lookup
- * into the FFXIPackageHelper_ItemDetails static array.
+ * into the HXI_ItemDetails static array.
  */
 class HXI_ItemFactory {
 
