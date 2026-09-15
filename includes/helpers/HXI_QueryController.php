@@ -118,12 +118,16 @@ class HXI_QueryController {
 
 		$tabindex = 0;
 		foreach ($items as $item) {
-			$id = HXI_CustomItemIconMap::iconIdFor($item->id);
+			// data-id must stay the real itemid - it's what gets sent server-side to actually
+			// equip the item. Only the icon file needs the donor id for custom (>=50000) items,
+			// since those have no client DAT art of their own. Conflating the two here used to
+			// mean clicking a custom item in search results equipped the donor item instead.
+			$iconId = HXI_CustomItemIconMap::iconIdFor($item->id);
 
-			$html .= "<dt tabindex=\"" . $tabindex . "\" style=\"\" data-id=\"" . $id . "\"> ";
+			$html .= "<dt tabindex=\"" . $tabindex . "\" style=\"\" data-id=\"" . $item->id . "\"> ";
 			$tabindex = -1;
 
-			$imgURL = $wgScript . "/Special:Filepath/itemid_" . $id . ".png";
+			$imgURL = $wgScript . "/Special:Filepath/itemid_" . $iconId . ".png";
 			$html .= "<img src=\"" . $imgURL . "\" width=\"20\" height=\"20\">";
 			$html .= "" . $item->name . "";
 			$html .= "</dt>";

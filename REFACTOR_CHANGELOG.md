@@ -310,6 +310,27 @@ The equipment search feature (both the Equipsets modal slot-picker and the gener
 codebase. Left in place (it's a shared utility class with other still-used methods) rather than
 deleted, since removing it wasn't explicitly asked for — flagging for a future cleanup pass.
 
+## 15. JS/data-shape audit + a real bug found and fixed
+
+Asked to double-check every JS file touching equipment/character data for shape mismatches against
+this session's PHP changes. Traced `ActionAPI.js`, `DataManager.js`, `ModalWindow.js`,
+`LuaSets.js`, `TabCharacters.js`, `TabEquipment.js` against every API response field. No mismatches
+from this session's changes - `selectchar`/`equipLabels`/`grid`/`luaNames`/the search response all
+still match what the JS reads.
+
+Found two **pre-existing** issues (present before this session, not introduced by it):
+
+- `changeGrid()` in `ActionAPI.js` reads `updatedGrid[1][4]` (`slot_longname`), but the PHP grid
+  array only ever has 4 elements. Dead variable, never read afterward - harmless, left alone.
+- **Fixed:** in `HXI_QueryController::queryEquipsetsSearchItems()`, custom items (id ≥50000) had
+  their search-result `data-id` set to the *donor* item's id (via `HXI_CustomItemIconMap`) instead
+  of their own real id. `data-id` is what gets sent server-side to actually equip the item
+  (`DataManager.js`'s `updateEquipmentGrid`), so clicking a custom item in search results would
+  equip the donor item instead. The grid-refresh code (`updateGridItems()`) already gets this
+  right elsewhere - it resolves the donor id only for the icon filename, keeping the real itemid
+  everywhere else. Fixed `queryEquipsetsSearchItems()` to do the same: `data-id` stays `$item->id`,
+  only the `<img>` src uses the resolved donor id.
+
 ---
 
 ## Open / deferred items
