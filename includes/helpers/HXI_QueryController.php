@@ -95,34 +95,37 @@ class HXI_QueryController {
 	 */
 	public static function queryEquipsetsSearchItems($queryData){
 		$db = new DatabaseQueryWrapper();
-		$dm = new DataModel();
 
 		$searchString = ParserHelper::replaceApostrophe($queryData['search']);
 		$searchString = ParserHelper::replaceSpaces($searchString);
 
 		$equipList = $db->getEquipment( $searchString, $queryData['mlvl'], $queryData['slot']); // get data from DB
+		$items = HXI_ItemFactory::fromFullItemRowsGrouped( $equipList );
 
-		$finalList = $dm->parseEquipment( $equipList, $queryData['mjob'] ); // build associative array with data so its easier to build list
+		$job = $queryData['mjob'] ?? null;
+		if ( $job != null && $job > 0 ) {
+			$items = array_filter( $items, function($item) use ($job) {
+				return ParserHelper::checkJob($job, $item->jobs);
+			});
+		}
 
 		$html = "";
 
-		if ( count($finalList) == 0 ) return $html;
+		if ( count($items) == 0 ) return $html;
 
 		//global $wgServer;
     	global $wgScript;
 
-		for ($l = 0; $l < count($finalList); $l++) {
-			if ( $l == 0 ) $tabindex = 0;
-			else $tabindex = -1;
-
-			if ( $finalList[$l]['id'] >= 50000 ) $id = $finalList[$l]['DATid'];
-			else $id = $finalList[$l]['id'];
+		$tabindex = 0;
+		foreach ($items as $item) {
+			$id = HXI_CustomItemIconMap::iconIdFor($item->id);
 
 			$html .= "<dt tabindex=\"" . $tabindex . "\" style=\"\" data-id=\"" . $id . "\"> ";
+			$tabindex = -1;
 
 			$imgURL = $wgScript . "/Special:Filepath/itemid_" . $id . ".png";
 			$html .= "<img src=\"" . $imgURL . "\" width=\"20\" height=\"20\">";
-			$html .= "" . $finalList[$l]['name'] . "";
+			$html .= "" . $item->name . "";
 			$html .= "</dt>";
 		}
 

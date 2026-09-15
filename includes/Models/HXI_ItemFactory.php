@@ -1,21 +1,48 @@
 <?php
 
 /**
- * Builds a single HXI_Item/HXI_Weapon from the rows returned by
- * DatabaseQueryWrapper::getFullItem() - one query joining item_basic, item_equipment,
- * item_weapon, item_mods and dat_details, instead of a DB row plus a separate lookup
- * into the HXI_ItemDetails static array.
+ * Builds HXI_Item/HXI_Weapon objects from the rows returned by
+ * DatabaseQueryWrapper::getFullItem()/getEquipment()/getEquipmentFromDB() - each of those joins
+ * item_basic, item_equipment, item_weapon, item_mods and dat_details, instead of a DB row plus a
+ * separate lookup into the FFXIPackageHelper_ItemDetails static array.
  */
 class HXI_ItemFactory {
 
     /**
-     * @param iterable $rows result set from DatabaseQueryWrapper::getFullItem() - one row
-     * per mod (all other columns repeat across rows for the same item).
+     * @param iterable $rows result set for a single item - one row per mod (all other columns
+     * repeat across rows for that item).
      */
     public static function fromFullItemRows($rows): ?HXI_Item {
-        $first = null;
-        foreach ($rows as $row) { $first = $row; break; }
-        if ($first === null) return null;
+        foreach (self::group($rows) as $itemRows) {
+            return self::buildFromGroup($itemRows);
+        }
+        return null;
+    }
+
+    /**
+     * @param iterable $rows result set covering MANY items (e.g. a search) - rows for different
+     * items may be interleaved; each item's own mod rows are grouped together before building.
+     * @return array<int, HXI_Item> keyed by itemid
+     */
+    public static function fromFullItemRowsGrouped($rows): array {
+        $items = [];
+        foreach (self::group($rows) as $id => $itemRows) {
+            $items[$id] = self::buildFromGroup($itemRows);
+        }
+        return $items;
+    }
+
+    /** @return array<int, array> rows grouped by itemid, order of first appearance preserved */
+    private static function group($rows): array {
+        $grouped = [];
+        foreach ($rows as $row) {
+            $grouped[(int)$row->itemid][] = $row;
+        }
+        return $grouped;
+    }
+
+    private static function buildFromGroup(array $rows): HXI_Item {
+        $first = $rows[0];
 
         $isWeapon = !is_null($first->skilltype ?? null);
 

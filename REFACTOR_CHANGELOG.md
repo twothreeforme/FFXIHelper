@@ -278,6 +278,38 @@ left untouched in `HXI_Variables` — out of scope for this pass (not asked for)
 `$effectType` (~640 entries) and `$mobModArray` are similarly dictionary-shaped and could get the
 same `HXI_ModDictionary` treatment later if wanted.
 
+## 14. Equipment search migrated to the factory/objects
+
+The equipment search feature (both the Equipsets modal slot-picker and the general LSBSearch
+"Equipment Search" tab) was the last piece still on the old `getEquipment()`/`getEquipmentFromDB()`
++ `DataModel::parseEquipment()` + `HXI_ItemDetails`-array path — everything else already used
+`HXI_Item`/`HXI_Weapon`. Migrated it:
+
+- Widened `getEquipment()` and `getEquipmentFromDB()` in place (same WHERE-clause/filter behavior,
+  untouched) to also join `item_weapon` and `dat_details` and select the full column set, matching
+  `getFullItem()` — rather than duplicating them as parallel methods, since only the SELECT/JOIN
+  needed to grow, not the search semantics.
+- Added `HXI_ItemFactory::fromFullItemRowsGrouped($rows): array<int,HXI_Item>` — the single-item
+  `fromFullItemRows()` was refactored to share a `buildFromGroup()` helper with this, which groups
+  a bulk (interleaved, multi-item) row set by itemid before building one object per item. This is
+  an improvement over the old `parseEquipment()`'s dedup logic, which grouped consecutive rows by
+  matching *display name* rather than actual item id.
+- `HXI_QueryController::queryEquipsetsSearchItems()` and `APIModuleEquipmentSearch::queryEquipment()`
+  now build real `HXI_Item` objects and apply the job filter (`ParserHelper::checkJob`) themselves
+  post-build, since they no longer go through `parseEquipment()`.
+- `HXI_HTMLTableHelper::table_EquipmentQuery()` reads `$item->name/slot/jobs/level/descr` directly
+  instead of the old associative-array shape; no longer needs `new HXI_ItemDetails()`.
+- New `HXI_CustomItemIconMap` (the old `~22`-entry `$replacement` map, kept separately from
+  `dat_details`): custom items (id ≥50000) have no client DAT art of their own, so their *icon*
+  still needs to resolve to a real item's id even though `dat_details` already resolves their
+  *display text* directly under their own id (baked in at generation time, see §8). Kept as a tiny
+  dedicated class rather than adding a schema column, to avoid requiring another SQL re-import for
+  22 rows.
+
+**Now dead as a result:** `DataModel::parseEquipment()` has zero remaining callers anywhere in the
+codebase. Left in place (it's a shared utility class with other still-used methods) rather than
+deleted, since removing it wasn't explicitly asked for — flagging for a future cleanup pass.
+
 ---
 
 ## Open / deferred items

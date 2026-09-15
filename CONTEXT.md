@@ -36,11 +36,16 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
   class (`getName()`/`all()`) since it's DB-driven and not a fixed closed set.
   `$jobArrayByID`/`$effectType`/`$mobModArray`/etc. left as-is in Variables (out of scope, though
   `$effectType`/`$mobModArray` are similarly dictionary-shaped if this comes up again).
+- Equipment **search** migrated too (`HXI_QueryController::queryEquipsetsSearchItems`,
+  `APIModuleEquipmentSearch`): `getEquipment()`/`getEquipmentFromDB()` widened in place to join
+  `item_weapon`+`dat_details`; new `HXI_ItemFactory::fromFullItemRowsGrouped()` builds real objects
+  from a multi-item row set; new `HXI_CustomItemIconMap` (the old ~22-entry custom-item icon
+  borrow map, kept separate from `dat_details` since icons still need a real item id even though
+  display text is already resolved). `DataModel::parseEquipment()` is now fully dead (zero
+  callers) — left in place, not deleted.
 
 ## Not done / open
 - `FFXIPH_ItemDescription` (`FFXIPH_Item.php`) — untouched, deferred by request.
-- Equipment **search** feature (`HXI_QueryController`/`APIModuleEquipmentSearch`) — still on the
-  old array + `HXI_ItemDetails` path, not migrated to the factory.
 - No `HXI_StatCalculator` interface / `HXI_BaseStatCalculator` abstract base built.
 - A handful of files still have old-prefixed filenames even though their class names never had
   the prefix (`ExclusionsHelper`, `ParserHelper`, `DataModel`, `VanaTime`, `ZoneForecast`,
