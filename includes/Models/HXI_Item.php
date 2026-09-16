@@ -6,6 +6,9 @@
  */
 class HXI_Item {
 
+    /** Server-custom items (no client DAT art of their own) start at this id. See HXI_CustomItemIconMap. */
+    public const CUSTOM_ITEM_ID_THRESHOLD = 50000;
+
     public int $id = 0;
     public int $subId = 0;
     public string $name = "";
@@ -43,6 +46,15 @@ class HXI_Item {
 
     public function canEquipInSlot(HXI_EquipSlot $slot): bool {
         return ($this->slot & $slot->slotMask()) !== 0;
+    }
+
+    /**
+     * True if this is a server-custom item added by this private server (id >= 50000), with no
+     * art of its own in the retail game client - it borrows another item's icon for display
+     * (see HXI_CustomItemIconMap). False means it's a genuine retail item.
+     */
+    public function isCustomItem(): bool {
+        return $this->id >= self::CUSTOM_ITEM_ID_THRESHOLD;
     }
 
     public function setMod(int $modId, int $value): void {

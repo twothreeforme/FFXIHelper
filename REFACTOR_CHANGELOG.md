@@ -331,6 +331,22 @@ Found two **pre-existing** issues (present before this session, not introduced b
   everywhere else. Fixed `queryEquipsetsSearchItems()` to do the same: `data-id` stays `$item->id`,
   only the `<img>` src uses the resolved donor id.
 
+**Follow-up risk raised:** the fixed bug is pre-existing, so any set saved *before* this fix, where
+a user searched for and selected one of the 22 custom items specifically (rather than using Import
+Lua, which looks items up by name and was never affected), would have the donor id baked into its
+saved `user_sets.equipment` string permanently — reloading that set pulls the wrong item forever.
+Not auto-fixable: a saved set referencing a donor id is indistinguishable from one where a user
+genuinely, intentionally equipped that real retail item. Offered a diagnostic query (rows
+referencing any of the 22 donor ids, for manual review) - not run, no DB access here.
+
+## 16. `HXI_Item::isCustomItem()`
+
+Added a proper `isCustomItem(): bool` method (plus a named `CUSTOM_ITEM_ID_THRESHOLD = 50000`
+constant) to `HXI_Item`, computed from `id`, so code can ask "is this a private-server custom item
+or a genuine retail one" without re-deriving the `>= 50000` magic number each time. Requested as a
+building block for reasoning about retail-vs-custom items generally (e.g. for future auditing of
+the risk noted in §15) - not wired into any UI or diagnostic yet, just exposed on the model.
+
 ---
 
 ## Open / deferred items
