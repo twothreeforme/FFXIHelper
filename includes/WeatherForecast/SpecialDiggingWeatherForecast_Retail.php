@@ -14,6 +14,7 @@ class SpecialDiggingWeatherForecast_Retail extends SpecialPage {
 
         $request = $this->getRequest();
 		$output = $this->getOutput();
+        VanaTime::addTimezoneSync( $output );
 		//$output->setPageTitle( $this->msg( 'diggingweatherforecast' ) );
         $this->setHeaders();
 
