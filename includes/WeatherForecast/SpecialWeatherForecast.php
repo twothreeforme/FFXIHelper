@@ -27,6 +27,7 @@ class SpecialWeatherForecast extends SpecialPage {
 
         $request = $this->getRequest();
 		$output = $this->getOutput();
+        VanaTime::addTimezoneSync( $output );
 		//$output->addModules(['inputHandler']);
 		//$output->setPageTitle( $this->msg( 'weatherforecast' ) );
 

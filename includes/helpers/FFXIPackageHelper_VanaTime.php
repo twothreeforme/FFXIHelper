@@ -21,49 +21,61 @@ class VanaTime {
     private $VMULTIPLIER =      25;
     private $MOON_CYCLE_DAYS =  84;
 
+    // @var DateTimeZone|null Cached result of resolveTimeZone()
+    private $resolvedTimeZone = null;
 
-    function getTimeZone(){
-        if( !isset($_COOKIE['timezone'] )){
+    // Name of the timezone cookie
+    const TIMEZONE_COOKIE = 'timezone';
 
-            $ip = $_SERVER['REMOTE_ADDR'];
-
-            //Open GeoIP database and query our IP
-            $gi = geoip_open("GeoLiteCity.dat", GEOIP_STANDARD);
-            $record = geoip_record_by_addr($gi, $ip);
-
-            //If we for some reason didnt find data about the IP, default to a preset location.
-            //You can also print an error here.
-            if(!isset($record))
-            {
-                $record = new geoiprecord();
-                $record->latitude = 59.2;
-                $record->longitude = 17.8167;
-                $record->country_code = 'SE';
-                $record->region = 26;
+    /**
+     * Inline script that stores the browser's timezone in a cookie and reloads
+     * ONCE so the server can render earth times in the visitor's timezone.
+     */
+    const TIMEZONE_SYNC_JS = <<<'JS'
+(function () {
+    var COOKIE = 'timezone';
+    function readCookie() {
+        var parts = document.cookie.split(';');
+        for (var i = 0; i < parts.length; i++) {
+            var c = parts[i].replace(/^\s+/, '');
+            if (c.indexOf(COOKIE + '=') === 0) {
+                try { return decodeURIComponent(c.substring(COOKIE.length + 1)); } catch (e) { return ''; }
             }
-
-            //Calculate the timezone and local time
-            try
-            {
-                //Create timezone
-                $user_timezone = new DateTimeZone(get_time_zone($record->country_code, ($record->region!='') ? $record->region : 0));
-
-                setcookie("timezone", strval($user_timezone), time() + (86400 * 30), "/"); //setting cookie to the browser for reference
-
-                //Create local time
-                $user_localtime = new DateTime("now", $user_timezone);
-                $user_timezone_offset = $user_localtime->getOffset();
-            }
-            //Timezone and/or local time detection failed
-            catch(Exception $e)
-            {
-                $user_timezone_offset = 7200;
-                $user_localtime = new DateTime("now");
-            }
-
-            // print_r( 'User local time: ' . $user_localtime->format('H:i:s') . '<br/>' );
-            // print_r(  'Timezone GMT offset: ' . $user_timezone_offset . '<br/>' );
         }
+        return '';
+    }
+    var tz;
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) { return; }
+    if (!tz || readCookie() === tz) { return; }
+    document.cookie = COOKIE + '=' + encodeURIComponent(tz) +
+        ';path=/;max-age=' + (86400 * 30) + ';samesite=lax;secure';
+    if (readCookie() === tz) {
+        location.reload();
+    }
+})();
+JS;
+
+    // Put the timezone-sync script in <head>.
+    public static function addTimezoneSync( OutputPage $out ) {
+        $out->addHeadItem( 'ffxiph-timezone-sync', Html::inlineScript( self::TIMEZONE_SYNC_JS ) );
+    }
+
+    // The visitor's timezone: the cookie set by TIMEZONE_SYNC_JS, otherwise default UTC.
+    public function resolveTimeZone() {
+        if ( $this->resolvedTimeZone !== null ) {
+            return $this->resolvedTimeZone;
+        }
+        $name = isset( $_COOKIE[self::TIMEZONE_COOKIE] ) ? $_COOKIE[self::TIMEZONE_COOKIE] : '';
+        if ( is_string( $name ) && $name !== '' ) {
+            try {
+                $this->resolvedTimeZone = new DateTimeZone( $name );
+                return $this->resolvedTimeZone;
+            } catch ( Exception $e ) {
+                // fall through to the default below
+            }
+        }
+        $this->resolvedTimeZone = new DateTimeZone( date_default_timezone_get() );
+        return $this->resolvedTimeZone;
     }
 
     /**
@@ -220,8 +232,7 @@ class VanaTime {
 
         //print_r("<br/>" . $vTempTime . "  " . (int)$vanatime);
 
-        $this->getTimeZone();
-        $dt = new DateTime("now", new DateTimeZone($_COOKIE['timezone']));
+        $dt = new DateTime("now", $this->resolveTimeZone());
         //$dt->setTimestamp(floor((int)$vanatime) - ($this->vanaBirthday - $this->VTIME_BIRTH));
         $dt->setTimestamp( $test );
         return $dt->format("d-M h:i A");
@@ -229,29 +240,3 @@ class VanaTime {
 
 
 }
-
- ?>
-
-<script type="text/javascript">
-    function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-    }
-
-    if(getCookie('timezone')!=Intl.DateTimeFormat().resolvedOptions().timeZone){
-        document.cookie = "timezone="+Intl.DateTimeFormat().resolvedOptions().timeZone;
-        location.reload();
-    }
-
-</script>
