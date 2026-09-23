@@ -8,7 +8,7 @@ class SpecialWeatherForecast extends SpecialPage {
 
     }
 
-    static function onBeforePageDisplay( $out, $skin ) : void  { 
+    static function onBeforePageDisplay( $out, $skin ) : void  {
         //wfDebugLog( 'Equipsets', get_called_class() . ":" . $out->getTitle() );
         if ( $out->getTitle() == "Special:WeatherForecast" )  $out->addModules(['FFXIPackageHelper_WeatherForecast']);
     }
@@ -27,6 +27,7 @@ class SpecialWeatherForecast extends SpecialPage {
 
         $request = $this->getRequest();
 		$output = $this->getOutput();
+        VanaTime::addTimezoneSync( $output );
 		//$output->addModules(['inputHandler']);
 		//$output->setPageTitle( $this->msg( 'weatherforecast' ) );
 
