@@ -14,6 +14,9 @@ enum HXI_Skill: int {
     case GreatKatana = 10;
     case Club = 11;
     case Staff = 12;
+    case AutomatonMelee = 22;
+    case AutomatonRanged = 23;
+    case AutomatonMagic = 24;
     case Archery = 25;
     case Marksmanship = 26;
     case Throwing = 27;
@@ -32,6 +35,7 @@ enum HXI_Skill: int {
     case Singing = 40;
     case StringInstrument = 41;
     case WindInstrument = 42;
+    case BlueMagic = 43;
 
     public function label(): string {
         return match($this) {
@@ -48,6 +52,9 @@ enum HXI_Skill: int {
             self::GreatKatana => "GREAT_KATANA",
             self::Club => "CLUB",
             self::Staff => "STAFF",
+            self::AutomatonMelee => "AUTOMATON_MELEE",
+            self::AutomatonRanged => "AUTOMATON_RANGED",
+            self::AutomatonMagic => "AUTOMATON_MAGIC",
             self::Archery => "ARCHERY",
             self::Marksmanship => "MARKSMANSHIP",
             self::Throwing => "THROWING",
@@ -66,6 +73,7 @@ enum HXI_Skill: int {
             self::Singing => "SINGING",
             self::StringInstrument => "STRING_INSTRUMENT",
             self::WindInstrument => "WIND_INSTRUMENT",
+            self::BlueMagic => "BLUE_MAGIC",
         };
     }
 }

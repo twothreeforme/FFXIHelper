@@ -423,6 +423,14 @@ UNLOCK TABLES;
 -- ---------------------------------------------------------------------------
 
 
+LOCK TABLE `mob_groups_levels` WRITE;	
+
+UPDATE `mob_groups_levels` SET `dropid` = 3228 WHERE `poolid` = 2962 AND `dropid` = 399 AND `groupid` = 11;  -- Old_Gobbue in Boyahda Tree, interesting issue here that was caught
+
+UNLOCK TABLES;
+
+
+
 \! echo ... hxi_changes_itemMods
 source hxi_changes_items.sql;
 \! echo ... hxi_changes_itemMods done

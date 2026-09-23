@@ -6,7 +6,8 @@
 //class DBConnection {
 class DatabaseQueryWrapper {
 
-    private $database; 
+    private $database;
+    private $mobContent = "( mob_groups.content_tag = 'COP' OR mob_groups.content_tag = 'TOAU' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')";
 
     public function __construct() {
         $this->database = new DatabaseConnection();
@@ -69,14 +70,16 @@ class DatabaseQueryWrapper {
     }
 
     function getWeatherHex($arr, $vanaDay){
-        $hexweatherdata =  $arr[(($vanaDay * 2)  + 1 )] . $arr[($vanaDay * 2) ];
+        $day1 = $this->getValidWeatherDate((($vanaDay * 2)  + 1 ));
+        $day2 = $this->getValidWeatherDate(( $vanaDay * 2 ));
+        $hexweatherdata =  $arr[ $day1 ] . $arr[ $day2 ];
         return $hexweatherdata;
     }
 
     function getLastWeatherHex($arr, $w_vanaDate){
         $hexweatherdata = 0;
         do {
-            $w_vanaDate = $w_vanaDate - 1;
+            $w_vanaDate = ($w_vanaDate - 1);
             $hexweatherdata = $this->getWeatherHex($arr,$w_vanaDate);
         }while ( $hexweatherdata == 0000 );
         return $hexweatherdata;
@@ -85,10 +88,16 @@ class DatabaseQueryWrapper {
     function getNextWeatherHex($arr, $w_vanaDate){
         $hexweatherdata = 0;
         do {
-            $w_vanaDate = $w_vanaDate + 1;
+            $w_vanaDate = ($w_vanaDate + 1);
             $hexweatherdata = $this->getWeatherHex($arr, $w_vanaDate);
         }while ( $hexweatherdata == 0000 );
         return $hexweatherdata;
+    }
+
+    function getValidWeatherDate(int $date){
+        if ( $date >= 4320 ) $date -= 4320; 
+        else if ( $date < 0 ) $date += 4320;
+        return $date;
     }
 
     function convertHexToSplitStrings($hex){
@@ -291,7 +300,7 @@ class DatabaseQueryWrapper {
             $weatherArray[$w_vanaDate - $m_vanaDate] = $dayArray;
             // $dayUpdate = $dayUpdate + 1;
             $hexweatherdata = 0;
-            $w_vanaDate = $w_vanaDate + 1;
+            $w_vanaDate = ($w_vanaDate + 1);
             $hexweatherdata = $this->getWeatherHex($arr, $w_vanaDate);
             //print_r(count($weatherArray));
             }while( count($weatherArray) < 16 );
@@ -339,7 +348,7 @@ class DatabaseQueryWrapper {
             else $temp = ParserHelper::zoneERA_forList($row->name);
 			if ( !isset($temp) || ExclusionsHelper::zoneIsTown($temp)) { continue; }
 
-            $dayCount = 45;
+            $dayCount = 100;
             //check if on the diggers special page
             //should only include the weather for the zones listed in ExclusionsHelper::$diggingRelevantZones
             if ( $forDiggersPage == true) {
@@ -405,7 +414,7 @@ class DatabaseQueryWrapper {
 			//"zone_settings.name" => $zoneNameSearch,
 			"mob_droplist.dropid != 0 ",
             //"mob_droplist.dropType != 4",  // removing DESPOIL - as its OOE
-			"( mob_groups.content_tag = 'COP' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')",
+			$this->mobContent,
 			//"mob_groups.content_tag IS NULL ",
 		];
 
@@ -413,8 +422,6 @@ class DatabaseQueryWrapper {
 
         if ( $mobNameSearch !=  '' ) {
             array_push($query, "mob_groups.name LIKE '%$mobNameSearch%'");
-            //wfDebugLog( 'LSBSearch', get_called_class() . ":" . json_encode($query) );
-            
 		}
 
         if ( $includeFished == 0 ){ $query = $this->exclude_MOBGROUPS_fished($query); }
@@ -423,10 +430,9 @@ class DatabaseQueryWrapper {
         if ( $itemNameSearch !=  '' ) {
 			array_push($query, "item_basic.name LIKE '%$itemNameSearch%' OR item_basic.sortname LIKE '%$itemNameSearch%'");
 		}   
-			//up_property = 'enotifwatchlistpages'
+
 		if ( $zoneNameSearch !=  'searchallzones' ) {
 			$zoneNameSearch = ParserHelper::replaceSpaces($zoneNameSearch);
-			//$str = "zone_settings.name => $zoneNameSearch';
 			array_push($query, "zone_settings.name = '$zoneNameSearch'");
 		}
 		if ( $excludeNMs == 1) {
@@ -445,15 +451,18 @@ class DatabaseQueryWrapper {
 		}
         else array_push($query, "mob_droplist.dropType <= 1"); // all other drops = 0
 
+        //wfDebugLog( 'LSBSearch', get_called_class() . ":" . json_encode($query) );
+
 		$dbr = $this->openLSBSearchConnection();
 		return $dbr->newSelectQueryBuilder()
 			->select( [ //'mob_droplist.name', 
-						'mob_droplist.itemRate',
+
+						'mob_groups.name AS mobName',
+                        'mob_droplist.itemRate',
 						'mob_droplist.dropType',
 						'mob_droplist.groupId',
 						'mob_droplist.groupRate',
 						'zone_settings.name AS zoneName',
-						'mob_groups.name AS mobName',
 						'mob_groups_levels.minLevel AS mobMinLevel',
 						'mob_groups_levels.maxLevel AS mobMaxLevel',
                         'mob_groups.dropid',
@@ -491,10 +500,10 @@ class DatabaseQueryWrapper {
     public function getMobDropRates(string $mobname){
         $mobNameSearch = ParserHelper::replaceSpaces($mobname);
        
-        $query = [ 
+        $query = [
                     "mob_droplist.dropid != 0 ",
                     //"mob_droplist.dropType != 4",  // removing DESPOIL - as its OOE
-                    "( mob_groups.content_tag = 'COP' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')",
+                    $this->mobContent,
                     "mob_groups.name LIKE '%$mobNameSearch%'",
                 ];
 
@@ -502,7 +511,7 @@ class DatabaseQueryWrapper {
 
         $dbr = $this->openLSBSearchConnection();
 		return $dbr->newSelectQueryBuilder()
-			->select( [ //'mob_droplist.name', 
+			->select( [ //'mob_droplist.name',
 						'mob_droplist.itemRate',
 						'mob_droplist.dropType',
 						'mob_droplist.groupId',
@@ -596,7 +605,7 @@ class DatabaseQueryWrapper {
     public function getMobAndZone($mobname = null, $zonename = null, $moblevel = null){
         if ( $mobname == null && $zonename == null ) return;
 
-        $query = [  "( mob_groups.content_tag = 'COP' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')" ];
+        $query = [  $this->mobContent ];
         //array_push($query, $this->exclude_MOBGROUP_GARRISON);
 
         $query = $this->exclude_MOBGROUPS_OOE($query);
@@ -653,7 +662,7 @@ class DatabaseQueryWrapper {
         if ( !is_null($moblevel) ) $moblevel = intval($moblevel);
         else $moblevel = 0;
 
-        $query = [  "( mob_groups.content_tag = 'COP' OR mob_groups.content_tag IS NULL OR mob_groups.content_tag = 'NEODYNA')" ];
+        $query = [  $this->mobContent ];
 
         $query = $this->exclude_MOBGROUPS_OOE($query);
 
@@ -741,7 +750,6 @@ class DatabaseQueryWrapper {
         $dbr = $this->openLSBSearchConnection();
         $query = [
             "( traits.job = '$mjob' AND traits.level <= '$mlvl') OR (traits.job = '$sjob' AND traits.level <= '$slvl')",
-            //"( traits.content_tag = 'COP' OR traits.content_tag IS NULL )",
         ];
 
         return $dbr->newSelectQueryBuilder()
@@ -817,7 +825,7 @@ class DatabaseQueryWrapper {
             $itemArray[$item->itemid] = $item->name;
         }
 
-        $query = [ "( synth_recipes.content_tag = 'COP' OR synth_recipes.content_tag IS NULL )" ];
+        $query = [ "( synth_recipes.content_tag = 'COP' OR synth_recipes.content_tag = 'TOAU' OR synth_recipes.content_tag IS NULL )" ];
 
         if ( isset($recipename) && $recipename != "" ){
             $recipeIDs = $this->getItemIDsFromDB($recipename, $dbr);
