@@ -13,7 +13,7 @@
         "SpecialWeatherForecast": "includes/WeatherForecast/SpecialWeatherForecast.php",
         "SpecialDiggingWeatherForecast": "includes/WeatherForecast/SpecialDiggingWeatherForecast.php",
         "SpecialDiggingWeatherForecast_Retail": "includes/WeatherForecast/SpecialDiggingWeatherForecast_Retail.php",
-        "ZoneForecast": "includes/WeatherForecast/FFXIPackageHelper_ZoneForecast.php",
+        "ZoneForecast": "includes/WeatherForecast/HXI_ZoneForecast.php",
         "SpecialEquipsets": "includes/SpecialPages/SpecialEquipsets.php",
 
         "HXI_Mob": "includes/Models/HXI_Mob.php",
@@ -61,18 +61,18 @@
         "HXI_QueryController": "includes/helpers/HXI_QueryController.php",
         "HXI_APIHelper": "includes/helpers/HXI_APIHelper.php",
 
-        "ExclusionsHelper": "includes/helpers/FFXIPackageHelper_ExclusionsHelper.php",
-        "ParserHelper": "includes/helpers/FFXIPackageHelper_ParserHelper.php",
-        "DataModel": "includes/helpers/FFXIPackageHelper_DataModel.php",
-        "DatabaseConnection": "includes/helpers/Database Management/FFXIPH_DatabaseConnection.php",
-        "DatabaseQueryWrapper": "includes/helpers/Database Management/FFXIPH_DatabaseQueryWrapper.php",
+        "ExclusionsHelper": "includes/helpers/HXI_ExclusionsHelper.php",
+        "ParserHelper": "includes/helpers/HXI_ParserHelper.php",
+        "DataModel": "includes/helpers/HXI_DataModel.php",
+        "DatabaseConnection": "includes/helpers/Database Management/HXI_DatabaseConnection.php",
+        "DatabaseQueryWrapper": "includes/helpers/Database Management/HXI_DatabaseQueryWrapper.php",
 
-        "WeatherForecast_ElementMaps": "includes/helpers/FFXIPackageHelper_WeatherForecast_ElementMaps.php",
+        "WeatherForecast_ElementMaps": "includes/helpers/HXI_WeatherForecast_ElementMaps.php",
 
         "HXI_Equipsets": "includes/helpers/HXI_Equipsets.php",
         "HXI_LuaSetsHelper": "includes/helpers/data/HXI_LuaSetsHelper.php",
 
-        "VanaTime": "includes/helpers/FFXIPackageHelper_VanaTime.php",
+        "VanaTime": "includes/helpers/HXI_VanaTime.php",
         "HXI_ShowMobDropTable": "includes/Page Directs/HXI_ShowMobDropTable.php"
 	},
     "SpecialPages": {
