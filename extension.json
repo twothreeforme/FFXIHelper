@@ -17,6 +17,7 @@
         "SpecialEquipsets": "includes/SpecialPages/SpecialEquipsets.php",
 
         "HXI_Mob": "includes/Models/HXI_Mob.php",
+        "HXI_BaseStatCalculator": "includes/Models/HXI_BaseStatCalculator.php",
         "HXI_MobStatCalculator": "includes/Models/HXI_MobStatCalculator.php",
         "HXI_StatsUtils": "includes/helpers/data/HXI_StatsUtils.php",
         "FFXIPH_ItemDescription": "includes/Models/FFXIPH_Item.php",

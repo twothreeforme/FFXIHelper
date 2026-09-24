@@ -5,14 +5,7 @@
  * Extracted from the old FFXIPH_Mob::importSQL/setModifiersFromSQL and FFXIPH_MobUtils, which mixed this
  * calculation logic and its DB access directly into the Mob data model.
  */
-class HXI_MobStatCalculator {
-
-    private array $modifiers = [];
-
-    private function addMod($modlabel, $modValue){
-        if ( !isset($this->modifiers[$modlabel]) ) $this->modifiers[$modlabel] = intval($modValue);
-        else $this->modifiers[$modlabel] += intval($modValue);
-    }
+class HXI_MobStatCalculator extends HXI_BaseStatCalculator {
 
     private function handleMods($mods){
         foreach ($mods as $mod) {

@@ -1,7 +1,7 @@
 <?php
 
 
-class HXI_CharacterStatCalculator {
+class HXI_CharacterStatCalculator extends HXI_BaseStatCalculator {
     
     // Base Stats
     public $HP = 0;
@@ -55,7 +55,6 @@ class HXI_CharacterStatCalculator {
     public $enemycritrate = 0;
 
 
-    public $modifiers = [];
     public $equipment;
     public $skillCaps = [];
     public $meritStats = [];
@@ -556,9 +555,7 @@ class HXI_CharacterStatCalculator {
     private function applyToModifiers($mods){
         foreach ($mods as $m => $v) {
 
-            $mod = HXI_ModDictionary::getName($m);
-            if ( !isset($this->modifiers[$mod]) ) $this->modifiers[$mod] = intval($v);
-            else $this->modifiers[$mod] += intval($v);
+            $this->addMod( HXI_ModDictionary::getName($m), $v );
             //if ( $m == 384 ) wfDebugLog( 'Equipsets', get_called_class() . ":applyToModifiers:" . $m . ":" . $v );
         }
         // throw new Exception(implode(',', array_keys($this->modifiers)) );
