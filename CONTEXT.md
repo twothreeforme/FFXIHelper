@@ -42,14 +42,14 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
   from a multi-item row set; new `HXI_CustomItemIconMap` (the old ~22-entry custom-item icon
   borrow map, kept separate from `dat_details` since icons still need a real item id even though
   display text is already resolved). `DataModel::parseEquipment()` is now fully dead (zero
-  callers) — left in place, not deleted.
+  callers) — since deleted.
 
 ## Not done / open
 - `FFXIPH_ItemDescription` (`FFXIPH_Item.php`) — untouched, deferred by request.
-- No `HXI_StatCalculator` interface / `HXI_BaseStatCalculator` abstract base built.
-- A handful of files still have old-prefixed filenames even though their class names never had
-  the prefix (`ExclusionsHelper`, `ParserHelper`, `DataModel`, `VanaTime`, `ZoneForecast`,
-  `WeatherForecast_ElementMaps`) — cosmetic, low priority.
+- `HXI_BaseStatCalculator` (abstract, shared modifier accumulator) exists; Mob and Character
+  calculators extend it. No `HXI_StatCalculator` interface - their entry points differ.
+- Legacy-named PHP files were renamed to `HXI_*.php` (file names only; class names unchanged).
+  `FFXIPH_Item.php` / `FFXIPH_ItemDescription` still untouched (unused class).
 - **After any class rename in this project, clear MediaWiki's extension-registration cache /
   reset opcache** before assuming a resulting failure is a code bug — this already happened once
   (LSBSearch briefly broke, cache clear fixed it, not a code issue).

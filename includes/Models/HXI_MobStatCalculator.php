@@ -231,7 +231,6 @@ class HXI_MobStatCalculator extends HXI_BaseStatCalculator {
             case HXI_Variables::$jobArrayByName["RDM"]:
             case HXI_Variables::$jobArrayByName["DRK"]:
             case HXI_Variables::$jobArrayByName["BLU"]:
-            case HXI_Variables::$jobArrayByName["SCH"]:
             case HXI_Variables::$jobArrayByName["SMN"]:
                 $hasMp = true;
                 break;
@@ -247,7 +246,6 @@ class HXI_MobStatCalculator extends HXI_BaseStatCalculator {
             case HXI_Variables::$jobArrayByName["RDM"]:
             case HXI_Variables::$jobArrayByName["DRK"]:
             case HXI_Variables::$jobArrayByName["BLU"]:
-            case HXI_Variables::$jobArrayByName["SCH"]:
             case HXI_Variables::$jobArrayByName["SMN"]:
                 $hasMp = true;
                 break;
