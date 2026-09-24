@@ -36,6 +36,7 @@ class SpecialLSBSearch extends SpecialPage {
 		$thRatesCheck = (int)$request->getText( 'thRatesCheck' );
 		$showBCNMdrops = (int)$request->getText( 'showBCNMdrops' );
 		$excludeNMs = (int)$request->getText( 'excludeNMs' );
+		$includeSteal = (int)$request->getText( 'includeSteal' );
 		$includeFished = (int)$request->getText( 'includeFished' );
 
 		$queryDataDR = NULL;
@@ -58,6 +59,7 @@ class SpecialLSBSearch extends SpecialPage {
 				$levelRangeMIN,
 				$levelRangeMAX,
 				$thRatesCheck,
+				$includeSteal,
 				$includeFished
 			];
 		}

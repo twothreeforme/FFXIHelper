@@ -78,26 +78,30 @@ class DatabaseQueryWrapper {
 
     function getLastWeatherHex($arr, $w_vanaDate){
         $hexweatherdata = 0;
+        $tries = 0;
         do {
             $w_vanaDate = ($w_vanaDate - 1);
             $hexweatherdata = $this->getWeatherHex($arr,$w_vanaDate);
-        }while ( $hexweatherdata == 0000 );
+        }while ( $hexweatherdata == 0000 && ++$tries < 2160 ); // wraps, so cap at one full cycle
         return $hexweatherdata;
     }
 
     function getNextWeatherHex($arr, $w_vanaDate){
         $hexweatherdata = 0;
+        $tries = 0;
         do {
             $w_vanaDate = ($w_vanaDate + 1);
             $hexweatherdata = $this->getWeatherHex($arr, $w_vanaDate);
-        }while ( $hexweatherdata == 0000 );
+        }while ( $hexweatherdata == 0000 && ++$tries < 2160 ); // wraps, so cap at one full cycle
         return $hexweatherdata;
     }
 
+    /**
+     * Wraps a weather byte index into 0..4319. Weather data is 2 bytes per day over 2160 days.
+     * Modulo (not a single +/-4320) so any distance past either end still lands in range.
+     */
     function getValidWeatherDate(int $date){
-        if ( $date >= 4320 ) $date -= 4320; 
-        else if ( $date < 0 ) $date += 4320;
-        return $date;
+        return ( ( $date % 4320 ) + 4320 ) % 4320;
     }
 
     function convertHexToSplitStrings($hex){
@@ -484,7 +488,7 @@ class DatabaseQueryWrapper {
 			->join( 'zone_settings', null, 'zone_settings.zoneid=mob_groups.zoneid')
 			->join( 'mob_pools', null, 'mob_pools.poolid=mob_groups.poolid')
             ->join( 'mob_family_system', null, 'mob_family_system.familyID=mob_pools.familyid')
-            ->join( 'mob_groups_levels', null, 'mob_groups.dropid=mob_groups_levels.dropid' )
+            ->leftJoin( 'mob_groups_levels', null, 'mob_groups_levels.zoneid=mob_groups.zoneid AND mob_groups_levels.groupid=mob_groups.groupid' )
 			->orderBy( 'groupId', 'ASC' )
 			->where( $query	)
 			->limit( $queryLimit)
@@ -518,8 +522,8 @@ class DatabaseQueryWrapper {
 						'mob_droplist.groupRate',
 						'zone_settings.name AS zoneName',
 						'mob_groups.name AS mobName',
-						'mob_groups.minLevel AS mobMinLevel',
-						'mob_groups.maxLevel AS mobMaxLevel',
+						'mob_groups_levels.minLevel AS mobMinLevel',
+						'mob_groups_levels.maxLevel AS mobMaxLevel',
 						'item_basic.name AS itemName', 
 						//'item_basic.sortname AS itemSortName',
 						'mob_groups.changes_tag AS mobChanges',
@@ -538,6 +542,7 @@ class DatabaseQueryWrapper {
 			->join( 'zone_settings', null, 'zone_settings.zoneid=mob_groups.zoneid')
 			->join( 'mob_pools', null, 'mob_pools.poolid=mob_groups.poolid')
             ->join( 'mob_family_system', null, 'mob_family_system.familyID=mob_pools.familyid')
+            ->leftJoin( 'mob_groups_levels', null, 'mob_groups_levels.zoneid=mob_groups.zoneid AND mob_groups_levels.groupid=mob_groups.groupid' )
 			->orderBy( 'groupId', 'ASC' )
 			->where( $query	)
 			//->limit( $queryLimit )
@@ -585,8 +590,8 @@ class DatabaseQueryWrapper {
 						'hxi_bcnm_crate_list.groupRate',
 						'zone_settings.name AS zoneName',
 						'bcnm_records.name AS mobName',
-						//'mob_groups.minLevel AS mobMinLevel',
-						//'mob_groups.maxLevel AS mobMaxLevel',
+						//'mob_groups_levels.minLevel AS mobMinLevel',
+						//'mob_groups_levels.maxLevel AS mobMaxLevel',
 						'item_basic.name AS itemName', 
                         'item_basic.changes_tag AS itemChanges',
 						'hxi_bcnm_crate_list.changes_tag AS bcnmChanges',
@@ -620,7 +625,7 @@ class DatabaseQueryWrapper {
             array_push($query, "zone_settings.name = '$zoneNameSearch'");
 		}
         if ( !is_null($moblevel) && intval($moblevel) > 0 ){
-            array_push($query, "(mob_groups.minLevel <= '$moblevel') AND (mob_groups.maxLevel >= '$moblevel')");
+            array_push($query, "(mob_groups_levels.minLevel <= '$moblevel') AND (mob_groups_levels.maxLevel >= '$moblevel')");
         }
         
         //wfDebugLog( 'Equipsets', get_called_class() . ":" . $params['action'] . ":" . $zonename .":". $mobname . ":" . $moblevel . ":" . gettype($moblevel)  );
@@ -635,8 +640,8 @@ class DatabaseQueryWrapper {
                         'mob_pools.mobType',
                         'mob_pools.aggro',
                         'mob_pools.true_detection',
-                        'mob_groups.minLevel AS mobMinLevel',
-						'mob_groups.maxLevel AS mobMaxLevel',
+                        'mob_groups_levels.minLevel AS mobMinLevel',
+						'mob_groups_levels.maxLevel AS mobMaxLevel',
                         'mob_groups.changes_tag AS mobChanges',
                         'mob_family_system.detects',
 						] )
@@ -644,6 +649,7 @@ class DatabaseQueryWrapper {
 			->join( 'zone_settings', null, 'zone_settings.zoneid=mob_groups.zoneid')
 			->join( 'mob_pools', null, 'mob_pools.poolid=mob_groups.poolid')
             ->join( 'mob_family_system', null, 'mob_family_system.familyID=mob_pools.familyid')
+            ->leftJoin( 'mob_groups_levels', null, 'mob_groups_levels.zoneid=mob_groups.zoneid AND mob_groups_levels.groupid=mob_groups.groupid' )
             ->orderBy( 'zoneid', 'ASC' )
 			->where( $query	)
 			->fetchResultSet(); 
@@ -673,7 +679,7 @@ class DatabaseQueryWrapper {
         array_push($query, "zone_settings.name = '$zoneNameSearch'");
         
         if ( $moblevel > 0 ){
-            array_push($query, "(mob_groups.minLevel <= '$moblevel') AND (mob_groups.maxLevel >= '$moblevel')");
+            array_push($query, "(mob_groups_levels.minLevel <= '$moblevel') AND (mob_groups_levels.maxLevel >= '$moblevel')");
         }
 	
         $dbr = $this->openLSBSearchConnection();
@@ -683,8 +689,8 @@ class DatabaseQueryWrapper {
                         'mob_groups.name',
                         'mob_groups.HP AS HPmodifier',
                         'mob_groups.MP AS MPmodifier',
-                        'mob_groups.minLevel',
-                        'mob_groups.maxLevel',
+                        'mob_groups_levels.minLevel',
+                        'mob_groups_levels.maxLevel',
                         'zone_settings.name AS zonename',
                         'mob_family_system.STR',
                         'mob_family_system.DEX',
@@ -733,6 +739,7 @@ class DatabaseQueryWrapper {
 			->join( 'zone_settings', null, 'zone_settings.zoneid=mob_groups.zoneid')
 			->join( 'mob_pools', null, 'mob_pools.poolid=mob_groups.poolid')
             ->join( 'mob_family_system', null, 'mob_family_system.familyID=mob_pools.familyid')
+            ->leftJoin( 'mob_groups_levels', null, 'mob_groups_levels.zoneid=mob_groups.zoneid AND mob_groups_levels.groupid=mob_groups.groupid' )
             ->join( 'mob_resistances', null, 'mob_pools.resist_id=mob_resistances.resist_id' )
             //->orderBy( 'zoneid', 'ASC' )
 			->where( $query	)
