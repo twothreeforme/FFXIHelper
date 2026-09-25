@@ -9,7 +9,8 @@ class SpecialEquipsets extends SpecialPage {
 	static function onBeforePageDisplay( $out, $skin ) : void  {
 		//$out->addModules(['HXI_LSBSearch']);
 		if ( $out->getTitle() == "Special:Equipsets" )  {
-			$out->addModules(['HXI_Equipsets']);
+			$out->addBodyClasses( 'HXI-equipsets' );
+				$out->addModules(['HXI_Equipsets']);
 		}
 	}
 
