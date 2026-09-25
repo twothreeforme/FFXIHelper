@@ -287,59 +287,46 @@ class HXI_HTMLOptions {
     }
 
     public static function setsList(){
+        $html = "<details id=\"HXI_Equipsets_setManagement\" class=\"HXI_win HXI_gs_sets HXI_Equipsets_setManagement\" open>";
+        $html .= "<summary class=\"HXI_win_title\">Saved Sets</summary>";
+        $html .= "<div id=\"HXI_Equipsets_setManagement_setsList\" class=\"HXI_Equipsets_setManagement_setsList HXI_setsList\">";
 
-        $html = "<div id=\"HXI_Equipsets_setManagement\" class=\"HXI_Equipsets_setManagement\">";
-        //$html .= HXI_HTMLOptions::selectableButtonsBar("HXI_equipsets_setSelect");
-        
-        $html .="<div style=\"width: 100%; flex-wrap: nowrap; display: flex;flex-direction: row;justify-content: space-between;\">";
-        $html .="<h3 style=\"display:inline-block;margin-top:0em;padding:0px;\">Available Sets</h3>";
-        $html .="<div id=\"HXI_menuIcon\" class=\"HXI_menuIcon\">" .
-                    "<div class=\"HXI_menuIcon_bar1\"></div>" .
-                    "<div class=\"HXI_menuIcon_bar2\"></div>" .
-                    "<div class=\"HXI_menuIcon_bar3\"></div>" .
-                "</div>";
-        $html .="</div>";
-        
-        $html .= "<div id=\"HXI_Equipsets_setManagement_setsList\" class=\"HXI_Equipsets_setManagement_setsList\">";
         $user = RequestContext::getMain()->getUser();
         $uid = $user->getId();
         if ( $uid != 0 && $uid != null ){
             $db = new DatabaseQueryWrapper();
-            $userSets = $db->getUserSetsFromUserID($uid);
-            //throw new Exception ( json_encode($userSets));
-            if ( count($userSets) > 0 ){
-
-                $html .= self::setsListTable($userSets);
-            }
-
+            $html .= self::setsListTable( $db->getUserSetsFromUserID($uid) );
+        }
+        else {
+            $html .= "<p class=\"HXI_setsEmpty\">Log in to save and load your own sets.</p>";
         }
         $html .= "</div>";
-        //$html .= "<button id=\"HXI_deleteSetButton\" class=\"HXI_deleteSetButton\">Remove set</button>";
 
-        $html .= "</div>";
+        $html .= "</details>";
         return $html;
     }
 
     public static function setsListTable($userSets){
-        $html = "";
-            $html = "<table id=\"HXI_Equipsets_setManagement_setsListTable\" class=\"HXI_Equipsets_setManagement_setsListTable\">";
-            if ( count($userSets) > 0 ){
-                foreach ($userSets as $jobtype => $val ) {
-                    $html .="<tr>
-                                <th colspan=\"2\">$jobtype</th>
-                            </tr>";
-
-                    foreach ( $val as $set ){
-                        $html .="<tr>";
-                        if (  gettype($set) == "string") throw new Exception ( json_encode($val));
-                        $html .= "<td data-value=\"" . $set["usersetid"] . "\">" . $set["setname"] ."</td>";
-                        $html .= "<td class =\"HXI_Equipsets_setManagement_setsListTable_Remove\" data-value=\"" . $set["usersetid"] . "\" style=\"color:red;text-align:end;width: 1%;white-space: nowrap;\" >Remove</td>";
-                        $html .="<tr>";
-                    }
-
+        $html = "<div id=\"HXI_Equipsets_setManagement_setsListTable\" class=\"HXI_setsGroups\">";
+        if ( !empty($userSets) ){
+            foreach ($userSets as $jobtype => $val ) {
+                $html .= "<div class=\"HXI_setGroup\"><h4>" . htmlspecialchars($jobtype) . "</h4><ul>";
+                foreach ( $val as $set ){
+                    if ( gettype($set) == "string") throw new Exception ( json_encode($val));
+                    $id = (int)$set["usersetid"];
+                    $name = htmlspecialchars($set["setname"], ENT_QUOTES);
+                    $html .= "<li>" .
+                                "<button type=\"button\" class=\"HXI_setLoad\" data-value=\"$id\">$name</button>" .
+                                "<button type=\"button\" class=\"HXI_setRemove\" data-value=\"$id\" data-name=\"$name\" title=\"Remove set\" aria-label=\"Remove set $name\">&times;</button>" .
+                             "</li>";
                 }
+                $html .= "</ul></div>";
             }
-            $html .= "</table>";
+        }
+        else {
+            $html .= "<p class=\"HXI_setsEmpty\">No saved sets yet. Equip some gear and press <b>Save this set</b>.</p>";
+        }
+        $html .= "</div>";
 
         return $html;
     }

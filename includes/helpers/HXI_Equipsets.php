@@ -44,137 +44,137 @@ class HXI_Equipsets  {
 
     }
 
+    private const SLOT_NAMES = ["Main", "Sub", "Range", "Ammo", "Head", "Neck", "Ear1", "Ear2", "Body", "Hands", "Ring1", "Ring2", "Back", "Waist", "Legs", "Feet"];
+
     public function querySection(): string{
-        $maxedSub = "<label class=\"HXI_dynamiccontent_checkContainer\"><input id=\"HXI_dynamiccontent_checkboxMaxSub\" type=\"checkbox\" checked=\"checked\"><i>(max)</i></input></label>";
-        $html = "<div class=\"HXI_Equipsets_selectOptions\">" .
-                    "<br>" .
-                    //"<span>Saved Sets  " . HXI_HTMLOptions::setsDropDown("HXI_equipsets_selectSet") . "</span><br>" .
-                    "<span>Main " . HXI_HTMLOptions::jobDropDown("HXI_equipsets_selectMJob", $this->sharedLink['mjob']) . HXI_HTMLOptions::levelRange("HXI_equipsets_selectMLevel", $this->sharedLink['mlvl']) . "</span><br>
-                    <span>Sub " . HXI_HTMLOptions::jobDropDown("HXI_equipsets_selectSJob", $this->sharedLink['sjob']) . HXI_HTMLOptions::subLevelRange("HXI_equipsets_selectSLevel", $this->sharedLink['slvl']) . $maxedSub ."</span><br>
-                    </div>";
+        $maxedSub = "<label class=\"HXI_dynamiccontent_checkContainer HXI_gs_max\"><input id=\"HXI_dynamiccontent_checkboxMaxSub\" type=\"checkbox\" checked=\"checked\"><span>Max</span></label>";
+        $html = "<div class=\"HXI_Equipsets_selectOptions HXI_gs_jobs\">" .
+                    "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_equipsets_selectMJob\">Main</label>" .
+                        HXI_HTMLOptions::jobDropDown("HXI_equipsets_selectMJob", $this->sharedLink['mjob']) .
+                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_equipsets_selectMLevel\">Lv</label>" . HXI_HTMLOptions::levelRange("HXI_equipsets_selectMLevel", $this->sharedLink['mlvl']) . "</span>" .
+                    "</div>" .
+                    "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_equipsets_selectSJob\">Sub</label>" .
+                        HXI_HTMLOptions::jobDropDown("HXI_equipsets_selectSJob", $this->sharedLink['sjob']) .
+                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_equipsets_selectSLevel\">Lv</label>" . HXI_HTMLOptions::subLevelRange("HXI_equipsets_selectSLevel", $this->sharedLink['slvl']) . $maxedSub . "</span>" .
+                    "</div>" .
+                "</div>";
         return $html;
     }
 
+    /**
+     * One row of the status window. $modId/$mod add the green/red "+n" bonus next to the value.
+     */
+    private function statRow(string $label, string $id, $value, ?string $modId = null, $mod = null, string $suffix = ""): string{
+        $html = "<div class=\"HXI_stat\"><span class=\"HXI_stat_l\">$label</span><span class=\"HXI_stat_v\">" .
+                    "<span id=\"HXI_Equipsets_stat$id\">" . ($value ?? 0) . "</span>";
+        if ( $suffix !== "" ) $html .= "<span class=\"HXI_stat_suffix\">$suffix</span>";
+        if ( $modId !== null ) $html .= "<span id=\"HXI_Equipsets_stat$modId\" class=\"HXI_mod " . self::modClass($mod) . "\">" . self::modText($mod) . "</span>";
+        $html .= "</span></div>";
+        return $html;
+    }
+
+    /**
+     * Content of #HXI_Equipsets_showstatstable (also returned by the API on every change).
+     */
     public function statsSection( $stats = null): string{
+        $s = fn($i) => $stats ? ($stats[$i] ?? 0) : 0;
 
-        $html = "
-             
-                <tr><td colspan=\"2\" style=\"height:10px;\"></td></tr>
-                <tr><td>HP&emsp;</td><td><span id=\"HXI_Equipsets_statHP\">" . ($stats ? $stats[0] : 0) . "</span></td></tr>
-                <tr><td>MP&emsp;</td><td><span id=\"HXI_Equipsets_statMP\">" . ($stats ? $stats[1] : 0) . "</span></td></tr>
-                <tr><td colspan=\"2\" style=\"height:10px;\"></td></tr>
-                <tr><td>STR&emsp;</td><td><span id=\"HXI_Equipsets_statSTR\">" . ($stats ? $stats[2] : 0) . "</span></td><td><span id=\"HXI_Equipsets_statSTRMod\"" . ($stats ? self::styleStatMod($stats[3]) : 0) . "&emsp;</span></td></tr>
-                <tr><td>DEX&emsp;</td><td><span id=\"HXI_Equipsets_statDEX\">" . ($stats ? $stats[4] : 0) . "</span></td><td><span id=\"HXI_Equipsets_statDEXMod\"" . ($stats ? self::styleStatMod($stats[5]) : 0) . "&emsp;</span></td></tr>
-                <tr><td>VIT&emsp;</td><td><span id=\"HXI_Equipsets_statVIT\">" . ($stats ? $stats[6] : 0) . "</span></td><td><span id=\"HXI_Equipsets_statVITMod\"" . ($stats ? self::styleStatMod($stats[7]) : 0) . "&emsp;</span></td></tr>
-                <tr><td>AGI&emsp;</td><td><span id=\"HXI_Equipsets_statAGI\">" . ($stats ? $stats[8] : 0) . "</span></td><td><span id=\"HXI_Equipsets_statAGIMod\"" . ($stats ? self::styleStatMod($stats[9]) : 0) . "&emsp;</span></td></tr>
-                <tr><td>INT&emsp;</td><td><span id=\"HXI_Equipsets_statINT\">" . ($stats ? $stats[10] : 0) . "</span></td><td><span id=\"HXI_Equipsets_statINTMod\"" . ($stats ? self::styleStatMod($stats[11]) : 0) . "&emsp;</span></td></tr>
-                <tr><td>MND&emsp;</td><td><span id=\"HXI_Equipsets_statMND\">" . ($stats ? $stats[12] : 0) . "</span></td><td><span id=\"HXI_Equipsets_statMNDMod\"" . ($stats ? self::styleStatMod($stats[13]) : 0) . "&emsp;</span></td></tr>
-                <tr><td>CHR&emsp;</td><td><span id=\"HXI_Equipsets_statCHR\">" . ($stats ? $stats[14] : 0) . "</span></td><td><span id=\"HXI_Equipsets_statCHRMod\"" . ($stats ? self::styleStatMod($stats[15]) : 0) . "&emsp;</span></td></tr>
-                <tr><td colspan=\"2\" style=\"height:10px;\"></td></tr>
-                <tr><td>DEF&emsp;</td><td><span id=\"HXI_Equipsets_statDEF\">" . ($stats ? $stats[16] : 0) . "</span></td></tr>
-                <tr><td>ATT&emsp;</td><td><span id=\"HXI_Equipsets_statATT\">" . ($stats ? $stats[17] : 0) . "</span></td></tr>
-                <tr><td>ACC&emsp;</td><td><span id=\"HXI_Equipsets_statACC\">" . ($stats ? $stats[26] : 0) . "</span></td></tr>
-                <tr><td>EVA&emsp;</td><td><span id=\"HXI_Equipsets_statEVA\">" . ($stats ? $stats[27] : 0) . "</span></td></tr>
-                <tr><td colspan=\"2\" style=\"height:10px;\"></td></tr>" .
+        $html  = "<div class=\"HXI_statGroup HXI_statGroup_vitals\">" .
+                    $this->statRow("HP", "HP", $s(0)) .
+                    $this->statRow("MP", "MP", $s(1)) .
+                 "</div>";
 
-                "<tr><td>Gear Haste&emsp;</td><td><span id=\"HXI_Equipsets_statHasteGear\">" . ($stats ? self::styleHaste($stats[28]["gear"]) : 0) . "</span></td><td>%</td></tr>" .
-                "<tr><td>Fast Cast&emsp;</td><td><span id=\"HXI_Equipsets_statFastCast\">" . ($stats ? $stats[29] : 0) . "</span></td><td>%</td></tr>" .
-                "<tr><td>PDT&emsp;</td><td><span id=\"HXI_Equipsets_statPDT\">" . ($stats ? $stats[30] : 0) . "</span></td><td>%</td></tr>" .
-                "<tr><td>MDT&emsp;</td><td><span id=\"HXI_Equipsets_statMDT\">" . ($stats ? $stats[31] : 0) . "</span></td><td>%</td></tr>" .
-                "<tr><td>Conserve MP&emsp;</td><td><span id=\"HXI_Equipsets_statConserveMP\">" . ($stats ? $stats[32] : 0) . "</span></td></tr>" .
-                "<tr><td>Enmity&emsp;</td><td><span id=\"HXI_Equipsets_statEnmity\">" . ($stats ? $stats[33] : 0) . "</span></td></tr>" .
-                "<tr><td>RACC&emsp;</td><td><span id=\"HXI_Equipsets_statRACC\">" . ($stats ? $stats[34] : 0) . "</span></td></tr>" .
+        $html .= "<div class=\"HXI_statGroup\">" .
+                    $this->statRow("STR", "STR", $s(2),  "STRMod", $s(3)) .
+                    $this->statRow("DEX", "DEX", $s(4),  "DEXMod", $s(5)) .
+                    $this->statRow("VIT", "VIT", $s(6),  "VITMod", $s(7)) .
+                    $this->statRow("AGI", "AGI", $s(8),  "AGIMod", $s(9)) .
+                    $this->statRow("INT", "INT", $s(10), "INTMod", $s(11)) .
+                    $this->statRow("MND", "MND", $s(12), "MNDMod", $s(13)) .
+                    $this->statRow("CHR", "CHR", $s(14), "CHRMod", $s(15)) .
+                 "</div>";
 
-            "</table>";
-            
+        $html .= "<div class=\"HXI_statGroup\">" .
+                    $this->statRow("Defense", "DEF", $s(16)) .
+                    $this->statRow("Attack", "ATT", $s(17)) .
+                    $this->statRow("Accuracy", "ACC", $s(26)) .
+                    $this->statRow("Evasion", "EVA", $s(27)) .
+                    $this->statRow("Ranged Acc.", "RACC", $s(34)) .
+                 "</div>";
+
+        $html .= "<div class=\"HXI_statGroup\">" .
+                    $this->statRow("Gear Haste", "HasteGear", $stats ? self::styleHaste($stats[28]["gear"]) : 0, null, null, "%") .
+                    $this->statRow("Fast Cast", "FastCast", $s(29), null, null, "%") .
+                    $this->statRow("PDT", "PDT", $s(30), null, null, "%") .
+                    $this->statRow("MDT", "MDT", $s(31), null, null, "%") .
+                    $this->statRow("Conserve MP", "ConserveMP", $s(32)) .
+                    $this->statRow("Enmity", "Enmity", $s(33)) .
+                 "</div>";
+
         return $html;
     }
 
-    private function styleHaste($stat){
+    private static function styleHaste($stat){
         return $stat / 100;
     }
 
-    private function styleStatMod($stat){
-        $style = "";
-        if ( $stat > 0 ){
-            $style = " style=\"color:green;\">&nbsp;&nbsp;+";
-        }
-        else if ( $stat < 0 ) {
-            $style = " style=\"color:red;\">&nbsp;&nbsp;";
-        }
-        else $style = ">";
+    private static function modClass($stat): string{
+        if ( $stat > 0 ) return "HXI_pos";
+        if ( $stat < 0 ) return "HXI_neg";
+        return "";
+    }
 
-        if ( $stat != 0 ) return $style . $stat;
-        else return $style;
+    private static function modText($stat): string{
+        if ( !$stat ) return "";
+        return ( $stat > 0 ? "+" : "" ) . $stat;
     }
 
     public function equipmentGrid($updatedGridItems = null){
-        //throw new Exception ( json_encode($updatedGridItems));
-        $f = MediaWikiServices::getInstance()->getRepoGroup()->findFile('Blank.jpg');
-        $imageURL = $f->getCanonicalUrl();
-
         $html = "";
 
         for ( $s = 0; $s <= 15; $s++){
+            $item = $updatedGridItems[$s] ?? null;
+            $name = self::SLOT_NAMES[$s];
 
-            $td = "<td style=\"height:inherit; background-image:url(" . $imageURL . ");background-repeat:no-repeat;background-size:64px 64px;\"";
-            if ( $updatedGridItems[$s][2] ){
-                $td .= " class=\"hint--bottom\" aria-label=\"";
-                $tooltip = str_replace("\"", "&quot;", $updatedGridItems[$s][2]);
-                $td .= $tooltip;
-                $td .= "\"";
-            }
-            $td .= ">";
-
-            if ( $s == 0 ) $html .= "<tr>";
-            else if ( $s == 4 || $s == 8 || $s == 12 ) $html .= "</tr><tr>";
-
-           $html .= $td . "<div class=\"equipsetsGridImage\" id=\"grid" . $s . "\" data-value=\"" . $updatedGridItems[$s][1][0]  . "\">". $updatedGridItems[$s][1][1] . "</div></td>";
+            // hint.css tooltip host: the API swaps the aria-label/class on this element (see HXI_Tooltips.js)
+            $html .= "<div class=\"HXI_slot";
+            $tip = $item[2] ?? "";
+            if ( $tip ) $html .= " hint--bottom\" aria-label=\"" . str_replace("\"", "&quot;", $tip);
+            $html .= "\">" .
+                        "<span class=\"HXI_slot_label\">$name</span>" .
+                        "<div class=\"equipsetsGridImage\" id=\"grid$s\" role=\"button\" tabindex=\"0\" title=\"Change $name\" data-value=\"" . ($item[1][0] ?? 0) . "\">" . ($item[1][1] ?? "") . "</div>" .
+                     "</div>";
         }
-        // $html .= "</tr></table>";
-        $html .= "</tr>";
 
         return $html;
     }
 
     public function resistances( $stats = null){
-        $resCircles = array();
-        $resCircles[] = "Trans_Fire.gif";
-        $resCircles[] = "Trans_Wind.gif";
-        $resCircles[] = "Trans_Lightning.gif";
-        $resCircles[] = "Trans_Light.gif";
-        $resCircles[] = "Trans_Ice.gif";
-        $resCircles[] = "Trans_Earth.gif";
-        $resCircles[] = "Trans_Water.gif";
-        $resCircles[] = "Trans_Dark.gif";
+        $elements = ["Fire", "Wind", "Lightning", "Light", "Ice", "Earth", "Water", "Dark"];
 
+        $icons = [];
+        foreach ( $elements as $e ) $icons[] = "[[File:Trans_" . $e . ".gif|20px|link=]]";
+        $icons = ParserHelper::wikiParse($icons);
+
+        $html = "<div class=\"HXI_resGrid\">";
         for ( $r = 0; $r <= 7; $r++){
-            $resCircles[$r] = "[[File:".  $resCircles[$r] . "|20px|link=]]";
+            $html .= "<div class=\"HXI_Equipsets_statRes HXI_res\" title=\"" . $elements[$r] . " resistance\">" . $icons[$r] .
+                        "<span id=\"HXI_Equipsets_statRes" . $r . "\">" . ($stats ? $stats[$r + 18] : 0) . "</span></div>";
         }
-
-        $resCircles = ParserHelper::wikiParse($resCircles);
-
-        $html = "<table style=\"width:100%;line-height: 14px;\" >";
-        $td = "<td class=\"HXI_Equipsets_statRes\" >";
-        //throw new Exception ( json_encode($updatedGridItems));
-        for ( $r = 0; $r <= 7; $r++){
-            if ( $r == 0 ) $html .= "<tr>";
-            else if ( $r == 4 ) $html .= "</tr><tr>";
-            $s = $r + 18;
-            $html .= $td . $resCircles[$r] . "<span id=\"HXI_Equipsets_statRes" . $r . "\"  >". ($stats ? $stats[$s] : 0) . "</span>";
-        }
-
-        $html .= "</tr></table>";
+        $html .= "</div>";
         return $html;
     }
 
     public function userSetsData(){
-        $html = "<div style=\"width:100%;text-align: center; padding: 12px;\">
-                    <span>". 
-                    HXI_HTMLTableHelper::shareButton("HXI_dynamiccontent_shareEquipset") .
-                    HXI_HTMLTableHelper::shareDiscordButton("HXI_dynamiccontent_shareDiscordEquipset") .
-                    "</span>
-                </div>";
+        $html = "<div class=\"HXI_gs_actions\">" .
+                    HXI_HTMLOptions::saveButton("HXI_newSetButton") .
+                    HXI_HTMLTableHelper::shareButton("HXI_dynamiccontent_shareEquipset", "Copy link") .
+                    HXI_HTMLTableHelper::shareDiscordButton("HXI_dynamiccontent_shareDiscordEquipset", "Discord") .
+                "</div>" .
+                "<div id=\"HXI_dynamiccontent_newSetSection\" class=\"HXI_gs_saveRow\" style=\"display: none;\">" .
+                    "<input type=\"text\" id=\"HXI_dynamiccontent_setNameInput\" class=\"HXI_dynamiccontent_setNameInput\" placeholder=\"Set name\" maxlength=\"25\" aria-label=\"Set name\">" .
+                    "<button id=\"HXI_dynamiccontent_saveSet\" class=\"HXI_newSetButton HXI_saveSetButton\">Save</button>" .
+                "</div>";
         return $html;
     }
 
@@ -182,124 +182,73 @@ class HXI_Equipsets  {
      * @param $luaNamesArray array of strings | names of items
      */
     public function additionalData($luaNamesArray){
-
-        $html =  "" .
-                    "<div class=\"HXI_Equipsets_equipList\">
-                        <h2 style=\"display:block;margin-top:0em;padding:0px;\">Equipment List</h2>
-                        <table>
-                            <tr>
-                                <td>Main</td><td id=\"HXI_Equipsets_gridLabel0\">" . (( !is_null($luaNamesArray) && $luaNamesArray[0] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[0] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Sub</td><td id=\"HXI_Equipsets_gridLabel1\">" . (( !is_null($luaNamesArray) && $luaNamesArray[1] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[1] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Range</td><td id=\"HXI_Equipsets_gridLabel2\">" . (( !is_null($luaNamesArray) && $luaNamesArray[2] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[2] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Ammo</td><td id=\"HXI_Equipsets_gridLabel3\">" . (( !is_null($luaNamesArray) && $luaNamesArray[3] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[3] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Head</td><td id=\"HXI_Equipsets_gridLabel4\">" . (( !is_null($luaNamesArray) && $luaNamesArray[4] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[4] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Neck</td><td id=\"HXI_Equipsets_gridLabel5\">" . (( !is_null($luaNamesArray) && $luaNamesArray[5] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[5] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Ear1</td><td id=\"HXI_Equipsets_gridLabel6\">" . (( !is_null($luaNamesArray) && $luaNamesArray[6] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[6] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Ear2</td><td id=\"HXI_Equipsets_gridLabel7\">" . (( !is_null($luaNamesArray) && $luaNamesArray[7] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[7] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Body</td><td id=\"HXI_Equipsets_gridLabel8\">" . (( !is_null($luaNamesArray) && $luaNamesArray[8] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[8] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Hands</td><td id=\"HXI_Equipsets_gridLabel9\">" . (( !is_null($luaNamesArray) && $luaNamesArray[9] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[9] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Ring1</td><td id=\"HXI_Equipsets_gridLabel10\">" . (( !is_null($luaNamesArray) && $luaNamesArray[10] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[10] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Ring2</td><td id=\"HXI_Equipsets_gridLabel11\">" . (( !is_null($luaNamesArray) && $luaNamesArray[11] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[11] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Back</td><td id=\"HXI_Equipsets_gridLabel12\">" . (( !is_null($luaNamesArray) && $luaNamesArray[12] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[12] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Waist</td><td id=\"HXI_Equipsets_gridLabel13\">" . (( !is_null($luaNamesArray) && $luaNamesArray[13] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[13] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Legs</td><td id=\"HXI_Equipsets_gridLabel14\">" . (( !is_null($luaNamesArray) && $luaNamesArray[14] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[14] . "]]") ) : "- ") . "</td>
-                            </tr>
-                            <tr>
-                                <td>Feet</td><td id=\"HXI_Equipsets_gridLabel15\">" . (( !is_null($luaNamesArray) && $luaNamesArray[15] != 0 ) ? ( ParserHelper::wikiParse("[[" . $luaNamesArray[15] . "]]") ) : "- ") . "</td>
-                            </tr>
-                        </table><br>" .
-                        HXI_HTMLOptions::saveButton("HXI_newSetButton") .
-                        "<br><div style=\"background: #202122; height: 1px; width: 70%;\"></div>" .
-                        //"<button id=\"HXI_editSetsButton\" class=\"HXI_editSetsButton\">Edit</button>" .
-
-                        "<button id=\"HXI_dynamiccontent_saveSet\" class=\"HXI_newSetButton HXI_saveSetButton\">Save</button>" .
-                        "<div id=\"HXI_dynamiccontent_newSetSection\" style=\"display: none;\" >" .
-                            //"<p id=\"HXI_dynamiccontent_raceLabel\">Set Name</p>" .
-                            "<input type=\"text\" id=\"HXI_dynamiccontent_setNameInput\" class=\"HXI_dynamiccontent_setNameInput\" placeholder=\"Set Name\" maxlength=\"25\"></input><br>" .
-                        "</div>" .
-                    "</div>" .
-                "";
+        $html = "<details class=\"HXI_win HXI_gs_collapsible HXI_Equipsets_equipList\">" .
+                    "<summary class=\"HXI_win_title\">Equipment List</summary>" .
+                    "<ul class=\"HXI_eqlist\">";
+        for ( $i = 0; $i <= 15; $i++ ){
+            $n = $luaNamesArray[$i] ?? 0;
+            $label = ( $n !== 0 && $n !== null ) ? ParserHelper::wikiParse("[[" . $n . "]]") : "- ";
+            $html .= "<li><span class=\"HXI_eqlist_slot\">" . self::SLOT_NAMES[$i] . "</span><span class=\"HXI_eqlist_item\" id=\"HXI_Equipsets_gridLabel$i\">$label</span></li>";
+        }
+        $html .= "</ul></details>";
         return $html;
     }
 
     public function luaContent(){
-        $html = "<div class=\"HXI_Equipsets_container\" >
-                    <span id=\"HXI_Equipsets_showLuaSets\">";
+        $html = "<details class=\"HXI_win HXI_gs_collapsible HXI_Equipsets_container\">" .
+                    "<summary class=\"HXI_win_title\">Export (Lua)</summary>" .
+                    "<div id=\"HXI_Equipsets_showLuaSets\" class=\"HXI_gs_lua\">";
         $setsHTML = new HXI_LuaSetsHelper();
-        $html .= $setsHTML->__getSetsHTML( $this->updatedEquipmentData[1] );    
-                    
-        $html .=  "</span></div>";
+        $html .= $setsHTML->__getSetsHTML( $this->updatedEquipmentData[1] );
+        $html .= "</div></details>";
         return $html;
     }
 
     public function showEquipsets(){
         $stats = null;
         if ( $this->sharedLink['canGenerateStats'] ) {
-            //throw new Exception (  json_encode($this->sharedLink) ) ;
-            // $equipmentModel = new HXI_EquipmentParser(  $this->sharedLink['equipment'] );
-            //$equipmentArray = $equipmentModel->getEquipmentArray();
-
             $newStats = new HXI_CharacterStatCalculator( $this->sharedLink['race'],
                                                     $this->sharedLink['mlvl'],
-                                                    $this->sharedLink['slvl'], 
-                                                    $this->sharedLink['mjob'], 
-                                                    $this->sharedLink['sjob'], 
-                                                    $this->sharedLink['merits'], 
+                                                    $this->sharedLink['slvl'],
+                                                    $this->sharedLink['mjob'],
+                                                    $this->sharedLink['sjob'],
+                                                    $this->sharedLink['merits'],
                                                     $this->sharedEquipmentModel->getItemObjects() );
             $stats =  $newStats->getStats();
         }
-        
-        $html = "<span><i><b>Disclosure:</b>  Please reach out with any questions/comments via Discord.</i>" .
-                "<div class=\"HXI_Equipsets_container\" >" .
-                    $this->userSetsData() .
-                    "<br><table class=\"HXI_Equipsets_showset\">
-                        <tr>
-                            <td colspan=\"2\">" . $this->querySection() . "</td>
-                        </tr>
-                        <tr>
-                            <td><table id=\"HXI_Equipsets_equipmentgrid\" class=\"HXI_Equipsets_equipmentgrid\" >" . $this->equipmentGrid( $this->updatedEquipmentData[0] ) . "</table></td>
-                        </tr>
-                        <tr><td><div id=\"HXI_Equipsets_showstats_res\">" . $this->resistances( $stats ) ."</div></td></tr>
-                    </table>" .   
-                "</div>" .
-                "<div class=\"HXI_Equipsets_additionalData\">
-                    <div class=\"HXI_Equipsets_showstats\">
-                        <h2 style=\"display:block;margin-top:0em;padding:0px;\">Statistics</h2>" .
-                        "<table id=\"HXI_Equipsets_showstatstable\" class=\"HXI_Equipsets_showstatstable\">" .
-                            $this->statsSection( $stats ) .
-                        "</table></div><br><br>" .
-                    $this->additionalData( $this->updatedEquipmentData[1] ) . 
-                "</div>" .
-                HXI_HTMLOptions::setsList().
-                $this->luaContent()  ;
+
+        $html = "<div class=\"HXI_gs\">" .
+                    "<div class=\"HXI_gs_layout\">" .
+
+                        // Equipment window: jobs + 4x4 grid + resistances + actions
+                        "<section class=\"HXI_gs_main\">" .
+                            "<div class=\"HXI_win HXI_gs_equip\">" .
+                                "<div class=\"HXI_win_title\">Equipment</div>" .
+                                $this->querySection() .
+                                "<div id=\"HXI_Equipsets_equipmentgrid\" class=\"HXI_Equipsets_equipmentgrid HXI_grid\">" . $this->equipmentGrid( $this->updatedEquipmentData[0] ) . "</div>" .
+                                "<div id=\"HXI_Equipsets_showstats_res\" class=\"HXI_Equipsets_showstats_res\">" . $this->resistances( $stats ) . "</div>" .
+                            "</div>" .
+                            $this->userSetsData() .
+                        "</section>" .
+
+                        // Stats window
+                        "<section class=\"HXI_gs_stats\">" .
+                            "<div class=\"HXI_win HXI_Equipsets_showstats\">" .
+                                "<div class=\"HXI_win_title\">Stats</div>" .
+                                "<div id=\"HXI_Equipsets_showstatstable\" class=\"HXI_Equipsets_showstatstable HXI_stats\">" . $this->statsSection( $stats ) . "</div>" .
+                            "</div>" .
+                        "</section>" .
+
+                        // Saved sets, export, equipment list
+                        "<section class=\"HXI_gs_side\">" .
+                            HXI_HTMLOptions::setsList() .
+                            $this->luaContent() .
+                            $this->additionalData( $this->updatedEquipmentData[1] ) .
+                        "</section>" .
+
+                    "</div>" .
+                    "<p class=\"HXI_gs_note\"><i><b>Disclosure:</b> Please reach out with any questions/comments via Discord.</i></p>" .
+                "</div>";
 
         return $html;
     }

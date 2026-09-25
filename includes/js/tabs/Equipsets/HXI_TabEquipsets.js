@@ -45,7 +45,7 @@ module.exports.setLinks = function (){
         saveSetClicked();
     });
 
-    addEventListersToSetsTable();
+    setupSetsList();
 
     /**
      * Modal Windows
@@ -59,6 +59,12 @@ module.exports.setLinks = function (){
 
         slot.addEventListener("click", function (e) {
             modal.open(Data.getEquipID(v));
+        });
+        slot.addEventListener("keydown", function (e) {
+            if ( e.key === "Enter" || e.key === " " ) {
+                e.preventDefault();
+                slot.click();
+            }
         });
     }
 
@@ -126,9 +132,13 @@ module.exports.setLinks = function (){
      // Load Merit Edits section
     // MeritEdits.setLinks(Data.updateStats);
     
-    const menuIcon = document.getElementById("HXI_menuIcon");
-    menuIcon.addEventListener("click", function (e) {
-        adjustMenuIconButtonCSS(this);
+    // Saved sets sidebar: open on wide screens, collapsed on phones/tablets to keep the grid on screen
+    const setsPanel = document.getElementById("HXI_Equipsets_setManagement");
+    if ( setsPanel && window.matchMedia("(max-width: 1099px)").matches ) setsPanel.open = false;
+
+    // Enter in the set name box saves
+    document.getElementById("HXI_dynamiccontent_setNameInput").addEventListener("keydown", function (e) {
+        if ( e.key === "Enter" ) { e.preventDefault(); saveSetClicked(); }
     });
 
 
@@ -146,21 +156,29 @@ module.exports.setLinks = function (){
     Tooltip.setupPageTooltips();
 }
 
-function addSetButtonEvents(setListItems){
-    setListItems.forEach(node => {
-        //console.log(node.classList);
-        node.addEventListener('click', () => {
-            if ( node.classList.length < 1 )  selectSetClicked(node.dataset.value);
-            else if (node.classList.contains("HXI_Equipsets_setManagement_setsListTable_Remove") ) {
-                let setInRow = node.parentNode.querySelectorAll('td');
-                if ( setInRow.length > 0 ){
-                    //console.log(setInRow[0].dataset.value,setInRow[0].innerText );
-                    removeSetClicked(setInRow[0].dataset.value, setInRow[0].innerText);
-                }
-                else console.log("no data for set in row");
-            }
-        });
-        //console.log(node.dataset.value);
+/**
+ * One delegated listener on the sets container, so the list can be re-rendered
+ * by the API without re-binding (or re-creating the remove modal) each time.
+ */
+function setupSetsList(){
+    const container = document.getElementById("HXI_Equipsets_setManagement_setsList");
+    if ( !container ) return;
+
+    setsModal = new ModalSetManagement({ removeCallback: API.actionAPI, returnCallback: setRemoved });
+
+    container.addEventListener("click", (e) => {
+        const remove = e.target.closest(".HXI_setRemove");
+        if ( remove ) {
+            removeSetClicked(remove.dataset.value, remove.dataset.name);
+            return;
+        }
+
+        const load = e.target.closest(".HXI_setLoad");
+        if ( load ) {
+            container.querySelectorAll(".HXI_setActive").forEach(el => el.classList.remove("HXI_setActive"));
+            load.classList.add("HXI_setActive");
+            selectSetClicked(load.dataset.value);
+        }
     });
 }
 
@@ -220,17 +238,8 @@ function resetSetList(results){
 }
 
 function buildSetslist(results){
-    //console.log(results);
-    if ( Array.isArray(results) ) {
-
-    }
-    else {
-        const tableDiv = document.getElementById("HXI_Equipsets_setManagement_setsList");
-        const tableElement = document.getElementById("HXI_Equipsets_setManagement_setsListTable");
-        if ( tableElement ) tableElement.remove();
-        tableDiv.innerHTML = results;
-    }
-    addEventListersToSetsTable();
+    if ( typeof results !== "string" ) return;
+    document.getElementById("HXI_Equipsets_setManagement_setsList").innerHTML = results;
 }
 
 function clearSetList(){
@@ -282,40 +291,16 @@ function showSetButtonSelected(button, selected){
 }
 
 function toggleNewButton() {
-
     NEWSET_BUTTON.classList.toggle('HXI_newSetButton_Grayed');
     const newset_buttonText = document.getElementById("HXI_newSetButton-text");
-    if ( NEWSET_BUTTON.classList.contains('HXI_newSetButton_Grayed')) {
-        newset_buttonText.innerText = "Cancel";
-    }
-    else newset_buttonText.innerText = "Save this set";
+    const saving = NEWSET_BUTTON.classList.contains('HXI_newSetButton_Grayed');
+    newset_buttonText.innerText = saving ? "Cancel" : "Save this set";
 
-    if ( hiddenDiv.style.display != "none" ) {
-        hiddenDiv.style.display = "none";
-        //ActionButtons.showButton(REMOVE_BUTTON);//show remove button
-        
-        ////SELECTSET_DROPDOWN.disabled = false;
-        mJobDropdown.disabled = false;
-        sJobDropdown.disabled = false;
-        mlvlDropdown.disabled = false;
-        slvlDropdown.disabled = false;
+    // Job/level are part of the saved set, so lock them while naming it
+    for ( const el of [ mJobDropdown, sJobDropdown, mlvlDropdown, slvlDropdown ] ) el.disabled = saving;
 
-        //setDisabledState_AllSavedSetButtons(false);
-        ActionButtons.hideButton(SAVE_BUTTON);//show save button
-    }
-    else  {
-        //setDisabledState_AllSavedSetButtons(true);
-        //ActionButtons.hideButton(REMOVE_BUTTON);//show remove button
-
-        ////SELECTSET_DROPDOWN.disabled = true;
-        mJobDropdown.disabled = true;
-        sJobDropdown.disabled = true;
-        mlvlDropdown.disabled = true;
-        slvlDropdown.disabled = true;
-
-        hiddenDiv.style.display = "inline-block";
-        ActionButtons.showButton(SAVE_BUTTON);//show save button
-    }
+    hiddenDiv.style.display = saving ? "flex" : "none";
+    if ( saving ) document.getElementById('HXI_dynamiccontent_setNameInput').focus();
 }
 
 function setDisabledState_AllSavedSetButtons(state){
@@ -324,24 +309,6 @@ function setDisabledState_AllSavedSetButtons(state){
     //console.log(setButtons);
     for ( const button of setButtons ){
         button.disabled = state;
-    }
-}
-
-function adjustMenuIconButtonCSS(i) {
-    i.classList.toggle("HXI_menuIcon_change");
-    const availableSets = document.getElementById("HXI_Equipsets_setManagement");
-    availableSets.classList.toggle("HXI_Equipsets_setManagement_expanded");    
-  }
-
-function addEventListersToSetsTable(){
-    const setListTable = document.getElementById("HXI_Equipsets_setManagement_setsListTable");
-    if ( setListTable ) {
-        const setListItems = setListTable.querySelectorAll("td");
-
-        if ( setListItems.length > 0 ){
-            addSetButtonEvents(setListItems);
-            setsModal = new ModalSetManagement({ removeCallback: API.actionAPI, returnCallback: setRemoved });
-        }
     }
 }
 

@@ -170,7 +170,7 @@
 			"styles": [
                 "resources/styles/HXI_Forms.css",
                 "resources/styles/HXI_Equipsets_Styles.css",
-                "resources/styles/HXI_Equipsets_SetList.css",
+                "resources/styles/HXI_Equipsets_GearSets.css",
                 "resources/styles/HXI_MWOverrides.css",
                 "resources/styles/tabs.css",
                 "resources/styles/hint.css"

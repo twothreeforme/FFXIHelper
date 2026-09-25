@@ -28,7 +28,7 @@ class ModalSetManagement {
         }
 
         this.content = `<h3>Permanently remove this set?</h3>`;
-        this.content += `<h3>` + this.options.setName + `</h3><i>This action cannot be undone</i><br><br>`;
+        this.content += `<h3>` + mw.html.escape(String(this.options.setName)) + `</h3><i>This action cannot be undone</i><br><br>`;
 
         const contentWrapper = document.createElement('div');
         contentWrapper.id = `HXI_equipsets_contentWrapperUserSets`;

@@ -44,6 +44,11 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
   display text is already resolved). `DataModel::parseEquipment()` is now fully dead (zero
   callers) — since deleted.
 
+- **Gear Sets tab UI redesign** (uncommitted): FFXI-window styling in `resources/styles/HXI_Equipsets_GearSets.css`
+  (replaces `HXI_Equipsets_SetList.css`); markup in `HXI_Equipsets::showEquipsets()` / `HXI_HTMLOptions::setsList()`.
+  Responsive via CSS grid areas (phone 1 col, >=700px 2 col, >=1100px 3 col). Stats/resist/sets-list HTML
+  is div-based now (API swaps it in via innerHTML; element ids unchanged). Not yet run on a real wiki.
+
 ## Not done / open
 - `HXI_BaseStatCalculator` (abstract, shared modifier accumulator) exists; Mob and Character
   calculators extend it. No `HXI_StatCalculator` interface - their entry points differ.
