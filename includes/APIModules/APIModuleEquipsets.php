@@ -485,7 +485,7 @@ class APIModuleEquipsets extends ApiBase {
 
     private function createChar($params, $meritsURLSafe = null, $equipmentString = null){
         $user = RequestContext::getMain()->getUser();
-        return new HXI_Character($user->getId(), (int)$params['race'], $meritsURLSafe, (int)$params['def'], $params['charname']);
+        return new HXI_Character($user->getId(), (int)$params['race'], $meritsURLSafe ?? "", (int)($params['def'] ?? 0), $params['charname'] ?? "");
     }
 
     private function createSet($params){
