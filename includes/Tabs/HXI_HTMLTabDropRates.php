@@ -32,28 +32,28 @@ class HXI_HTMLTabDropRates {
     }
 
     public function searchForm(){
-        $html = "<div id=\"FFXIPackageHelper_tabs_droprates_searchForm\">" .
+        $html = "<div id=\"HXI_tabs_droprates_searchForm\">" .
                     "<table><tbody>
                     <tr><td>
                         <table><tbody>
                         <tr>
-                            <td>Mob/BCNM Name<br><input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"mobNameSearch\" value=\"$this->mobName\" size=\"25\"></td>
+                            <td>Mob/BCNM Name<br><input class=\"HXI_dynamiccontent_textinput\" name=\"mobNameSearch\" value=\"$this->mobName\" size=\"25\"></td>
                         </tr>
                         <tr>
-                            <td>Item Name<br><input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"itemNameSearch\" value=\"$this->itemName\" size=\"25\"></td>
+                            <td>Item Name<br><input class=\"HXI_dynamiccontent_textinput\" name=\"itemNameSearch\" value=\"$this->itemName\" size=\"25\"></td>
                         </tr>
                         <tr>
-                            <td>Zone<br>" . HXI_HTMLOptions::zonesDropDown() . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchDropRatesSubmit\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button></td>
+                            <td>Zone<br>" . HXI_HTMLOptions::zonesDropDown() . "<br><br><button id=\"HXI_dynamiccontent_searchDropRatesSubmit\" class=\"HXI_dynamiccontent_customButton\">Search</button></td>
                             </tr>
                         </tbody></table>
                         </td>
-                        <td style=\"vertical-align:top;\">".$this->showShareButton("FFXIPackageHelper_dynamiccontent_shareDropRateQuery") . 
-                            "<br><br>Level: Min->". HXI_HTMLTableHelper::selectLvlDropDown("FFXIPackageHelper_dynamiccontent_selectLvlMIN", 85) .
-                            " Max->". HXI_HTMLTableHelper::selectLvlDropDown("FFXIPackageHelper_dynamiccontent_selectLvlMAX", 85) .
+                        <td style=\"vertical-align:top;\">".$this->showShareButton("HXI_dynamiccontent_shareDropRateQuery") . 
+                            "<br><br>Level: Min->". HXI_HTMLTableHelper::selectLvlDropDown("HXI_dynamiccontent_selectLvlMIN", 85) .
+                            " Max->". HXI_HTMLTableHelper::selectLvlDropDown("HXI_dynamiccontent_selectLvlMAX", 85) .
                             "<br><br>" . $this->selectionOptions() . 
                         "</td>
                     </tr></tbody></table>
-                    <div id=\"FFXIPackageHelper_tabs_droprates_queryresult\">". $this->postQueryResults() ."</div>
+                    <div id=\"HXI_tabs_droprates_queryresult\">". $this->postQueryResults() ."</div>
                 </div>";
         return $html;
     }
@@ -74,8 +74,8 @@ class HXI_HTMLTabDropRates {
     }
 
     // private function zonesDropDown(){
-    //     // <select id=\"FFXIPackageHelper_dynamiccontent_selectLvlMIN\"></select>
-    //     $html = "<select id=\"FFXIPackageHelper_dynamiccontent_selectZoneName\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+    //     // <select id=\"HXI_dynamiccontent_selectLvlMIN\"></select>
+    //     $html = "<select id=\"HXI_dynamiccontent_selectZoneName\" class=\"HXI_dynamiccontent_customDropDown\">";
     //     $zoneNamesList = $this->zoneNameList();
     //     foreach ($zoneNamesList as $key => $value) {
     //        // print_r($key . $value);
@@ -90,23 +90,23 @@ class HXI_HTMLTabDropRates {
     private function selectionOptions(){
         $html = "";
 
-        $html .= "<label class=\"FFXIPackageHelper_dynamiccontent_checkContainer\"><input id=\"FFXIPackageHelper_dynamiccontent_checkboxShowTH\" type=\"checkbox\"";
+        $html .= "<label class=\"HXI_dynamiccontent_checkContainer\"><input id=\"HXI_dynamiccontent_checkboxShowTH\" type=\"checkbox\"";
         if ( $this->thRatesCheck == 1 ) $html .= "checked=\"checked\"";
         $html .= "> Show TH Rates</input></label><br>";
 
-        $html .= "<label class=\"FFXIPackageHelper_dynamiccontent_checkContainer\"><input id=\"FFXIPackageHelper_dynamiccontent_checkboxBCNM\" type=\"checkbox\"";
+        $html .= "<label class=\"HXI_dynamiccontent_checkContainer\"><input id=\"HXI_dynamiccontent_checkboxBCNM\" type=\"checkbox\"";
         if ( $this->showBCNMdrops == 1 ) $html .= "checked=\"checked\"";
         $html .= "> Include BCNMs</input></label><br>";
 
-        $html .= "<label class=\"FFXIPackageHelper_dynamiccontent_checkContainer\"><input id=\"FFXIPackageHelper_dynamiccontent_checkboxExcludeNM\" type=\"checkbox\"";
+        $html .= "<label class=\"HXI_dynamiccontent_checkContainer\"><input id=\"HXI_dynamiccontent_checkboxExcludeNM\" type=\"checkbox\"";
         if ( $this->excludeNMs == 1 ) $html .= "checked=\"checked\"";
         $html .= "> Exclude NMs</input></label><br>";
 
-        $html .= "<label class=\"FFXIPackageHelper_dynamiccontent_checkContainer\"><input id=\"FFXIPackageHelper_dynamiccontent_checkboxIncludeSteal\" type=\"checkbox\"";
+        $html .= "<label class=\"HXI_dynamiccontent_checkContainer\"><input id=\"HXI_dynamiccontent_checkboxIncludeSteal\" type=\"checkbox\"";
         if ( $this->includeSteal == 1 ) $html .= "checked=\"checked\"";
         $html .= "> Include 'Steal'</input></label><br>";
 
-        $html .= "<label class=\"FFXIPackageHelper_dynamiccontent_checkContainer\"><input id=\"FFXIPackageHelper_dynamiccontent_checkboxIncludeFished\" type=\"checkbox\"";
+        $html .= "<label class=\"HXI_dynamiccontent_checkContainer\"><input id=\"HXI_dynamiccontent_checkboxIncludeFished\" type=\"checkbox\"";
         if ( $this->includeFished == 1 ) $html .= "checked=\"checked\"";
         $html .= "> Include 'Fished'</input></label><br>";
         return $html;

@@ -92,7 +92,7 @@ class HXI_QueryController {
 	 * Supports Equipsets modal window equipment search
 	 * @param queryData params from APIModuleEquipsets
 	 * @return string html list with query results
-	 * should fit into <dl> with id="FFXIPackageHelper_equipsets_searchResults"
+	 * should fit into <dl> with id="HXI_equipsets_searchResults"
 	 */
 	public static function queryEquipsetsSearchItems($queryData){
 		$db = new DatabaseQueryWrapper();

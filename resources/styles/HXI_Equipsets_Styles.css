@@ -36,7 +36,7 @@
 /*
 Character selection DIVs
 */
-#FFXIPackageHelper_equipsets_charSelect, #FFXIPackageHelper_equipsets_setSelect {
+#HXI_equipsets_charSelect, #HXI_equipsets_setSelect {
     /* background-color: #92fcac;
     display:inline-block;
     width:150px;
@@ -55,11 +55,11 @@ Character selection DIVs
     overflow-y: hidden;
 }
 
-#FFXIPackageHelper_equipsets_setSelect {
+#HXI_equipsets_setSelect {
   display: inherit;
 }
 
-#FFXIPackageHelper_equipsets_charSelectMerits {
+#HXI_equipsets_charSelectMerits {
     /* background-color: #d495ff;
     display:inline-block;
     overflow-x: auto;
@@ -75,14 +75,14 @@ Character selection DIVs
     /* padding: 0px 0px 0px 15px; */
   }
 
-  #FFXIPackageHelper_equipsets_charTab {
+  #HXI_equipsets_charTab {
       display: block;
       width: 100%;
       height: 100%;
 
   }
 
-  .FFXIPackageHelper_equipsets_charSelectOptionsMenu{
+  .HXI_equipsets_charSelectOptionsMenu{
     width: 100%;
     height: 45px;
     /* background-color: #95cfff; */
@@ -95,7 +95,7 @@ Character selection DIVs
 /*
 Character selection buttons
 */
-.FFXIPackageHelper_newCharButton, .FFXIPackageHelper_newSetButton {
+.HXI_newCharButton, .HXI_newSetButton {
   /* display: block; */
   outline: 0;
   cursor: pointer;
@@ -122,7 +122,7 @@ Character selection buttons
 
 }
 
-.FFXIPackageHelper_newCharButton:hover, .FFXIPackageHelper_newSetButton:hover{
+.HXI_newCharButton:hover, .HXI_newSetButton:hover{
   /* background-color: #00ad1a95;
   color:  #ffffff;
   stroke: #ffffff; */
@@ -134,7 +134,7 @@ Character selection buttons
   box-shadow: 0 6px 10px rgb(93 93 93 / 23%);
 }
 
-.FFXIPackageHelper_newCharButton:disabled, .FFXIPackageHelper_newSetButton:disabled{
+.HXI_newCharButton:disabled, .HXI_newSetButton:disabled{
   cursor: not-allowed;
   pointer-events: none;
   background-color: #86868671;
@@ -142,20 +142,20 @@ Character selection buttons
   stroke: #ffffff;
 }
 
-.FFXIPackageHelper_newCharButton_Grayed, .FFXIPackageHelper_newSetButton_Grayed{
+.HXI_newCharButton_Grayed, .HXI_newSetButton_Grayed{
   background-color: #868686;
   color: #fff;
   stroke: #ffffff;
 }
 
-.FFXIPackageHelper_newCharButton_Grayed:hover, .FFXIPackageHelper_newSetButton_Grayed:hover{
+.HXI_newCharButton_Grayed:hover, .HXI_newSetButton_Grayed:hover{
   background-color: #494949;
   box-shadow: 0 6px 10px rgb(93 93 93 / 23%);
   color: #fff;
   stroke: #ffffff;
 }
 
-.FFXIPackageHelper_saveCharButton, .FFXIPackageHelper_saveSetButton{
+.HXI_saveCharButton, .HXI_saveSetButton{
   visibility: hidden;
   display: unset;
   /* position: absolute; */
@@ -164,15 +164,15 @@ Character selection buttons
 }
 
 
-.FFXIPackageHelper_charButton_default, .FFXIPackageHelper_setButton_default {
+.HXI_charButton_default, .HXI_setButton_default {
   box-shadow: 5px 5px 5px 5px #00ad1a95;
 }
-.FFXIPackageHelper_charButton_default:hover, .FFXIPackageHelper_setButton_default:hover {
+.HXI_charButton_default:hover, .HXI_setButton_default:hover {
   box-shadow: 0 6px 10px #a1cb4785;
 }
 
 
-.FFXIPackageHelper_refreshStatsButton{
+.HXI_refreshStatsButton{
   position: relative;
   display:block;
   width: 35px;
@@ -188,13 +188,13 @@ Character selection buttons
   padding: 3px 0px;
 }
 
-.FFXIPackageHelper_refreshStatsButton:hover {
+.HXI_refreshStatsButton:hover {
   background: #3586ff;
   fill: #fff;
   transition: 0.2s;
 }
 
-.FFXIPackageHelper_deleteCharButton, .FFXIPackageHelper_deleteSetButton {
+.HXI_deleteCharButton, .HXI_deleteSetButton {
   visibility: hidden;
   display: block;
   outline: 0;
@@ -211,19 +211,19 @@ Character selection buttons
   transition: background 0.2sease, color 0.2sease, box-shadow 0.2sease;
 }
 
-.FFXIPackageHelper_deleteSetButton {
+.HXI_deleteSetButton {
   display: inherit;
   /* background: #d6d6d63c; */
   margin: 3px 0px 0px 5px;
 }
 
-.FFXIPackageHelper_deleteCharButton:hover, .FFXIPackageHelper_deleteSetButton:hover{
+.HXI_deleteCharButton:hover, .HXI_deleteSetButton:hover{
   background-color: #fff;
   color: #ff3535;
   box-shadow: 0 6px 20px rgb(93 93 93 / 23%);
 }
 
-.FFXIPackageHelper_editCharButton, .FFXIPackageHelper_editSetsButton{
+.HXI_editCharButton, .HXI_editSetsButton{
   visibility: hidden;
   /* display: block; */
   /* position: absolute; */
@@ -240,29 +240,29 @@ Character selection buttons
   box-shadow: 0 4px 5px 0 rgb(0 0 0 / 10%);
 }
 
-.FFXIPackageHelper_editCharButton{
+.HXI_editCharButton{
   visibility: visible;
 }
 
-.FFXIPackageHelper_editSetsButton{
+.HXI_editSetsButton{
   visibility: visible;
   position: relative;
   background: #3586ff;
 }
 
-.FFXIPackageHelper_editCharButton:hover, .FFXIPackageHelper_loadSetButton:hover,
-.FFXIPackageHelper_editSetsButton:hover{
+.HXI_editCharButton:hover, .HXI_loadSetButton:hover,
+.HXI_editSetsButton:hover{
   background-color: #fff;
   color: #3586ff;
   box-shadow: 0 6px 20px rgb(93 93 93 / 23%);
 }
 
-.FFXIPackageHelper_editCharButtonSelected, .FFXIPackageHelper_editSetsButtonSelected{
+.HXI_editCharButtonSelected, .HXI_editSetsButtonSelected{
   background-color: #3586ff;
   color: #fff;
 }
 
-.FFXIPackageHelper_charButton, .FFXIPackageHelper_setButton, .FFXIPackageHelper_importluaButton {
+.HXI_charButton, .HXI_setButton, .HXI_importluaButton {
     display: inline-block;
     outline: 0;
     cursor: pointer;
@@ -278,49 +278,49 @@ Character selection buttons
     transition: background 0.2s ease,color 0.2s ease,box-shadow 0.2s ease;
   }
 
-.FFXIPackageHelper_charButton:hover,
-.FFXIPackageHelper_importluaButton:hover {
+.HXI_charButton:hover,
+.HXI_importluaButton:hover {
     background-color: #3586ff50;
     box-shadow: 0 6px 10px rgb(93 93 93 / 23%);
 }
 
-.FFXIPackageHelper_importluaButton {
+.HXI_importluaButton {
   background-color: #3586ff;
   color: #fff;
 }
 
-.FFXIPackageHelper_charButton:disabled,
-.FFXIPackageHelper_charButton[disabled],
-.FFXIPackageHelper_editCharButton:disabled,
-.FFXIPackageHelper_editCharButton[disabled],
-.FFXIPackageHelper_importluaButton:disabled,
-.FFXIPackageHelper_importluaButton[disabled] {
+.HXI_charButton:disabled,
+.HXI_charButton[disabled],
+.HXI_editCharButton:disabled,
+.HXI_editCharButton[disabled],
+.HXI_importluaButton:disabled,
+.HXI_importluaButton[disabled] {
   cursor: not-allowed;
   pointer-events: none;
   background-color: #86868671;
   color: #fff;
 }
 
-.FFXIPackageHelper_charButtonselected, .FFXIPackageHelper_setButtonselected{
+.HXI_charButtonselected, .HXI_setButtonselected{
   background-color: #3586ff;
   color: #fff;
 }
 
-.FFXIPackageHelper_charButton_default {
+.HXI_charButton_default {
   box-shadow: 0 4px 5px 0 #a1cb47;
 }
-.FFXIPackageHelper_charButton_default:hover {
+.HXI_charButton_default:hover {
   box-shadow: 0 6px 10px #a1cb4785;
 }
 
 /*
 * Hidden save DIV
 */
-#FFXIPackageHelper_dynamiccontent_newCharSection{
+#HXI_dynamiccontent_newCharSection{
   /* display: none; */
 }
 
-.FFXIPackageHelper_dynamiccontent_charNameInput, .FFXIPackageHelper_dynamiccontent_setNameInput{
+.HXI_dynamiccontent_charNameInput, .HXI_dynamiccontent_setNameInput{
   position: relative;
   cursor: text;
   font-size: 18px;
@@ -340,7 +340,7 @@ Character selection buttons
   }
 }
 
-.FFXIPackageHelper_dynamiccontent_setNameInput{
+.HXI_dynamiccontent_setNameInput{
   width: 75%;
   height: 35px;
   font-size: 15px;
@@ -348,7 +348,7 @@ Character selection buttons
   margin: 0px;
 }
 
-.FFXIPackageHelper_dynamiccontent_charNameInput::placeholder, .FFXIPackageHelper_dynamiccontent_setNameInput::placeholder {
+.HXI_dynamiccontent_charNameInput::placeholder, .HXI_dynamiccontent_setNameInput::placeholder {
   font-style: italic;
   opacity: 0.5;
 }
@@ -356,13 +356,13 @@ Character selection buttons
 /*
 *  Race dropdown
 */
-#FFXIPackageHelper_dynamiccontent_raceLabel{
+#HXI_dynamiccontent_raceLabel{
   display: inline-block;
   font-size: larger;
   font-weight: bold;
 }
 
-/* #FFXIPackageHelper_equipsets_selectRace {
+/* #HXI_equipsets_selectRace {
   display: inline;
   margin: 3px 15px;
   height: 32px;
@@ -372,7 +372,7 @@ Character selection buttons
   background-color: #e8e9f4;
 }
 
-#FFXIPackageHelper_equipsets_selectRace option{
+#HXI_equipsets_selectRace option{
   background-color: #e8e9f4;
 } */
 
@@ -380,7 +380,7 @@ Character selection buttons
 /*
 * Default character toggle on add new char modal
 */
-.FFXIPackageHelper_dynamiccontent_addCharDefaultLabel {
+.HXI_dynamiccontent_addCharDefaultLabel {
   position: relative;
   display: inline-block;
   width: 45px;
@@ -388,13 +388,13 @@ Character selection buttons
   margin: 10px;
 }
 
-.FFXIPackageHelper_dynamiccontent_addCharDefaultLabel .FFXIPackageHelper_dynamiccontent_addCharDefaultInput {
+.HXI_dynamiccontent_addCharDefaultLabel .HXI_dynamiccontent_addCharDefaultInput {
   /* opacity: 0; */
   width: 0;
   height: 0;
 }
 
-.FFXIPackageHelper_dynamiccontent_addCharDefaultSpan {
+.HXI_dynamiccontent_addCharDefaultSpan {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -407,7 +407,7 @@ Character selection buttons
   /* border-radius: 4px; */
 }
 
-.FFXIPackageHelper_dynamiccontent_addCharDefaultSpan:before {
+.HXI_dynamiccontent_addCharDefaultSpan:before {
   position: absolute;
   content: "";
   height: 16px;
@@ -420,31 +420,31 @@ Character selection buttons
   border-radius: 3px;
 }
 
-.FFXIPackageHelper_dynamiccontent_addCharDefaultInput:checked + .FFXIPackageHelper_dynamiccontent_addCharDefaultSpan {
+.HXI_dynamiccontent_addCharDefaultInput:checked + .HXI_dynamiccontent_addCharDefaultSpan {
   background-color: #3586ff;
 }
 
-.FFXIPackageHelper_dynamiccontent_addCharDefaultInput:checked + .FFXIPackageHelper_dynamiccontent_addCharDefaultSpan:before {
+.HXI_dynamiccontent_addCharDefaultInput:checked + .HXI_dynamiccontent_addCharDefaultSpan:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
 
-.FFXIPackageHelper_dynamiccontent_addCharDefaultInput:disabled,
-.FFXIPackageHelper_dynamiccontent_addCharDefaultInput[disabled] {
+.HXI_dynamiccontent_addCharDefaultInput:disabled,
+.HXI_dynamiccontent_addCharDefaultInput[disabled] {
   cursor: not-allowed;
   pointer-events: none;
  }
 
-.FFXIPackageHelper_dynamiccontent_addCharDefaultSpan.FFXIPackageHelper_dynamiccontent_addCharDefaultSpanround {
+.HXI_dynamiccontent_addCharDefaultSpan.HXI_dynamiccontent_addCharDefaultSpanround {
   border-radius: 30px;
 }
 
-.FFXIPackageHelper_dynamiccontent_addCharDefaultSpan.FFXIPackageHelper_dynamiccontent_addCharDefaultSpanround:before {
+.HXI_dynamiccontent_addCharDefaultSpan.HXI_dynamiccontent_addCharDefaultSpanround:before {
   border-radius: 50%;
 }
 
-#FFXIPackageHelper_tabs_equipsets_shown_loading {
+#HXI_tabs_equipsets_shown_loading {
   /* visibility: hidden; */
   visibility: visible;
 
@@ -462,7 +462,7 @@ Character selection buttons
   padding: 20px;
 }
 
-#FFXIPackageHelper_tabs_equipsets_shown_loading p {
+#HXI_tabs_equipsets_shown_loading p {
   font-weight: bold;
   justify-self: center;
   position: relative;

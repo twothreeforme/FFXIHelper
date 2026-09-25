@@ -1,0 +1,27 @@
+/*
+  Table override for all tables on the Equipsets page
+*/
+.HXI_Equipsets_container > .content-table-wrapper.overflowed.scroll-right > .content-table,
+.HXI_Equipsets_setManagement_setsList > .content-table-wrapper.overflowed.scroll-right
+{
+    /* background-color: rgb(65, 255, 65); */
+}
+
+
+.HXI_Equipsets_container > .content-table-wrapper.overflowed.scroll-right > .content-table,
+.HXI_Equipsets_setManagement_setsList > .content-table-wrapper.overflowed.scroll-right > .content-table{
+    overflow-x: hidden;
+}
+
+.HXI_Equipsets_container > .content-table,
+.HXI_Equipsets_setManagement_setsList > .content-table{
+    overflow-x: hidden;
+}
+
+.HXI_Equipsets_container > .content-table-wrapper.overflowed.scroll-right > .content-table-right,
+.HXI_Equipsets_setManagement_setsList > .content-table-wrapper.overflowed.scroll-right > .content-table-right{
+    box-shadow: none;
+    border-left: none;
+}
+
+

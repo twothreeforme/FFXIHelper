@@ -20,7 +20,7 @@ class ModalCharRemoveWindow {
 
         const br = document.createElement("br");
         const removeCharTitleText = document.createElement("h2");
-        removeCharTitleText.id = "FFXIPackageHelper_dynamiccontent_removeCharTitleText";
+        removeCharTitleText.id = "HXI_dynamiccontent_removeCharTitleText";
         //removeCharTitleText.textContent = 'Remove ';
         contentWrapper.appendChild(removeCharTitleText);
         contentWrapper.appendChild(br);
@@ -29,13 +29,13 @@ class ModalCharRemoveWindow {
         inputWrapper.setAttribute('style', 'display: inline-flex; gap: 20px;');
 
             const closeButton = document.createElement('button');
-            closeButton.id = 'FFXIPackageHelper_dynamiccontent_closeCharsRemove';
-            closeButton.classList.add("close-modal", "FFXIPackageHelper_dynamiccontent_customButton", "customButton_cancel");
+            closeButton.id = 'HXI_dynamiccontent_closeCharsRemove';
+            closeButton.classList.add("close-modal", "HXI_dynamiccontent_customButton", "customButton_cancel");
             closeButton.textContent = 'Cancel';
 
             const removeButton = document.createElement('button');
-            removeButton.id = 'FFXIPackageHelper_dynamiccontent_removeChar';
-            removeButton.classList.add("FFXIPackageHelper_dynamiccontent_customButton", "customButton_removeItem");
+            removeButton.id = 'HXI_dynamiccontent_removeChar';
+            removeButton.classList.add("HXI_dynamiccontent_customButton", "customButton_removeItem");
             removeButton.textContent = 'Remove';
 
             inputWrapper.appendChild(removeButton);
@@ -51,12 +51,12 @@ class ModalCharRemoveWindow {
     }
   
     addEventListeners() {
-        const closeButton =  document.getElementById("FFXIPackageHelper_dynamiccontent_closeCharsRemove" );
+        const closeButton =  document.getElementById("HXI_dynamiccontent_closeCharsRemove" );
         closeButton.addEventListener('click', (e) => {
                 this.close();
             });
 
-        const removeButton = document.getElementById("FFXIPackageHelper_dynamiccontent_removeChar");
+        const removeButton = document.getElementById("HXI_dynamiccontent_removeChar");
         removeButton.addEventListener('click', (e) =>  {
             this.options.removeCallback(this.charname);
             this.close();
@@ -66,7 +66,7 @@ class ModalCharRemoveWindow {
 
     open(charname) {
         this.charname = charname;
-        const titleText = document.getElementById("FFXIPackageHelper_dynamiccontent_removeCharTitleText");
+        const titleText = document.getElementById("HXI_dynamiccontent_removeCharTitleText");
         titleText.textContent = 'Remove \'' + this.charname + '\'';
 
         this.modal.classList.add('open');

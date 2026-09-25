@@ -1,7 +1,7 @@
-var API = require("./Equipsets/FFXIPackageHelper_ActionAPI.js");
+var API = require("./Equipsets/HXI_ActionAPI.js");
 
 module.exports.setLinks = function (){
-    const searchDropRatesSubmit = document.getElementById("FFXIPackageHelper_dynamiccontent_searchDropRatesSubmit");
+    const searchDropRatesSubmit = document.getElementById("HXI_dynamiccontent_searchDropRatesSubmit");
     searchDropRatesSubmit.addEventListener("click", function (e) {
         submitDropRatesRequest();
     });
@@ -20,9 +20,9 @@ module.exports.setLinks = function (){
         }
     });
 
-    const shareDropRateQuery = document.getElementById("FFXIPackageHelper_dynamiccontent_shareDropRateQuery");
+    const shareDropRateQuery = document.getElementById("HXI_dynamiccontent_shareDropRateQuery");
     shareDropRateQuery.addEventListener("click", function (e) {
-        shareQueryClicked("FFXIPackageHelper_dynamiccontent_shareDropRateQuery", getDropRateQueryParams());
+        shareQueryClicked("HXI_dynamiccontent_shareDropRateQuery", getDropRateQueryParams());
     });
 }
 
@@ -35,16 +35,16 @@ function submitDropRatesRequest(){
   const params = getDropRateQueryParams();
 
   if( validDropRateQuery(params) == false ){
-      //document.getElementById("FFXIPackageHelper_tabs_droprates_queryresult").innerHTML = "<i>*Please use the fields above to query a search.</i>";
+      //document.getElementById("HXI_tabs_droprates_queryresult").innerHTML = "<i>*Please use the fields above to query a search.</i>";
       mw.notify( 'Please complete the fields to query a search', { autoHide: true,  type: 'error' } );
       return;
     }
 
-  const currentButton = document.getElementById("FFXIPackageHelper_dynamiccontent_searchDropRatesSubmit");
+  const currentButton = document.getElementById("HXI_dynamiccontent_searchDropRatesSubmit");
   currentButton.disabled = true;
-  document.getElementById("FFXIPackageHelper_tabs_droprates_queryresult").innerHTML = "Loading query...";
+  document.getElementById("HXI_tabs_droprates_queryresult").innerHTML = "Loading query...";
 
-  API.actionAPI(params, "dropratesearch", "FFXIPackageHelper_dynamiccontent_searchDropRatesSubmit");
+  API.actionAPI(params, "dropratesearch", "HXI_dynamiccontent_searchDropRatesSubmit");
 }
 
 function getDropRateQueryParams(){
@@ -52,20 +52,20 @@ function getDropRateQueryParams(){
       action: "dropratesearch",
       mobname: document.querySelectorAll('input[name=mobNameSearch]')[0].value,
       itemname: document.querySelectorAll('input[name=itemNameSearch]')[0].value,
-      zonename: document.getElementById("FFXIPackageHelper_dynamiccontent_selectZoneName").value,
-      lvlmin: document.getElementById("FFXIPackageHelper_dynamiccontent_selectLvlMIN").value,
-      lvlmax: document.getElementById("FFXIPackageHelper_dynamiccontent_selectLvlMAX").value,
-      showth: ( document.getElementById("FFXIPackageHelper_dynamiccontent_checkboxShowTH").checked ) ? 1 : 0,
-      bcnm: ( document.getElementById("FFXIPackageHelper_dynamiccontent_checkboxBCNM").checked  ) ? 1 : 0,
-      excludenm: ( document.getElementById("FFXIPackageHelper_dynamiccontent_checkboxExcludeNM").checked  ) ? 1 : 0,
-      includesteal: ( document.getElementById("FFXIPackageHelper_dynamiccontent_checkboxIncludeSteal").checked  ) ? 1 : 0,
-      includefished: ( document.getElementById("FFXIPackageHelper_dynamiccontent_checkboxIncludeFished").checked  ) ? 1 : 0
+      zonename: document.getElementById("HXI_dynamiccontent_selectZoneName").value,
+      lvlmin: document.getElementById("HXI_dynamiccontent_selectLvlMIN").value,
+      lvlmax: document.getElementById("HXI_dynamiccontent_selectLvlMAX").value,
+      showth: ( document.getElementById("HXI_dynamiccontent_checkboxShowTH").checked ) ? 1 : 0,
+      bcnm: ( document.getElementById("HXI_dynamiccontent_checkboxBCNM").checked  ) ? 1 : 0,
+      excludenm: ( document.getElementById("HXI_dynamiccontent_checkboxExcludeNM").checked  ) ? 1 : 0,
+      includesteal: ( document.getElementById("HXI_dynamiccontent_checkboxIncludeSteal").checked  ) ? 1 : 0,
+      includefished: ( document.getElementById("HXI_dynamiccontent_checkboxIncludeFished").checked  ) ? 1 : 0
     };
   }
 
 function shareQueryClicked(shareID, params) {
     var GETparams = "";
-    if ( shareID == "FFXIPackageHelper_dynamiccontent_shareDropRateQuery" && validDropRateQuery(params) == true ){
+    if ( shareID == "HXI_dynamiccontent_shareDropRateQuery" && validDropRateQuery(params) == true ){
         GETparams = "mobNameSearch=" + params['mobname'] + "&itemNameSearch=" + params['itemname'] + "&zoneNameDropDown=" + params['zonename'] + "&levelRangeMIN=" + params['lvlmin'] + "&levelRangeMAX=" + params['lvlmax'] + "&thRatesCheck=" + params['showth'] + "&showBCNMdrops=" + params['bcnm'] + "&excludeNMs=" + params['excludenm'] + "&includeSteal=" + params['includesteal'];
     }
     else {

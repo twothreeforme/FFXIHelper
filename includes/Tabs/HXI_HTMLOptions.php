@@ -6,7 +6,7 @@ class HXI_HTMLOptions {
       }
 
       public static function jobDropDown($classname, $sharedJob = null){
-        $html = "<select id=\"". $classname ."\" defaultValue=\"0\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        $html = "<select id=\"". $classname ."\" defaultValue=\"0\" class=\"HXI_dynamiccontent_customDropDown\">";
         $html .= "<option value=\"0\">Any</option>";
         $html .= "<option value=\"1\">Warrior</option>";
         $html .= "<option value=\"2\">Monk</option>";
@@ -41,7 +41,7 @@ class HXI_HTMLOptions {
     }
 
     public static function raceDropDown($classname, $sharedRace = null){
-        $html = "<select id=\"". $classname ."\" defaultValue=\"0\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\" disabled>";
+        $html = "<select id=\"". $classname ."\" defaultValue=\"0\" class=\"HXI_dynamiccontent_customDropDown\" disabled>";
         $html .= "<option value=\"0\" selected=\"selected\">Hume</option>";
         $html .= "<option value=\"1\">Elvaan</option>";
         $html .= "<option value=\"2\">Tarutaru</option>";
@@ -64,7 +64,7 @@ class HXI_HTMLOptions {
         $db = new DatabaseQueryWrapper();
         $userSets = $db->getUserSetsFromUserID($uid);
 
-        $html = "<select id=\"". $classname ."\" defaultValue=\"0\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\" ";
+        $html = "<select id=\"". $classname ."\" defaultValue=\"0\" class=\"HXI_dynamiccontent_customDropDown\" ";
 
         if ( count($userSets) > 0 ){
             $html .= ">";
@@ -79,7 +79,7 @@ class HXI_HTMLOptions {
                 foreach ( $val as $set ){
                     $html .= "<option value=\"" . $set["usersetid"] . "\">" . $set["setname"] . "</option>";
                     // $html .= "<option value=\"1\">Elvaan</option>";
-                    //$html .= "<button id=\"FFXIPackageHelper_setButton_" . $set["setname"] . "\" class=\"" . $classname . "\">" . $set["setname"] . "</button>";
+                    //$html .= "<button id=\"HXI_setButton_" . $set["setname"] . "\" class=\"" . $classname . "\">" . $set["setname"] . "</button>";
                 }
             }
 
@@ -95,7 +95,7 @@ class HXI_HTMLOptions {
     }
 
     public static function levelRange($classname, $sharedLvl = null){
-        $html = "<select id=\"". $classname ."\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        $html = "<select id=\"". $classname ."\" class=\"HXI_dynamiccontent_customDropDown\">";
 
         for ($i = 0; $i <= 75; $i++) {
             if ( $i == 0 ) $html .= "<option value=\"" . $i . "\">None</option>";
@@ -113,7 +113,7 @@ class HXI_HTMLOptions {
     }
 
     public static function subLevelRange($classname, $sharedLvl = null){
-        $html = "<select id=\"". $classname ."\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        $html = "<select id=\"". $classname ."\" class=\"HXI_dynamiccontent_customDropDown\">";
 
         for ($i = 0; $i <= 37; $i++) {
             if ( $i == 0 ) $html .= "<option value=\"" . $i . "\">None</option>";
@@ -148,8 +148,8 @@ class HXI_HTMLOptions {
     }
 
     public static function zonesDropDown($id = null){
-        if ( $id == null ) $id = "FFXIPackageHelper_dynamiccontent_selectZoneName";
-        $html = "<select id=\"$id\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        if ( $id == null ) $id = "HXI_dynamiccontent_selectZoneName";
+        $html = "<select id=\"$id\" class=\"HXI_dynamiccontent_customDropDown\">";
         $zoneNamesList = self::zoneNameList();
 
         foreach ($zoneNamesList as $key => $value) {
@@ -161,7 +161,7 @@ class HXI_HTMLOptions {
     }
 
     public static function fishZonesDropDown(){
-        $html = "<select id=\"FFXIPackageHelper_dynamiccontent_selectFishingZone\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        $html = "<select id=\"HXI_dynamiccontent_selectFishingZone\" class=\"HXI_dynamiccontent_customDropDown\">";
         $zoneNamesList = self::zoneNameList(true);
 
         foreach ($zoneNamesList as $key => $value) {
@@ -180,8 +180,8 @@ class HXI_HTMLOptions {
      */
     public static function charactersButtonsList($userCharacters, $selectDefaultCharacter = null){
 
-        // "<button id=\"FFXIPackageHelper_newCharButton\" class=\"FFXIPackageHelper_newCharButton\"></button>"
-        // $html = "<button id=\"FFXIPackageHelper_newCharButton\" class=\"FFXIPackageHelper_newCharButton\"></button>";
+        // "<button id=\"HXI_newCharButton\" class=\"HXI_newCharButton\"></button>"
+        // $html = "<button id=\"HXI_newCharButton\" class=\"HXI_newCharButton\"></button>";
         $html = "";
 
         //wfDebugLog( 'Equipsets', get_called_class() . ":charactersButtonsList:" . json_encode($selectDefaultCharacter) . ":gettype " .  gettype($selectDefaultCharacter) );
@@ -190,31 +190,31 @@ class HXI_HTMLOptions {
         if ( !is_null($userCharacters) && count($userCharacters) > 0 ){
             /* array of FFIXPH_Character objects */
             foreach ($userCharacters as $char) {
-                $classlist = "FFXIPackageHelper_charButton";    
+                $classlist = "HXI_charButton";    
                 if ( $char->def != 0 ) {
-                    $classlist .= " FFXIPackageHelper_charButton_default";
+                    $classlist .= " HXI_charButton_default";
                     
                     if ( $selectDefaultCharacter === true )  {
-                        //$html = str_replace("FFXIPackageHelper_charButtonselectDefaultCharactered", "", $html);
-                        $classlist .= " FFXIPackageHelper_charButtonselected";
+                        //$html = str_replace("HXI_charButtonselectDefaultCharactered", "", $html);
+                        $classlist .= " HXI_charButtonselected";
                     }
                 }
 
-                if ( gettype($selectDefaultCharacter) == 'string' && $char->charname == $selectDefaultCharacter && !str_contains($classlist, "FFXIPackageHelper_charButtonselected") ) {
-                    $classlist .= " FFXIPackageHelper_charButtonselected";
+                if ( gettype($selectDefaultCharacter) == 'string' && $char->charname == $selectDefaultCharacter && !str_contains($classlist, "HXI_charButtonselected") ) {
+                    $classlist .= " HXI_charButtonselected";
                 }
 
-                $html .= "<button id=\"FFXIPackageHelper_charButton_" . $char->charname . "\" class=\"" . $classlist . "\">" . $char->charname . "</button>";
+                $html .= "<button id=\"HXI_charButton_" . $char->charname . "\" class=\"" . $classlist . "\">" . $char->charname . "</button>";
             }
         }
         
-        $classlist = "FFXIPackageHelper_charButton";
+        $classlist = "HXI_charButton";
         if ( $selectDefaultCharacter === false ||  is_null($userCharacters) ){
-            $classlist .= " FFXIPackageHelper_charButtonselected";
+            $classlist .= " HXI_charButtonselected";
             //wfDebugLog( 'Equipsets', get_called_class() . ":charactersButtonsList:" . json_encode($selectDefaultCharacter) );
         }
-        $html = "<button id=\"FFXIPackageHelper_charButtonNone\" class=\"" . $classlist . "\">None</button>" . $html;
-        //$html .= "<button id=\"FFXIPackageHelper_charButtonNone\" class=\"FFXIPackageHelper_charButton\">None</button>";
+        $html = "<button id=\"HXI_charButtonNone\" class=\"" . $classlist . "\">None</button>" . $html;
+        //$html .= "<button id=\"HXI_charButtonNone\" class=\"HXI_charButton\">None</button>";
 
         return $html;
     }
@@ -232,9 +232,9 @@ class HXI_HTMLOptions {
             if ( count($userSets) > 0 ){
                 foreach ($userSets as $set) {
                     // throw new Exception ( json_encode($set));
-                    $classlist = "FFXIPackageHelper_setButton";
-                    // if ( $set["def"] != 0  ) $classlist .= " FFXIPackageHelper_setButton_default";
-                    $html .= "<button id=\"FFXIPackageHelper_setButton_" . $set["usersetid"] . "\" class=\"" . $classlist . "\">" . $set["setname"] . "</button>";
+                    $classlist = "HXI_setButton";
+                    // if ( $set["def"] != 0  ) $classlist .= " HXI_setButton_default";
+                    $html .= "<button id=\"HXI_setButton_" . $set["usersetid"] . "\" class=\"" . $classlist . "\">" . $set["setname"] . "</button>";
                 }
             }
         }
@@ -245,13 +245,13 @@ class HXI_HTMLOptions {
     public static function selectableButtonsBar($barClassname, $userCharacters, $selectDefaultCharacter = null){
         $divName = "";
         $newButton = "";
-        if ( $barClassname == "FFXIPackageHelper_equipsets_setSelect"){
-            $divName = "FFXIPackageHelper_equipsets_setSelect";
-            $newButton = "FFXIPackageHelper_newSetButton";
+        if ( $barClassname == "HXI_equipsets_setSelect"){
+            $divName = "HXI_equipsets_setSelect";
+            $newButton = "HXI_newSetButton";
         }
-        else if ( $barClassname == "FFXIPackageHelper_equipsets_charSelect" ){
-            $divName = "FFXIPackageHelper_equipsets_charSelect";
-            $newButton = "FFXIPackageHelper_newCharButton";
+        else if ( $barClassname == "HXI_equipsets_charSelect" ){
+            $divName = "HXI_equipsets_charSelect";
+            $newButton = "HXI_newCharButton";
         }
 
         $html = "<div id=\"$divName\">" .
@@ -261,13 +261,13 @@ class HXI_HTMLOptions {
                     <line x1=\"5\" y1=\"0\" x2=\"5\" y2=\"10\"  stroke-linecap=\"round\"/>
                 </svg>
                 <span id=\"$newButton-text\">";
-        if ( $newButton == "FFXIPackageHelper_newSetButton") $html .= "Save this set" ;
+        if ( $newButton == "HXI_newSetButton") $html .= "Save this set" ;
         else $html .= "New";
         $html .= "</span></button>";
         
-        $html .= "<div id=\"FFXIPackageHelper_equipsets_charactersButtonsList\">";
-        if ( $barClassname == "FFXIPackageHelper_equipsets_charSelect" ) $html .= self::charactersButtonsList($userCharacters, $selectDefaultCharacter);
-        //else if ( $barClassname == "FFXIPackageHelper_equipsets_setSelect") $html .= self::setsButtonsList();
+        $html .= "<div id=\"HXI_equipsets_charactersButtonsList\">";
+        if ( $barClassname == "HXI_equipsets_charSelect" ) $html .= self::charactersButtonsList($userCharacters, $selectDefaultCharacter);
+        //else if ( $barClassname == "HXI_equipsets_setSelect") $html .= self::setsButtonsList();
 					
 		$html .= "</div></div>";
         return $html;
@@ -280,7 +280,7 @@ class HXI_HTMLOptions {
                     <line x1=\"5\" y1=\"0\" x2=\"5\" y2=\"10\"  stroke-linecap=\"round\"/>
                 </svg>
                 <span id=\"$classname-text\">";
-        if ( $classname == "FFXIPackageHelper_newSetButton") $html .= "Save this set" ;
+        if ( $classname == "HXI_newSetButton") $html .= "Save this set" ;
         else $html .= "New";
         $html .= "</span></button>";
         return $html;
@@ -288,19 +288,19 @@ class HXI_HTMLOptions {
 
     public static function setsList(){
 
-        $html = "<div id=\"FFXIPackageHelper_Equipsets_setManagement\" class=\"FFXIPackageHelper_Equipsets_setManagement\">";
-        //$html .= HXI_HTMLOptions::selectableButtonsBar("FFXIPackageHelper_equipsets_setSelect");
+        $html = "<div id=\"HXI_Equipsets_setManagement\" class=\"HXI_Equipsets_setManagement\">";
+        //$html .= HXI_HTMLOptions::selectableButtonsBar("HXI_equipsets_setSelect");
         
         $html .="<div style=\"width: 100%; flex-wrap: nowrap; display: flex;flex-direction: row;justify-content: space-between;\">";
         $html .="<h3 style=\"display:inline-block;margin-top:0em;padding:0px;\">Available Sets</h3>";
-        $html .="<div id=\"FFXIPackageHelper_menuIcon\" class=\"FFXIPackageHelper_menuIcon\">" .
-                    "<div class=\"FFXIPackageHelper_menuIcon_bar1\"></div>" .
-                    "<div class=\"FFXIPackageHelper_menuIcon_bar2\"></div>" .
-                    "<div class=\"FFXIPackageHelper_menuIcon_bar3\"></div>" .
+        $html .="<div id=\"HXI_menuIcon\" class=\"HXI_menuIcon\">" .
+                    "<div class=\"HXI_menuIcon_bar1\"></div>" .
+                    "<div class=\"HXI_menuIcon_bar2\"></div>" .
+                    "<div class=\"HXI_menuIcon_bar3\"></div>" .
                 "</div>";
         $html .="</div>";
         
-        $html .= "<div id=\"FFXIPackageHelper_Equipsets_setManagement_setsList\" class=\"FFXIPackageHelper_Equipsets_setManagement_setsList\">";
+        $html .= "<div id=\"HXI_Equipsets_setManagement_setsList\" class=\"HXI_Equipsets_setManagement_setsList\">";
         $user = RequestContext::getMain()->getUser();
         $uid = $user->getId();
         if ( $uid != 0 && $uid != null ){
@@ -314,7 +314,7 @@ class HXI_HTMLOptions {
 
         }
         $html .= "</div>";
-        //$html .= "<button id=\"FFXIPackageHelper_deleteSetButton\" class=\"FFXIPackageHelper_deleteSetButton\">Remove set</button>";
+        //$html .= "<button id=\"HXI_deleteSetButton\" class=\"HXI_deleteSetButton\">Remove set</button>";
 
         $html .= "</div>";
         return $html;
@@ -322,7 +322,7 @@ class HXI_HTMLOptions {
 
     public static function setsListTable($userSets){
         $html = "";
-            $html = "<table id=\"FFXIPackageHelper_Equipsets_setManagement_setsListTable\" class=\"FFXIPackageHelper_Equipsets_setManagement_setsListTable\">";
+            $html = "<table id=\"HXI_Equipsets_setManagement_setsListTable\" class=\"HXI_Equipsets_setManagement_setsListTable\">";
             if ( count($userSets) > 0 ){
                 foreach ($userSets as $jobtype => $val ) {
                     $html .="<tr>
@@ -333,7 +333,7 @@ class HXI_HTMLOptions {
                         $html .="<tr>";
                         if (  gettype($set) == "string") throw new Exception ( json_encode($val));
                         $html .= "<td data-value=\"" . $set["usersetid"] . "\">" . $set["setname"] ."</td>";
-                        $html .= "<td class =\"FFXIPackageHelper_Equipsets_setManagement_setsListTable_Remove\" data-value=\"" . $set["usersetid"] . "\" style=\"color:red;text-align:end;width: 1%;white-space: nowrap;\" >Remove</td>";
+                        $html .= "<td class =\"HXI_Equipsets_setManagement_setsListTable_Remove\" data-value=\"" . $set["usersetid"] . "\" style=\"color:red;text-align:end;width: 1%;white-space: nowrap;\" >Remove</td>";
                         $html .="<tr>";
                     }
 

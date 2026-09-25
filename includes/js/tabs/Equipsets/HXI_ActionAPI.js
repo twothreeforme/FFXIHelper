@@ -1,12 +1,12 @@
 
-var Tooltip = require("./FFXIPackageHelper_Tooltips.js");
-var LuaSets = require("./FFXIPackageHelper_LuaSets.js");
+var Tooltip = require("./HXI_Tooltips.js");
+var LuaSets = require("./HXI_LuaSets.js");
 
 function actionAPI(params, forTab, currentButton, callback) {
   //console.log("actionAPI:", params);
   var api = new mw.Api();
 
-  let mainDiv = document.getElementById("FFXIPackageHelper_tabs_equipsets_shown");
+  let mainDiv = document.getElementById("HXI_tabs_equipsets_shown");
   if ( mainDiv) mainDiv.classList.toggle('tabcontent-loading');
 
   api.get( params ).done( function ( d ) {
@@ -104,10 +104,10 @@ function actionAPI(params, forTab, currentButton, callback) {
           const luas_ = JSON.parse(atob(luas_base64));
           LuaSets.adjustLuaSet(luas_);
 
-          document.getElementById('FFXIPackageHelper_equipsets_selectMJob').selectedIndex = result['selectset']['mjob'];
-          document.getElementById('FFXIPackageHelper_equipsets_selectSJob').selectedIndex = result['selectset']['sjob'];
-          document.getElementById('FFXIPackageHelper_equipsets_selectMLevel').selectedIndex = result['selectset']['mlvl'];
-          document.getElementById('FFXIPackageHelper_equipsets_selectSLevel').selectedIndex = result['selectset']['slvl'];
+          document.getElementById('HXI_equipsets_selectMJob').selectedIndex = result['selectset']['mjob'];
+          document.getElementById('HXI_equipsets_selectSJob').selectedIndex = result['selectset']['sjob'];
+          document.getElementById('HXI_equipsets_selectMLevel').selectedIndex = result['selectset']['mlvl'];
+          document.getElementById('HXI_equipsets_selectSLevel').selectedIndex = result['selectset']['slvl'];
 
           //callback.loadSet(result['selectset']);
         }
@@ -151,23 +151,23 @@ function actionAPI(params, forTab, currentButton, callback) {
 };
 
 function updateDropRatesFromQuery(updatedHTML){
-  document.getElementById("FFXIPackageHelper_tabs_droprates_queryresult").innerHTML = updatedHTML;
-  mw.hook( 'wikipage.content' ).fire($('#FFXIPackageHelper_tabs_droprates_queryresult'));
+  document.getElementById("HXI_tabs_droprates_queryresult").innerHTML = updatedHTML;
+  mw.hook( 'wikipage.content' ).fire($('#HXI_tabs_droprates_queryresult'));
 }
 
 function updateRecipesFromQuery(updatedHTML){
-  document.getElementById("FFXIPackageHelper_tabs_recipeSearch_queryresult").innerHTML = updatedHTML;
-  mw.hook( 'wikipage.content' ).fire($('#FFXIPackageHelper_tabs_recipeSearch_queryresult'));
+  document.getElementById("HXI_tabs_recipeSearch_queryresult").innerHTML = updatedHTML;
+  mw.hook( 'wikipage.content' ).fire($('#HXI_tabs_recipeSearch_queryresult'));
 }
 
 function updateEquipmentFromQuery(updatedHTML){
-  document.getElementById("FFXIPackageHelper_tabs_equipment_queryresult").innerHTML = updatedHTML;
-  mw.hook( 'wikipage.content' ).fire($('#FFXIPackageHelper_tabs_equipment_queryresult'));
+  document.getElementById("HXI_tabs_equipment_queryresult").innerHTML = updatedHTML;
+  mw.hook( 'wikipage.content' ).fire($('#HXI_tabs_equipment_queryresult'));
 }
 
 function updateFishingFromQuery(updatedHTML){
-  document.getElementById("FFXIPackageHelper_tabs_fishing_queryresult").innerHTML = updatedHTML;
-  mw.hook( 'wikipage.content' ).fire($('#FFXIPackageHelper_tabs_fishing_queryresult'));
+  document.getElementById("HXI_tabs_fishing_queryresult").innerHTML = updatedHTML;
+  mw.hook( 'wikipage.content' ).fire($('#HXI_tabs_fishing_queryresult'));
 }
 
 function changeGrid(incomingGridData, equipLabels){
@@ -220,7 +220,7 @@ function updateEquipsets(updatedStats){
   //console.log("updateEquipsets:", updatedStats);
 
   //let tempTooltip = `<span class="myTooltip" data-options="background:#fff;animation:fade;">Hello</span>`;
-  const _id = "FFXIPackageHelper_Equipsets_stat";
+  const _id = "HXI_Equipsets_stat";
   let stat = document.getElementById(_id + "HP"); stat.innerHTML = updatedStats[0];
   stat = document.getElementById(_id + "MP"); stat.innerHTML = updatedStats[1];
 
@@ -275,35 +275,35 @@ function formatStatMod(classname, modValue){
 
 
 function updateEquipmentList(slotNumber, updatedName){
-  let linkID = "FFXIPackageHelper_Equipsets_gridLabel" + slotNumber;
+  let linkID = "HXI_Equipsets_gridLabel" + slotNumber;
   let labelLink = document.getElementById(linkID);
   labelLink.innerHTML = updatedName;
 }
 
 function updateStats(incomingStats){
-  let showstats = document.getElementById("FFXIPackageHelper_Equipsets_showstatstable");
+  let showstats = document.getElementById("HXI_Equipsets_showstatstable");
   showstats.innerHTML = incomingStats;
 }
 
 function updateResistances(incomingStats){
-  let showstats_res = document.getElementById("FFXIPackageHelper_Equipsets_showstats_res");
+  let showstats_res = document.getElementById("HXI_Equipsets_showstats_res");
   showstats_res.innerHTML = incomingStats;
 }
 
 function updateMerits(incomingMerits){
-  let meritsTable = document.getElementById("FFXIPackageHelper_dynamiccontent_showMerits_table");
+  let meritsTable = document.getElementById("HXI_dynamiccontent_showMerits_table");
   meritsTable.innerHTML = incomingMerits;
 }
 
 function updateCharactersTab(incomingCharactersTab){
-  let charsTab = document.getElementById("FFXIPackageHelper_tabs_characters_shown");
+  let charsTab = document.getElementById("HXI_tabs_characters_shown");
   charsTab.innerHTML = incomingCharactersTab;
 }
 
 // function updateMobAndZoneTable(incomingMobAndZoneTable){
-//   let combatSimTab = document.getElementById("FFXIPackageHelper_tabs_combatsim_queryresult");
+//   let combatSimTab = document.getElementById("HXI_tabs_combatsim_queryresult");
 //   combatSimTab.innerHTML = incomingMobAndZoneTable;
-//   mw.hook( 'wikipage.content' ).fire($('#FFXIPackageHelper_tabs_combatsim_queryresult'));
+//   mw.hook( 'wikipage.content' ).fire($('#HXI_tabs_combatsim_queryresult'));
 // }
 
 module.exports = { actionAPI }

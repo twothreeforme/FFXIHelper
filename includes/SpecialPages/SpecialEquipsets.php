@@ -7,7 +7,7 @@ class SpecialEquipsets extends SpecialPage {
     }
 
 	static function onBeforePageDisplay( $out, $skin ) : void  {
-		//$out->addModules(['FFXIPackageHelper_LSBSearch']);
+		//$out->addModules(['HXI_LSBSearch']);
 		if ( $out->getTitle() == "Special:Equipsets" )  {
 			$out->addModules(['HXI_Equipsets']);
 		}
@@ -87,11 +87,11 @@ class SpecialEquipsets extends SpecialPage {
 	}
 
 	public function header(){
-        return "<div class=\"FFXIPackageHelper_tabs\">" .
-					"<button id=\"FFXIPackageHelper_tabs_equipsets\" class=\"tablinks\">Gear Sets</button>" .
-					"<button id=\"FFXIPackageHelper_tabs_characters\" class=\"tablinks\">Characters</button>" .
-					"<button id=\"FFXIPackageHelper_tabs_combatsim\" class=\"tablinks\">Combat Sim</button>" .
-					"<button id=\"FFXIPackageHelper_tabs_importlua\" class=\"tablinks\">Import Lua</button>" .
+        return "<div class=\"HXI_tabs\">" .
+					"<button id=\"HXI_tabs_equipsets\" class=\"tablinks\">Gear Sets</button>" .
+					"<button id=\"HXI_tabs_characters\" class=\"tablinks\">Characters</button>" .
+					"<button id=\"HXI_tabs_combatsim\" class=\"tablinks\">Combat Sim</button>" .
+					"<button id=\"HXI_tabs_importlua\" class=\"tablinks\">Import Lua</button>" .
         		"</div>";
       }
 
@@ -101,7 +101,7 @@ class SpecialEquipsets extends SpecialPage {
         //remove when setting up for use on HXI
         //if ( isset($_SERVER['HTTP_HOST']) &&  $_SERVER['HTTP_HOST'] != 'localhost' ) $content = "<p><b>This site is still under construction. Coming soon !</b></p>";
 
-        $html = "<div id=\"FFXIPackageHelper_tabs_equipsets_shown\" class=\"tabcontent\">
+        $html = "<div id=\"HXI_tabs_equipsets_shown\" class=\"tabcontent\">
 		" . $content . "</div>";
 
         return $html;
@@ -116,7 +116,7 @@ class SpecialEquipsets extends SpecialPage {
 		// $stats = $c->getMerits();
 		// $skill = $c->getMerits();
 		 
-		$html = "<div id=\"FFXIPackageHelper_tabs_characters_shown\" class=\"tabcontent\">" .
+		$html = "<div id=\"HXI_tabs_characters_shown\" class=\"tabcontent\">" .
 				$content .
 				"</div>";
 
@@ -129,7 +129,7 @@ class SpecialEquipsets extends SpecialPage {
         //remove when setting up for use on HXI
         //if ( isset($_SERVER['HTTP_HOST']) &&  $_SERVER['HTTP_HOST'] != 'localhost' ) $content = "<p><b>This site is still under construction. Coming soon !</b></p>";
 		
-        $html = "<div id=\"FFXIPackageHelper_tabs_combatsim_shown\" class=\"tabcontent\">
+        $html = "<div id=\"HXI_tabs_combatsim_shown\" class=\"tabcontent\">
 		" . $content . "</div>";
 
         return $html;
@@ -141,7 +141,7 @@ class SpecialEquipsets extends SpecialPage {
         //remove when setting up for use on HXI
         //if ( isset($_SERVER['HTTP_HOST']) &&  $_SERVER['HTTP_HOST'] != 'localhost' ) $content = "<p><b>This site is still under construction. Coming soon !</b></p>";
 		
-        $html = "<div id=\"FFXIPackageHelper_tabs_importlua_shown\" class=\"tabcontent\">
+        $html = "<div id=\"HXI_tabs_importlua_shown\" class=\"tabcontent\">
 		" . $content . "</div>";
 
         return $html;

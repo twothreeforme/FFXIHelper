@@ -13,7 +13,7 @@ class HXI_ShowMobDropTable  {
     static function _tableHeaders(){
 		$html = "";
 		$html .= "
-		<div id=\"FFXIPH_ShowMobDropTable\" >
+		<div id=\"HXI_ShowMobDropTable\" >
             <p>Test data goes here</p>
 			</div>";
 		return $html;

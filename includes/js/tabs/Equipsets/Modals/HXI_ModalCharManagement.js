@@ -1,14 +1,14 @@
 
 // function searchInput(slot){
-//     return  "<input id=\"FFXIPackageHelper_equipsets_searchInput" + slot + "\" class=\"FFXIPackageHelper_dynamiccontent_textinput\" size=\"20\">";
+//     return  "<input id=\"HXI_equipsets_searchInput" + slot + "\" class=\"HXI_dynamiccontent_textinput\" size=\"20\">";
 // }
 
 // function searchButton(slot){
-//     return "<button id=\"FFXIPackageHelper_equipsets_search" + slot + "\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button>";
+//     return "<button id=\"HXI_equipsets_search" + slot + "\" class=\"HXI_dynamiccontent_customButton\">Search</button>";
 // }
 
 // function searchResults(slot){
-//     return "<br><br><div class=\"FFXIPackageHelper_equipsets_searchResults_div\" style=\"max-height: 350px;overflow-y: auto;\"><p></p><dl id=\"FFXIPackageHelper_equipsets_searchResults" + slot + "\" ></dl></div>";
+//     return "<br><br><div class=\"HXI_equipsets_searchResults_div\" style=\"max-height: 350px;overflow-y: auto;\"><p></p><dl id=\"HXI_equipsets_searchResults" + slot + "\" ></dl></div>";
 // }
 
 class ModalCharsWindow {
@@ -32,11 +32,11 @@ class ModalCharsWindow {
         // }
 
         const contentWrapper = document.createElement('div');
-        contentWrapper.id = `FFXIPackageHelper_equipsets_contentWrapperUserChars`;
+        contentWrapper.id = `HXI_equipsets_contentWrapperUserChars`;
         contentWrapper.classList.add('modal-content');
 
-        let closeHTML = `<br><br><button style="float:left;" id="FFXIPackageHelper_dynamiccontent_closeCharsWindow" class="close-modal FFXIPackageHelper_dynamiccontent_customButton customButton_cancel">Cancel</button>`;
-        let saveCharHTML = `<br><button class="FFXIPackageHelper_dynamiccontent_customButton">Save Character</button>`;
+        let closeHTML = `<br><br><button style="float:left;" id="HXI_dynamiccontent_closeCharsWindow" class="close-modal HXI_dynamiccontent_customButton customButton_cancel">Cancel</button>`;
+        let saveCharHTML = `<br><button class="HXI_dynamiccontent_customButton">Save Character</button>`;
 
 
         contentWrapper.innerHTML = `<h2>Char Management</h2>` + saveCharHTML +
@@ -45,7 +45,7 @@ class ModalCharsWindow {
 
         this.modal.appendChild(contentWrapper);
 
-        // var originalMerits = document.querySelector(".FFXIPackageHelper_dynamiccontent_showMerits");
+        // var originalMerits = document.querySelector(".HXI_dynamiccontent_showMerits");
         // var clonedMerits = originalMerits.cloneNode(true);
         // this.modal.appendChild(clonedMerits);
 
@@ -56,12 +56,12 @@ class ModalCharsWindow {
   
     addEventListeners() {
 
-        const closeButton =  document.getElementById("FFXIPackageHelper_dynamiccontent_closeCharsWindow" );
+        const closeButton =  document.getElementById("HXI_dynamiccontent_closeCharsWindow" );
         closeButton.addEventListener('click', (e) => {
                 this.close();
             });
 
-        // const searchButton = document.getElementById("FFXIPackageHelper_equipsets_search" + this.slot);
+        // const searchButton = document.getElementById("HXI_equipsets_search" + this.slot);
         // searchButton.addEventListener('click', (e) =>  {
         //     this.options.searchCallback(searchEquip(this.slot), "equipsets_search", null, this);
         // });

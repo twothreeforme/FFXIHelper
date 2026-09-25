@@ -2,8 +2,8 @@
 
 class ModalCombatSimMobSelect {
     content = {
-        divID: "FFXIPackageHelper_equipsets_combatSimMobSelect",
-        closeButtonID: "FFXIPackageHelper_dynamiccontent_closeCombatSimMobSelect"
+        divID: "HXI_equipsets_combatSimMobSelect",
+        closeButtonID: "HXI_dynamiccontent_closeCombatSimMobSelect"
     };
 
     constructor(options = {}) {
@@ -22,9 +22,9 @@ class ModalCombatSimMobSelect {
         contentWrapper.id = this.content.divID;
         contentWrapper.classList.add('modal-content');
 
-        //let closeHTML = `<br><br><button style="float:left;" id="FFXIPackageHelper_dynamiccontent_closeCombatSimMobSelect" class="close-modal FFXIPackageHelper_dynamiccontent_customButton customButton_cancel">Cancel</button>`;
-        let closeHTML = `<br><br><button style="float:left;" id="${this.content.closeButtonID}" class="close-modal FFXIPackageHelper_dynamiccontent_customButton customButton_cancel">Cancel</button>`;
-        // let saveCharHTML = `<br><button class="FFXIPackageHelper_dynamiccontent_customButton">Save Character</button>`;
+        //let closeHTML = `<br><br><button style="float:left;" id="HXI_dynamiccontent_closeCombatSimMobSelect" class="close-modal HXI_dynamiccontent_customButton customButton_cancel">Cancel</button>`;
+        let closeHTML = `<br><br><button style="float:left;" id="${this.content.closeButtonID}" class="close-modal HXI_dynamiccontent_customButton customButton_cancel">Cancel</button>`;
+        // let saveCharHTML = `<br><button class="HXI_dynamiccontent_customButton">Save Character</button>`;
 
         contentWrapper.innerHTML = "<h2>Select Mob</h2>" + moblist + "<br>" + closeHTML;
 
@@ -41,19 +41,19 @@ class ModalCombatSimMobSelect {
             });
         
 
-        let resultsListDIV = document.getElementById("FFXIPH_equipsets_combatsim_mobandzonelist");
+        let resultsListDIV = document.getElementById("HXI_equipsets_combatsim_mobandzonelist");
         let listItems = resultsListDIV.getElementsByTagName('tr');
         for (let i = 1; i < listItems.length; i++) {
             listItems[i].onmouseover = function() { this.style="background-color:#00c4ff45;"; };
             listItems[i].onmouseout = function() { this.style="background-color:none;"; };
 
             listItems[i].addEventListener('click', () => {
-                // let mobLvlIncrementDIV = document.getElementById("FFXIPackageHelper_dynamiccontent_moblevelincrement"); 
+                // let mobLvlIncrementDIV = document.getElementById("HXI_dynamiccontent_moblevelincrement"); 
                 // mobLvlIncrementDIV.style.visibility = 'visible';
 
                 let cells = listItems[i].getElementsByTagName('td');
 
-                let lvl = document.getElementById("FFXIPackageHelper_dynamiccontent_selectLvlMob").value;
+                let lvl = document.getElementById("HXI_dynamiccontent_selectLvlMob").value;
                 
                 this.options.selectMobCallback( cells[0].innerText, 
                                                 cells[1].innerText, 
@@ -81,7 +81,7 @@ class ModalCombatSimMobSelect {
         this.modal.classList.remove('open');
         this.destroy();
 
-        const removeModal = document.querySelectorAll('#FFXIPackageHelper_equipsets_combatSimMobSelect');
+        const removeModal = document.querySelectorAll('#HXI_equipsets_combatSimMobSelect');
         removeModal.forEach(modal => { modal.remove(); });
     }
 }

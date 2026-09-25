@@ -1,7 +1,7 @@
-var API = require("./Equipsets/FFXIPackageHelper_ActionAPI.js");
+var API = require("./Equipsets/HXI_ActionAPI.js");
 
 module.exports.setLinks = function (){
-    const searchFishingSubmit = document.getElementById("FFXIPackageHelper_dynamiccontent_searchFishingSubmit");
+    const searchFishingSubmit = document.getElementById("HXI_dynamiccontent_searchFishingSubmit");
     searchFishingSubmit.addEventListener("click", function (e) {
         submitFishingRequest();
     });
@@ -22,9 +22,9 @@ module.exports.setLinks = function (){
         }
     });
 
-    // const shareDropRateQuery = document.getElementById("FFXIPackageHelper_dynamiccontent_shareDropRateQuery");
+    // const shareDropRateQuery = document.getElementById("HXI_dynamiccontent_shareDropRateQuery");
     // shareDropRateQuery.addEventListener("click", function (e) {
-    //     shareQueryClicked("FFXIPackageHelper_dynamiccontent_shareDropRateQuery", getDropRateQueryParams());
+    //     shareQueryClicked("HXI_dynamiccontent_shareDropRateQuery", getDropRateQueryParams());
     // });
 }
 
@@ -37,16 +37,16 @@ function submitFishingRequest(){
   const params = getFishingQueryParams();
   console.log(params.zonename);
   if( validFishingQuery(params) == false ){
-      //document.getElementById("FFXIPackageHelper_tabs_droprates_queryresult").innerHTML = "<i>*Please use the fields above to query a search.</i>";
+      //document.getElementById("HXI_tabs_droprates_queryresult").innerHTML = "<i>*Please use the fields above to query a search.</i>";
       mw.notify( 'Please complete the fields to query a search', { autoHide: true,  type: 'error' } );
       return;
     }
 
-  const currentButton = document.getElementById("FFXIPackageHelper_dynamiccontent_searchFishingSubmit");
+  const currentButton = document.getElementById("HXI_dynamiccontent_searchFishingSubmit");
   currentButton.disabled = true;
-  document.getElementById("FFXIPackageHelper_tabs_fishing_queryresult").innerHTML = "Loading query...";
+  document.getElementById("HXI_tabs_fishing_queryresult").innerHTML = "Loading query...";
 
-  API.actionAPI(params, "fishingsearch", "FFXIPackageHelper_dynamiccontent_searchFishingSubmit");
+  API.actionAPI(params, "fishingsearch", "HXI_dynamiccontent_searchFishingSubmit");
 }
 
 function getFishingQueryParams(){
@@ -54,13 +54,13 @@ function getFishingQueryParams(){
       action: "fishingsearch",
       baitname: document.querySelectorAll('input[name=baitSearch]')[0].value,
       fishname: document.querySelectorAll('input[name=fishNameSearch]')[0].value,
-      zonename: document.getElementById("FFXIPackageHelper_dynamiccontent_selectFishingZone").value
+      zonename: document.getElementById("HXI_dynamiccontent_selectFishingZone").value
     };
   }
 
 // function shareQueryClicked(shareID, params) {
 //     var GETparams = "";
-//     if ( shareID == "FFXIPackageHelper_dynamiccontent_shareDropRateQuery" && validDropRateQuery(params) == true ){
+//     if ( shareID == "HXI_dynamiccontent_shareDropRateQuery" && validDropRateQuery(params) == true ){
 //         GETparams = "mobNameSearch=" + params['mobname'] + "&itemNameSearch=" + params['itemname'] + "&zoneNameDropDown=" + params['zonename'] + "&levelRangeMIN=" + params['lvlmin'] + "&levelRangeMAX=" + params['lvlmax'] + "&thRatesCheck=" + params['showth'] + "&showBCNMdrops=" + params['bcnm'] + "&excludeNMs=" + params['excludenm'] + "&includeSteal=" + params['includesteal'];
 //     }
 //     else {

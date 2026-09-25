@@ -1,14 +1,14 @@
-var TabEquipsets = require("./FFXIPackageHelper_TabEquipsets.js");
-var TabCharacters = require("./FFXIPackageHelper_TabCharacters.js");
-var TabCombatSim = require("../FFXIPackageHelper_TabMobSearch.js");
-var TabImportLua = require("./FFXIPH_TabImportLua.js");
+var TabEquipsets = require("./HXI_TabEquipsets.js");
+var TabCharacters = require("./HXI_TabCharacters.js");
+var TabCombatSim = require("../HXI_TabMobSearch.js");
+var TabImportLua = require("./HXI_TabImportLua.js");
 
-var Tabs = require("../FFXIPackageHelper_ShowTabs.js");
+var Tabs = require("../HXI_ShowTabs.js");
 
 function onPageLoad(){
 //console.log("onReady")
 
-  const tabsButton_equipsets = document.getElementById("FFXIPackageHelper_tabs_equipsets");
+  const tabsButton_equipsets = document.getElementById("HXI_tabs_equipsets");
   if ( tabsButton_equipsets == null ) {
     return ;
   }
@@ -17,7 +17,7 @@ function onPageLoad(){
   });
   tabsButton_equipsets.click();
 
-  const tabsButton_characters = document.getElementById("FFXIPackageHelper_tabs_characters");
+  const tabsButton_characters = document.getElementById("HXI_tabs_characters");
   if ( tabsButton_characters == null ) {
     return ;
   }
@@ -25,7 +25,7 @@ function onPageLoad(){
     Tabs.showTab(e,tabsButton_characters.id);
   });
 
-  const tabsButton_combatsim = document.getElementById("FFXIPackageHelper_tabs_combatsim");
+  const tabsButton_combatsim = document.getElementById("HXI_tabs_combatsim");
   if ( tabsButton_combatsim == null ) {
     return ;
   }
@@ -33,7 +33,7 @@ function onPageLoad(){
     Tabs.showTab(e,tabsButton_combatsim.id);
   });
 
-  const tabsButton_importlua = document.getElementById("FFXIPackageHelper_tabs_importlua");
+  const tabsButton_importlua = document.getElementById("HXI_tabs_importlua");
   if ( tabsButton_importlua == null ) {
     return ;
   }

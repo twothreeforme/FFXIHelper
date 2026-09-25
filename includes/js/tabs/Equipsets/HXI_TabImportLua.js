@@ -1,11 +1,11 @@
-var API = require("./FFXIPackageHelper_ActionAPI.js");
-var Data = require("./FFXIPackageHelper_DataManager.js");
+var API = require("./HXI_ActionAPI.js");
+var Data = require("./HXI_DataManager.js");
 
-const importButton = document.getElementById("FFXIPackageHelper_importLuaButton");
+const importButton = document.getElementById("HXI_importLuaButton");
 
 module.exports.setLinks = function (){
 
-    const verifyButton = document.getElementById("FFXIPackageHelper_verifyluabutton");
+    const verifyButton = document.getElementById("HXI_verifyluabutton");
     verifyButton.addEventListener("click", function () {
         const textarea = document.getElementById("form_importlua");
 
@@ -17,7 +17,7 @@ module.exports.setLinks = function (){
             //console.log(jsonString);
             if ( jsonString == null ) mw.notify( 'Lua not recognized', { autoHide: true,  type: 'error' } );
             else {
-                API.actionAPI( verifyLuaData(jsonString), "importlua_verify", "FFXIPackageHelper_verifyluabutton", verifyResult);
+                API.actionAPI( verifyLuaData(jsonString), "importlua_verify", "HXI_verifyluabutton", verifyResult);
             }
         }
     });
@@ -28,7 +28,7 @@ module.exports.setLinks = function (){
             return;
         }
 
-        const luaImportReady = document.getElementById("FFXIPackageHelper_importlua_importReady");
+        const luaImportReady = document.getElementById("HXI_importlua_importReady");
         if ( luaImportReady.innerText.trim() == '' ) {
             mw.notify( 'Import failed - Missing base64 encoded luaImportReady text', { autoHide: true,  type: 'error' } );
             return;
@@ -105,33 +105,33 @@ function isValidJSONSet(jsonDetails){
 }
 
 function verifyResult(result){
-    const resultsDIV = document.getElementById("FFXIPackageHelper_importlua_verificationResults");
+    const resultsDIV = document.getElementById("HXI_importlua_verificationResults");
     resultsDIV.innerHTML = "";
     resultsDIV.innerHTML += result['verifyresults'];
 
-    const importComment = document.getElementById("FFXIPackageHelper_importLuaComment");
+    const importComment = document.getElementById("HXI_importLuaComment");
     if ( isCharSet() ){
         importComment.innerHTML = "";
         importButton.disabled = false; }
     else {
         importComment.innerHTML = "<i>Requires job and level selected on Gear Sets tab.</i>";
     }
-    const importReady = document.getElementById("FFXIPackageHelper_importlua_importReady");
+    const importReady = document.getElementById("HXI_importlua_importReady");
     importReady.innerText += result['luaImportReady'];
 }
 
 function importResult(){
-    const tabsButton_equipsets = document.getElementById("FFXIPackageHelper_tabs_equipsets");
+    const tabsButton_equipsets = document.getElementById("HXI_tabs_equipsets");
     tabsButton_equipsets.click();
 
     resetPage();
 }
 
 function resetPage(){
-    const resultsDIV = document.getElementById("FFXIPackageHelper_importlua_verificationResults");
+    const resultsDIV = document.getElementById("HXI_importlua_verificationResults");
     resultsDIV.innerHTML = "";
 
-    const importReady = document.getElementById("FFXIPackageHelper_importlua_importReady");
+    const importReady = document.getElementById("HXI_importlua_importReady");
     importReady.innerText = "";
 
     const textarea = document.getElementById("form_importlua");
@@ -141,9 +141,9 @@ function resetPage(){
 }
 
 function isCharSet(){
-    if ( document.getElementById("FFXIPackageHelper_equipsets_selectMLevel").value == 0 ||
-            document.getElementById("FFXIPackageHelper_equipsets_selectMJob").value == 0 ||
-            document.getElementById("FFXIPackageHelper_equipsets_selectSJob").value == 0 )
+    if ( document.getElementById("HXI_equipsets_selectMLevel").value == 0 ||
+            document.getElementById("HXI_equipsets_selectMJob").value == 0 ||
+            document.getElementById("HXI_equipsets_selectSJob").value == 0 )
             return false;
     else return true;
 }

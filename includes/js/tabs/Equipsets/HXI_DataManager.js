@@ -1,4 +1,4 @@
-var API = require("./FFXIPackageHelper_ActionAPI.js");
+var API = require("./HXI_ActionAPI.js");
 
 function updateEquipmentGrid(id, slot, sender){
     //console.log("clicked: " + id + ", " + slot);
@@ -61,7 +61,7 @@ function getMeritsData(){
     // let meritSkills = {};
     let merits = {};
 
-    const _id = "FFXIPackageHelper_equipsets_merits_";
+    const _id = "HXI_equipsets_merits_";
     const allMerits = document.querySelectorAll("[id*='" + _id + "']");
     //console.log(allMerits);
     var meritsArray = [...allMerits];
@@ -85,7 +85,7 @@ function getMeritsData(){
 }
 
 function areMeritsSet(){
-    const _id = "FFXIPackageHelper_equipsets_merits_";
+    const _id = "HXI_equipsets_merits_";
     const allMerits = document.querySelectorAll("[id*='" + _id + "']");
     //console.log(allMerits);
     var meritsArray = [...allMerits];
@@ -101,7 +101,7 @@ function getCharData(){
     //let gmd = getMeritsData();
     //console.log("getCharData:", btoa(gmd), encodeURIComponent(btoa(gmd)));
     return {
-        race:document.getElementById("FFXIPackageHelper_equipsets_selectRace").value,
+        race:document.getElementById("HXI_equipsets_selectRace").value,
         merits: encodeURIComponent(btoa(getMeritsData())),
     };
 }
@@ -128,11 +128,11 @@ function getStatsData(equipIDs){
     //console.log("getMeritsData: ", getMeritsData(), encodeURIComponent(btoa(getMeritsData())));
     return {
         action: "equipsets",
-        race:document.getElementById("FFXIPackageHelper_equipsets_selectRace").value,
-        mlvl:document.getElementById("FFXIPackageHelper_equipsets_selectMLevel").value,
-        slvl:document.getElementById("FFXIPackageHelper_equipsets_selectSLevel").value,
-        mjob:document.getElementById("FFXIPackageHelper_equipsets_selectMJob").value,
-        sjob:document.getElementById("FFXIPackageHelper_equipsets_selectSJob").value,
+        race:document.getElementById("HXI_equipsets_selectRace").value,
+        mlvl:document.getElementById("HXI_equipsets_selectMLevel").value,
+        slvl:document.getElementById("HXI_equipsets_selectSLevel").value,
+        mjob:document.getElementById("HXI_equipsets_selectMJob").value,
+        sjob:document.getElementById("HXI_equipsets_selectSJob").value,
         merits: encodeURIComponent(btoa(getMeritsData())),
         equipment: equipIDs,
     };
@@ -146,19 +146,19 @@ function getSetData(){
     //console.log("getMeritsData: ", getMeritsData(), encodeURIComponent(btoa(getMeritsData())));
     return {
         action: "equipsets",
-        mlvl:document.getElementById("FFXIPackageHelper_equipsets_selectMLevel").value,
-        slvl:document.getElementById("FFXIPackageHelper_equipsets_selectSLevel").value,
-        mjob:document.getElementById("FFXIPackageHelper_equipsets_selectMJob").value,
-        sjob:document.getElementById("FFXIPackageHelper_equipsets_selectSJob").value,
+        mlvl:document.getElementById("HXI_equipsets_selectMLevel").value,
+        slvl:document.getElementById("HXI_equipsets_selectSLevel").value,
+        mjob:document.getElementById("HXI_equipsets_selectMJob").value,
+        sjob:document.getElementById("HXI_equipsets_selectSJob").value,
         equipment: encodeURIComponent(btoa(equipIDString)),
-        setname:document.getElementById("FFXIPackageHelper_dynamiccontent_setNameInput").value, 
+        setname:document.getElementById("HXI_dynamiccontent_setNameInput").value, 
     };
 }
 
 function resetStats(preventAPIUpdate){
-    document.getElementById("FFXIPackageHelper_equipsets_selectRace").value = 0;
+    document.getElementById("HXI_equipsets_selectRace").value = 0;
 
-    const removeButton = document.getElementById("FFXIPackageHelper_deleteCharButton");
+    const removeButton = document.getElementById("HXI_deleteCharButton");
     removeButton.style.visibility = "hidden";
 
     resetMeritsToDefault();
@@ -168,7 +168,7 @@ function resetStats(preventAPIUpdate){
 }
 
 function resetMeritsToDefault(){
-    let _id = "FFXIPackageHelper_equipsets_merits_";
+    let _id = "HXI_equipsets_merits_";
     let allMerits = document.querySelectorAll("[id*='" + _id + "']");
     //console.log(allMerits);
     let meritsArray = [...allMerits];
@@ -190,16 +190,16 @@ function setMeritsData(merits_){
         merits_ = JSON.parse(atob(merits_base64));
     }
     
-    const stats = document.querySelectorAll('[id*="FFXIPackageHelper_equipsets_merits_stats"]');
+    const stats = document.querySelectorAll('[id*="HXI_equipsets_merits_stats"]');
     stats.forEach(stat => {
-        const id =  Number(stat.id.replace("FFXIPackageHelper_equipsets_merits_stats", ""));
+        const id =  Number(stat.id.replace("HXI_equipsets_merits_stats", ""));
         if ( merits_.hasOwnProperty(id) == true ) stat.value = merits_[id];
         else  stat.value = 0;
     });
 
-    const skills = document.querySelectorAll('[id*="FFXIPackageHelper_equipsets_merits_skill"]');
+    const skills = document.querySelectorAll('[id*="HXI_equipsets_merits_skill"]');
     skills.forEach(skill => {
-        const id =  Number(skill.id.replace("FFXIPackageHelper_equipsets_merits_skill", ""));
+        const id =  Number(skill.id.replace("HXI_equipsets_merits_skill", ""));
         if ( merits_.hasOwnProperty(id) == true ) skill.value = merits_[id];
         else  skill.value = 0;
     });
@@ -209,18 +209,18 @@ function setMeritsData(merits_){
 
 function setHeaderCharacterDetails(){
     //console.log("setHeaderCharacterDetails");
-    let charSelectDIV = document.getElementById("FFXIPackageHelper_equipsets_charSelect");
+    let charSelectDIV = document.getElementById("HXI_equipsets_charSelect");
     let buttons = charSelectDIV.querySelectorAll('button');
-    let currentCharacterName = document.getElementById("FFXIPackageHelper_characterHeader_name");
+    let currentCharacterName = document.getElementById("HXI_characterHeader_name");
 
     //let namechanged = false;
-    let selectRace = document.getElementById("FFXIPackageHelper_equipsets_selectRace");
+    let selectRace = document.getElementById("HXI_equipsets_selectRace");
     let race = selectRace.selectedOptions[0].innerHTML;
 
     Array.from(buttons).forEach((button) => {
 
-        if ( button.classList.contains('FFXIPackageHelper_charButtonselected') ) {
-            if ( button.id == "FFXIPackageHelper_charButtonNone" ) currentCharacterName.innerText = "No character selected";
+        if ( button.classList.contains('HXI_charButtonselected') ) {
+            if ( button.id == "HXI_charButtonNone" ) currentCharacterName.innerText = "No character selected";
             else currentCharacterName.innerText = button.innerHTML;
             //namechanged = true;
             //console.log("changed", namechanged, button.innerHTML, currentCharacterName.innerText);
@@ -233,8 +233,8 @@ function setHeaderCharacterDetails(){
     // }
 
     if (selectRace) {
-        if ( areMeritsSet() == true ) document.getElementById("FFXIPackageHelper_characterHeader_details").innerText = "  -  " + race + "  -  Merits set";
-        else document.getElementById("FFXIPackageHelper_characterHeader_details").innerText = "  -  " + race + "  -  No merits set";
+        if ( areMeritsSet() == true ) document.getElementById("HXI_characterHeader_details").innerText = "  -  " + race + "  -  Merits set";
+        else document.getElementById("HXI_characterHeader_details").innerText = "  -  " + race + "  -  No merits set";
         // console.log("setHeaderCharacterDetails");
     }
 }
@@ -243,17 +243,17 @@ function updateCharacter(char){
     //console.log("updateCharacter:", char);
     
     if ( char.charname == null || char.charname == "" ) {
-        document.getElementById("FFXIPackageHelper_equipsets_selectRace").value = 0;
-        document.getElementById("FFXIPackageHelper_dynamiccontent_defaultChar").checked = false;
+        document.getElementById("HXI_equipsets_selectRace").value = 0;
+        document.getElementById("HXI_dynamiccontent_defaultChar").checked = false;
         setHeaderCharacterDetails();
         return;
     }
 
 
-    document.getElementById("FFXIPackageHelper_equipsets_selectRace").value = char.race;
+    document.getElementById("HXI_equipsets_selectRace").value = char.race;
 
-    if ( char.def == 0 ) document.getElementById("FFXIPackageHelper_dynamiccontent_defaultChar").checked = false;
-    else document.getElementById("FFXIPackageHelper_dynamiccontent_defaultChar").checked = true;
+    if ( char.def == 0 ) document.getElementById("HXI_dynamiccontent_defaultChar").checked = false;
+    else document.getElementById("HXI_dynamiccontent_defaultChar").checked = true;
 
     if ( char.charname.length > 0 ) {
         // const merits_base64 = decodeURIComponent(char.merits);
@@ -269,7 +269,7 @@ function loadSet(fromFetechedResult){
 
     // const data = {
     //     action: "equipsets_change",
-    //     race:document.getElementById("FFXIPackageHelper_equipsets_selectRace").value,
+    //     race:document.getElementById("HXI_equipsets_selectRace").value,
     //     mlvl:fromFetechedResult.mlvl,
     //     slvl:fromFetechedResult.slvl,
     //     mjob:fromFetechedResult.mjob,

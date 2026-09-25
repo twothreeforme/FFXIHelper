@@ -514,7 +514,7 @@ class APIModuleEquipsets extends ApiBase {
         return HXI_HTMLOptions::charactersButtonsList($userChars );
     }
 
-    // div id=FFXIPackageHelper_equipsets_charSelect
+    // div id=HXI_equipsets_charSelect
     private function getCharSelectButtonsBar($userchars, $selectChar = null){
         return HXI_HTMLOptions::charactersButtonsList($userchars, $selectChar );
     }

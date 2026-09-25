@@ -6,7 +6,7 @@ class HXI_HTMLTabAdmin {
     }
 
     public function showAdmin(){
-        $html = "<div id=\"FFXIPackageHelper_tabs_admin_display\">";
+        $html = "<div id=\"HXI_tabs_admin_display\">";
 
         $apiHelper = new HXI_APIHelper();
         if ( $apiHelper->userIsAuth() == false ) return $html . "This page is restricted to administrators and senior-editors.</div>";
@@ -18,7 +18,7 @@ class HXI_HTMLTabAdmin {
         $rehits = $db->getHitCounter("recipes");
         $mobsearchhits = $db->getHitCounter("mobsearch");
 
-         $html = "<div id=\"FFXIPackageHelper_tabs_admin_display\">" .
+         $html = "<div id=\"HXI_tabs_admin_display\">" .
                     "<h3>LSBSearch Clicks:</h3>
                     <pre>Drop Rates: $drhits\nEquipment: $eqhits\nRecipes: $rehits\nFishing: $fihits\nMob Search: $mobsearchhits</pre>" .
                 "</div>";

@@ -3,8 +3,8 @@
 class HXI_HTMLTableHelper {
 
 	public static function selectLvlDropDown($classname, $lvlMax){
-        // <select id=\"FFXIPackageHelper_dynamiccontent_selectLvlMIN\"></select> FFXIPackageHelper_dynamiccontent_selectMinCraftLvl
-        $html = "<select id=\"". $classname ."\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        // <select id=\"HXI_dynamiccontent_selectLvlMIN\"></select> HXI_dynamiccontent_selectMinCraftLvl
+        $html = "<select id=\"". $classname ."\" class=\"HXI_dynamiccontent_customDropDown\">";
 
         for ($i = 0; $i <= $lvlMax; $i++) {
             if ( $i == 0 ) $html .= "<option value=\"" . $i . "\">None</option>";
@@ -15,7 +15,7 @@ class HXI_HTMLTableHelper {
     }
 
 	public static function shareButton($buttonID){
-		return "<button type=\"button\" id=\"$buttonID\" class=\"FFXIPackageHelper_dynamiccontent_shareButton\" >
+		return "<button type=\"button\" id=\"$buttonID\" class=\"HXI_dynamiccontent_shareButton\" >
 			<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"22\" height=\"22\" fill=\"currentColor\" viewBox=\"0 0 16 16\">
 				<path fill-rule=\"evenodd\" d=\"M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z\"/>
 				<path fill-rule=\"evenodd\" d=\"M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z\"/>
@@ -24,7 +24,7 @@ class HXI_HTMLTableHelper {
 	}
 
 	public static function shareDiscordButton($buttonID){
-		return "<button type=\"button\" id=\"$buttonID\" class=\"FFXIPackageHelper_dynamiccontent_shareDiscordButton\" >
+		return "<button type=\"button\" id=\"$buttonID\" class=\"HXI_dynamiccontent_shareDiscordButton\" >
 			<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"22\" height=\"22\" fill=\"currentColor\" viewBox=\"0 0 16 16\">
 				<path d=\"M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612\"/>
 			</svg>
@@ -32,7 +32,7 @@ class HXI_HTMLTableHelper {
 	}
 
 	public static function incrementMinus(){
-		return "<button class=\"FFXIPackageHelper_dynamiccontent_incrementButton\">
+		return "<button class=\"HXI_dynamiccontent_incrementButton\">
                 <svg width=\"10\" height=\"10\" viewBox=\"0 0 10 10\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">
                     <line x1=\"0\" y1=\"5\" x2=\"10\" y2=\"5\" stroke-linecap=\"round\"/>
                 </svg>
@@ -40,7 +40,7 @@ class HXI_HTMLTableHelper {
 	}
 
 	public static function incrementPlus(){
-		return "<button class=\"FFXIPackageHelper_dynamiccontent_incrementButton\">
+		return "<button class=\"HXI_dynamiccontent_incrementButton\">
                 <svg width=\"10\" height=\"10\" viewBox=\"0 0 10 10\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">
 
                     <line x1=\"0\" y1=\"5\" x2=\"10\" y2=\"5\" stroke-linecap=\"round\"/>
@@ -56,7 +56,7 @@ class HXI_HTMLTableHelper {
 		 */
 		$html .= "<br>
 		<div ><i> All data and probabilities are based on LandSandBoat(base). All earth times are based on your local timezone.</i></div>
-		<div class=\"FFXIPH_weatherforecast\">
+		<div class=\"HXI_weatherforecast\">
 		<table id=\"special-weatherforecast-table\" class=\"horizon-table general-table special-weatherforecast-table  sortable\">
             <tr><th>Zone Name</th>
 			<th>Vana Days</th>
@@ -292,7 +292,7 @@ class HXI_HTMLTableHelper {
 		$html = "<br>
 
 		<div style=\"max-height: 900px; overflow: auto; display: inline-block; width: 100%;\">
-		<table id=\"FFXIPH_ShowMobDrops_table\" class=\"$classname\">
+		<table id=\"HXI_ShowMobDrops_table\" class=\"$classname\">
 			<tr><th>Zone</th>
 			<th>Level</th>
 			<th>Item - Drop Rate</th>
@@ -767,18 +767,18 @@ class HXI_HTMLTableHelper {
 
 	public static function characterSelectedHeader(HXI_Character $character){
 
-		/*backup*/ //$html = "<div class=\"FFXIPackageHelper_characterHeader\"><i><b id=\"FFXIPackageHelper_characterHeader_$charname\">No character selected</b></i><i id=\"FFXIPackageHelper_characterHeader_details\" style=\"font-color:light-grey;\"></i></div>";
+		/*backup*/ //$html = "<div class=\"HXI_characterHeader\"><i><b id=\"HXI_characterHeader_$charname\">No character selected</b></i><i id=\"HXI_characterHeader_details\" style=\"font-color:light-grey;\"></i></div>";
 
-		$html = "<div class=\"FFXIPackageHelper_characterHeader\">";
+		$html = "<div class=\"HXI_characterHeader\">";
 
 		// Character Name
-		$html .= "<i><b id=\"FFXIPackageHelper_characterHeader_name\">" ;
+		$html .= "<i><b id=\"HXI_characterHeader_name\">" ;
 		if ( $character->charname != null ) $html .= $character->charname;
 		else $html .= "No character selected";
 		$html .= "</b></i>";
 
 		// Character Details
-		$html .= "<i id=\"FFXIPackageHelper_characterHeader_details\" style=\"font-color:light-grey;\">";
+		$html .= "<i id=\"HXI_characterHeader_details\" style=\"font-color:light-grey;\">";
 		// Race
 		$html .=  " - " . $character->raceString .  " - ";
 		if (  $character->hasMeritsSet() == false ) $html .= "No merits set";
@@ -792,7 +792,7 @@ class HXI_HTMLTableHelper {
 		if ( count($moblist) <= 0 ) return;
 		/* class=\"horizon-table general-table sortable\" */
 		$html = "<br><div style=\"max-height: 400px; overflow: auto; display: inline-block; width: 100%;\">
-			<table id=\"FFXIPH_equipsets_combatsim_mobandzonelist\" class=\"sortable\">
+			<table id=\"HXI_equipsets_combatsim_mobandzonelist\" class=\"sortable\">
 				<tr>
 					<th>Zone</th>
 					<th>Mob Name</th>
@@ -819,10 +819,10 @@ class HXI_HTMLTableHelper {
 		
 		$html .= "</table></div>";
 
-		// $html .= "<div id=\"FFXIPackageHelper_dynamiccontent_moblevelincrement\" style=\"height: 35px; overflow: auto; display: inline-block; width: 100%; visibility: hidden;\">";
-		// $html .=	"<div class=\"FFXIPackageHelper_dynamiccontent_counterbox\">" . 
+		// $html .= "<div id=\"HXI_dynamiccontent_moblevelincrement\" style=\"height: 35px; overflow: auto; display: inline-block; width: 100%; visibility: hidden;\">";
+		// $html .=	"<div class=\"HXI_dynamiccontent_counterbox\">" . 
 		// 		HXI_HTMLTableHelper::incrementMinus() .
-		// 		"<input id=\"FFXIPackageHelper_equipsets_moblevelincrement\" class=\"FFXIPackageHelper_dynamiccontent_incrementInput\" type=\"text\" value=\"0\" readonly >" . 
+		// 		"<input id=\"HXI_equipsets_moblevelincrement\" class=\"HXI_dynamiccontent_incrementInput\" type=\"text\" value=\"0\" readonly >" . 
 		// 		HXI_HTMLTableHelper::incrementPlus() .
 		// 		"</div>";
 		// $html .= "</div>";
@@ -862,7 +862,7 @@ class HXI_HTMLTableHelper {
 			"<b>Zone:</b>  " . $zone . "<br>" .
 			"<b>Mob:</b>  " . $name ."<br>" .			
 			"<b>Main/Sub:</b>  " . $mjob . " / " . $sjob . "<br><br>" .
-			"<table id=\"FFXIPH_equipsets_combatsim_mobdetails\" class=\"FFXIPH_table_mobdetails sortable\">";
+			"<table id=\"HXI_equipsets_combatsim_mobdetails\" class=\"HXI_table_mobdetails sortable\">";
 			
 			for ( $s = 1; $s <= count( self::$tableMap_MobStats ); $s++){
 					$html .= "<tr>";

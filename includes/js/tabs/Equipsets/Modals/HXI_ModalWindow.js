@@ -17,27 +17,27 @@ const  _legs = `<h2>Legs Slot</h2>`;
 const  _feet = `<h2>Feet Slot</h2>`;
 
 let _default = `<p>Search for item...</p>`;
-let _default2 = `<br><br><button style="float: left;" class="close-modal FFXIPackageHelper_dynamiccontent_customButton customButton_cancel">Cancel</button>`;
+let _default2 = `<br><br><button style="float: left;" class="close-modal HXI_dynamiccontent_customButton customButton_cancel">Cancel</button>`;
 
 
 function searchInput(slot){
-    return  "<input id=\"FFXIPackageHelper_equipsets_searchInput" + slot + "\" class=\"FFXIPackageHelper_dynamiccontent_textinput\" size=\"20\">";
+    return  "<input id=\"HXI_equipsets_searchInput" + slot + "\" class=\"HXI_dynamiccontent_textinput\" size=\"20\">";
 }
 
 function searchButton(slot){
-    return "<button id=\"FFXIPackageHelper_equipsets_search" + slot + "\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button>";
+    return "<button id=\"HXI_equipsets_search" + slot + "\" class=\"HXI_dynamiccontent_customButton\">Search</button>";
 }
 
 function searchResults(slot){
-    return "<br><div class=\"FFXIPackageHelper_equipsets_searchResults_div\" style=\"max-height: 350px;overflow-y: auto;\"><p></p><dl id=\"FFXIPackageHelper_equipsets_searchResults" + slot + "\" ></dl></div>";
+    return "<br><div class=\"HXI_equipsets_searchResults_div\" style=\"max-height: 350px;overflow-y: auto;\"><p></p><dl id=\"HXI_equipsets_searchResults" + slot + "\" ></dl></div>";
 }
 
 function removeItemButton(slot){
     const newElement = document.createElement("button");
-    newElement.id = `FFXIPackageHelper_equipsets_removeButton${slot}`;
+    newElement.id = `HXI_equipsets_removeButton${slot}`;
     newElement.innerText = "Remove";
-    newElement.classList.add('close-modal'); // FFXIPackageHelper_dynamiccontent_customButton customButton_removeItem
-    newElement.classList.add('FFXIPackageHelper_dynamiccontent_customButton');
+    newElement.classList.add('close-modal'); // HXI_dynamiccontent_customButton customButton_removeItem
+    newElement.classList.add('HXI_dynamiccontent_customButton');
     newElement.classList.add('customButton_removeItem');
     //newElement.setAttribute("style", "display: none; float: right; background-color:rgba(244, 67, 54, 0.50);");
     return newElement;
@@ -46,9 +46,9 @@ function removeItemButton(slot){
 function searchEquip(slot){
     return {
         action: "equipsets_search",
-        search: document.getElementById("FFXIPackageHelper_equipsets_searchInput" + slot).value,
-        mlvl: document.getElementById("FFXIPackageHelper_equipsets_selectMLevel").value,
-        mjob: document.getElementById("FFXIPackageHelper_equipsets_selectMJob").value,
+        search: document.getElementById("HXI_equipsets_searchInput" + slot).value,
+        mlvl: document.getElementById("HXI_equipsets_selectMLevel").value,
+        mjob: document.getElementById("HXI_equipsets_selectMJob").value,
         slot: slot
     };
   }
@@ -109,7 +109,7 @@ class ModalWindow {
         // }
 
         const contentWrapper = document.createElement('div');
-        contentWrapper.id = `FFXIPackageHelper_equipsets_contentWrapper${this.slot}`;
+        contentWrapper.id = `HXI_equipsets_contentWrapper${this.slot}`;
         contentWrapper.classList.add('modal-content');
         contentWrapper.innerHTML = this.content;
         contentWrapper.appendChild(removeItemButton(this.slot));
@@ -128,7 +128,7 @@ class ModalWindow {
         const closeButtons = this.modal.querySelectorAll('.close-modal');
             closeButtons.forEach(button => {
             button.addEventListener('click', (e) => {
-                if ( button.id == `FFXIPackageHelper_equipsets_removeButton${this.slot}` ){
+                if ( button.id == `HXI_equipsets_removeButton${this.slot}` ){
                     //console.log(button);
                     this.options.returnCallback(0, this.slot, this);
                 }
@@ -137,14 +137,14 @@ class ModalWindow {
             });
         });
 
-        const searchButton = document.getElementById("FFXIPackageHelper_equipsets_search" + this.slot);
+        const searchButton = document.getElementById("HXI_equipsets_search" + this.slot);
         searchButton.addEventListener('click', (e) =>  {
             //this.options.searchCallback(searchEquip(this.slot), "equipsets_search", null, this);
             this.searchClicked();
         });
 
 
-        const inputField = document.getElementById(`FFXIPackageHelper_equipsets_searchInput${this.slot}`);
+        const inputField = document.getElementById(`HXI_equipsets_searchInput${this.slot}`);
         inputField.addEventListener("keypress", (e) =>  {
             if (e.key === "Enter") {
                 e.preventDefault();
@@ -160,9 +160,9 @@ class ModalWindow {
         let slot = Number(results[1]);
         //let arr = results[0];
         let html = results[0];
-        let idname = "FFXIPackageHelper_equipsets_searchResults" + slot;
+        let idname = "HXI_equipsets_searchResults" + slot;
 
-        let commentNode = document.querySelectorAll(".FFXIPackageHelper_equipsets_searchResults_div")[this.slot].getElementsByTagName('p')[0];
+        let commentNode = document.querySelectorAll(".HXI_equipsets_searchResults_div")[this.slot].getElementsByTagName('p')[0];
 
         if ( html == "" || html.length == 0 ) {
             commentNode.innerText = "No results found";
@@ -190,7 +190,7 @@ class ModalWindow {
     }
 
     open(itemid) {
-        let rButton = document.getElementById(`FFXIPackageHelper_equipsets_removeButton${this.slot}`);
+        let rButton = document.getElementById(`HXI_equipsets_removeButton${this.slot}`);
         if ( itemid != 0 ) rButton.style.display = "block";
         else  rButton.style.display = "none";
 
@@ -198,18 +198,18 @@ class ModalWindow {
         this.modal.classList.add('open');
 
         // Auto-focus inputs when modal opens
-        const inputElement = document.getElementById(`FFXIPackageHelper_equipsets_searchInput${this.slot}`);
+        const inputElement = document.getElementById(`HXI_equipsets_searchInput${this.slot}`);
         inputElement.focus();
 
     }
   
     close() {
-        document.getElementById("FFXIPackageHelper_equipsets_searchResults" + this.slot).innerHTML = "";
+        document.getElementById("HXI_equipsets_searchResults" + this.slot).innerHTML = "";
 
-        let commentNode = document.querySelectorAll(".FFXIPackageHelper_equipsets_searchResults_div")[this.slot].getElementsByTagName('p')[0];
+        let commentNode = document.querySelectorAll(".HXI_equipsets_searchResults_div")[this.slot].getElementsByTagName('p')[0];
         commentNode.innerText = "";
 
-        document.getElementById("FFXIPackageHelper_equipsets_searchInput" + this.slot).value = "";
+        document.getElementById("HXI_equipsets_searchInput" + this.slot).value = "";
 
         // Close the Modal
         this.modal.classList.remove('open');

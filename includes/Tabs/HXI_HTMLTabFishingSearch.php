@@ -18,24 +18,24 @@ class HXI_HTMLTabFishingSearch {
       }
 
     public function searchForm(){
-        $html = "<div id=\"FFXIPackageHelper_tabs_fishing_searchForm\">" .
+        $html = "<div id=\"HXI_tabs_fishing_searchForm\">" .
                     "<table><tbody>
                     <tr><td>
                         <table><tbody>
                         <tr>
-                            <td>Bait<br><input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"baitSearch\" value=\"$this->baitName\" size=\"25\"></td>
+                            <td>Bait<br><input class=\"HXI_dynamiccontent_textinput\" name=\"baitSearch\" value=\"$this->baitName\" size=\"25\"></td>
                         </tr>
                         <tr>
-                            <td>Fish<br><input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"fishNameSearch\" value=\"$this->fishName\" size=\"25\"></td>
+                            <td>Fish<br><input class=\"HXI_dynamiccontent_textinput\" name=\"fishNameSearch\" value=\"$this->fishName\" size=\"25\"></td>
                         </tr>
                         <tr>
-                            <td>Zone<br>" . HXI_HTMLOptions::fishZonesDropDown() . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchFishingSubmit\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button></td>
+                            <td>Zone<br>" . HXI_HTMLOptions::fishZonesDropDown() . "<br><br><button id=\"HXI_dynamiccontent_searchFishingSubmit\" class=\"HXI_dynamiccontent_customButton\">Search</button></td>
                             </tr>
                         </tbody></table>
                         </td>
                         <td style=\"vertical-align:top;\">".$this->showShareButton()."<br>
                     </tr></tbody></table>
-                    <div id=\"FFXIPackageHelper_tabs_fishing_queryresult\">". $this->postQueryResults() ."</div>
+                    <div id=\"HXI_tabs_fishing_queryresult\">". $this->postQueryResults() ."</div>
                 </div>";
         return $html;
     }

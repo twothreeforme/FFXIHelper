@@ -1,7 +1,7 @@
 /*
 Custom Form related inputs
 */
-.FFXIPackageHelper_dynamiccontent_textinput {
+.HXI_dynamiccontent_textinput {
     display: inline-block;
     padding: 0 16px 0 12px;
     width: 75%;
@@ -14,7 +14,7 @@ Custom Form related inputs
     transition: border .1s linear,background-color .1s linear;
 }
 
-.FFXIPackageHelper_dynamiccontent_textinput:focus{
+.HXI_dynamiccontent_textinput:focus{
     border-color: #1b96ff;
     color: var(--sds-c-input-text-color-focus);
     box-shadow: rgb(1, 118, 211) 0px 0px 3px 0px;
@@ -23,7 +23,7 @@ Custom Form related inputs
 /*
 Custom Buttons
 */
-.FFXIPackageHelper_dynamiccontent_customButton {
+.HXI_dynamiccontent_customButton {
     display: inline-block;
     outline: none;
     cursor: pointer;
@@ -39,13 +39,13 @@ Custom Buttons
     white-space: nowrap;
 }
 
-.FFXIPackageHelper_dynamiccontent_customButton:hover {
+.HXI_dynamiccontent_customButton:hover {
     background-color: #005fb2;
     border-color: #005fb2;
 }
 
-.FFXIPackageHelper_dynamiccontent_customButton:disabled,
-.FFXIPackageHelper_dynamiccontent_customButton[disabled]{
+.HXI_dynamiccontent_customButton:disabled,
+.HXI_dynamiccontent_customButton[disabled]{
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
@@ -71,8 +71,8 @@ Custom Buttons
 }
 
 
-.FFXIPackageHelper_dynamiccontent_shareButton,
-.FFXIPackageHelper_dynamiccontent_shareDiscordButton {
+.HXI_dynamiccontent_shareButton,
+.HXI_dynamiccontent_shareDiscordButton {
     display: inline-block;
     outline: none;
     cursor: pointer;
@@ -91,41 +91,41 @@ Custom Buttons
     box-shadow: 0 4px 5px 0 rgb(0 0 0 / 10%);
 }
 
-.FFXIPackageHelper_dynamiccontent_shareButton{
+.HXI_dynamiccontent_shareButton{
     width: 40px;
     margin-right: 15px;
 }
 
-.FFXIPackageHelper_dynamiccontent_shareDiscordButton{
+.HXI_dynamiccontent_shareDiscordButton{
     background-color: #7289da;
     color: #ffffff;
     /* vertical-align: -50%; */
     
 }
 
-.FFXIPackageHelper_dynamiccontent_shareButton svg{
+.HXI_dynamiccontent_shareButton svg{
   width: 20px;
   height: 25px;
 }
 
-.FFXIPackageHelper_dynamiccontent_shareDiscordButton svg {
+.HXI_dynamiccontent_shareDiscordButton svg {
   width: 25px;
   height: 25px;
   /* padding: 2px 0 0 0; */
 }
 
-.FFXIPackageHelper_dynamiccontent_shareButton:hover,
-.FFXIPackageHelper_dynamiccontent_shareDiscordButton:hover {
+.HXI_dynamiccontent_shareButton:hover,
+.HXI_dynamiccontent_shareDiscordButton:hover {
     background-color: #f3f4f6;
     border-color: #1b1f2326;
     transition-duration: 0.1s;
 }
 
-.FFXIPackageHelper_dynamiccontent_shareDiscordButton:hover{
+.HXI_dynamiccontent_shareDiscordButton:hover{
     background-color: #7289da62;
 }
 
-.FFXIPackageHelper_dynamiccontent_customDropDown {
+.HXI_dynamiccontent_customDropDown {
     display: inline;
     margin: 3px 15px 0px 10px;
     height: 32px;
@@ -135,12 +135,12 @@ Custom Buttons
     background-color: #e8e9f4;
 }
 
-.FFXIPackageHelper_dynamiccontent_customDropDown option{
+.HXI_dynamiccontent_customDropDown option{
     background-color: #e8e9f4;
   }
 
 
-.FFXIPackageHelper_dynamiccontent_counterbox {
+.HXI_dynamiccontent_counterbox {
     display:flex;
     /* width:100%; */
     max-width: 100px;
@@ -149,7 +149,7 @@ Custom Buttons
     /* overflow:hidden; */
 }
 
-.FFXIPackageHelper_dynamiccontent_incrementInput {
+.HXI_dynamiccontent_incrementInput {
     width:25px;
     background:#ffffff00;
     border:none;
@@ -161,7 +161,7 @@ Custom Buttons
     padding: 0 0;
 }
 
-.FFXIPackageHelper_dynamiccontent_incrementButton {
+.HXI_dynamiccontent_incrementButton {
     display: none;
     padding: 0px;
     width: 18px;
@@ -186,19 +186,19 @@ Custom Buttons
 *   Merits sections
 */
 
-.FFXIPackageHelper_dynamiccontent_showMerits_table {
+.HXI_dynamiccontent_showMerits_table {
     border-collapse: collapse;
 }
 
-.FFXIPackageHelper_dynamiccontent_showMerits_table tr:nth-child(even) td{
+.HXI_dynamiccontent_showMerits_table tr:nth-child(even) td{
     background-color: #12396c10;
 }
 
-.FFXIPackageHelper_dynamiccontent_showMerits_table td{
+.HXI_dynamiccontent_showMerits_table td{
     /* width: 200px; */
 }
 
-.FFXIPackageHelper_dynamiccontent_addCharacter {
+.HXI_dynamiccontent_addCharacter {
     display: inline-block;
     padding: 0px;
     width: 1rem;
@@ -207,7 +207,7 @@ Custom Buttons
     border-color: #ffffff75;
 }
 
-.FFXIPackageHelper_dynamiccontent_removeCharacter {
+.HXI_dynamiccontent_removeCharacter {
     display: none;
     padding: 0px;
     width: 1rem;
@@ -217,7 +217,7 @@ Custom Buttons
     background-color: #ff000015;
 }
 
-.FFXIPackageHelper_dynamiccontent_newChar {
+.HXI_dynamiccontent_newChar {
     display: inline-block;
     padding: 0px;
     width: 95%;
@@ -329,7 +329,7 @@ Equipment table
 /*
 Selecting Equipsets table
 */
-.FFXIPackageHelper_Equipsets_table {
+.HXI_Equipsets_table {
     border-collapse: collapse;
     width: 400px;
     /* display: flex; */
@@ -337,11 +337,11 @@ Selecting Equipsets table
     flex-grow: 1; */
 }
 
-.FFXIPackageHelper_Equipsets_table tr:nth-child(even) {
+.HXI_Equipsets_table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-.FFXIPackageHelper_Equipsets_table td {
+.HXI_Equipsets_table td {
     border: 1px solid #000000b0;
     /* width: 1%;
     white-space: nowrap;
@@ -356,7 +356,7 @@ Main Equipsets DIV
 /*
 Showing Equipsets stats table
 */
-.FFXIPackageHelper_Equipsets_container {
+.HXI_Equipsets_container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -364,7 +364,7 @@ Showing Equipsets stats table
     /* overflow:hidden; */
 }
 
-.FFXIPackageHelper_Equipsets_showset {
+.HXI_Equipsets_showset {
     /* background-color: #87878725; */
     width: 325px;
     height: 1px;
@@ -373,7 +373,7 @@ Showing Equipsets stats table
     z-index: 1000;
 }
 
-.FFXIPackageHelper_Equipsets_showstats {
+.HXI_Equipsets_showstats {
     /* background-color: #1eff00; */
     /* width:50%; */
     /* height: 100%; */
@@ -385,28 +385,28 @@ Showing Equipsets stats table
     justify-content: center;
 }
 
-.FFXIPackageHelper_Equipsets_showstats > p {
+.HXI_Equipsets_showstats > p {
     margin:0px;
     padding:0px;
     font-size:13px;
     line-height:13px;
 }
 
-.FFXIPackageHelper_Equipsets_showstats_res {
+.HXI_Equipsets_showstats_res {
     /* background-color:rgb(255, 174, 174); */
     width:100%;
     /* height:55px; */
     padding:0;
 }
 
-.FFXIPackageHelper_Equipsets_showstats_res > p {
+.HXI_Equipsets_showstats_res > p {
     margin:0px;
     padding:0px;
 }
 
 
 
-.FFXIPackageHelper_Equipsets_selectOptions {
+.HXI_Equipsets_selectOptions {
     /* background-color:rgb(255, 174, 174); */
     /* width:415px;
     height:125px; */
@@ -419,7 +419,7 @@ Showing Equipsets stats table
 
 
 
-.FFXIPackageHelper_Equipsets_showstatstable {
+.HXI_Equipsets_showstatstable {
     /* background-color:rgba(252, 155, 155, 0.473); */
     font-size:16px;
     line-height:15px;
@@ -429,11 +429,11 @@ Showing Equipsets stats table
     /* width: 50% !important; */
 }
 
-/* .FFXIPackageHelper_Equipsets_showstatstable tr{
+/* .HXI_Equipsets_showstatstable tr{
     line-height:1px;
 } */
 
-.FFXIPackageHelper_Equipsets_showstatstable td {
+.HXI_Equipsets_showstatstable td {
     border: none;
     margin: 0px;
     padding: 0px;
@@ -441,7 +441,7 @@ Showing Equipsets stats table
     /* text-align: center; */
 }
 
-.FFXIPackageHelper_Equipsets_statRes div.mw-parser-output p {
+.HXI_Equipsets_statRes div.mw-parser-output p {
     margin: 0px;
     padding: 0px;
 }
@@ -449,7 +449,7 @@ Showing Equipsets stats table
 /*
 Equipsets equipment grid (table)
 */
-.FFXIPackageHelper_Equipsets_equipmentgrid {
+.HXI_Equipsets_equipmentgrid {
     /* background-color: #505050bb; */
     width: 256px;
     height: 256px;
@@ -457,7 +457,7 @@ Equipsets equipment grid (table)
     border-collapse: collapse;
 }
 
-.FFXIPackageHelper_Equipsets_equipmentgrid p {
+.HXI_Equipsets_equipmentgrid p {
     margin:0px;
     padding:0px;
 }
@@ -466,43 +466,43 @@ Equipsets equipment grid (table)
     -webkit-filter: brightness(1.25);
 }
 
-.FFXIPackageHelper_Equipsets_additionalData {
+.HXI_Equipsets_additionalData {
     /* width: 50%; */
     display: block;
     /* flex-wrap: wrap; */
     /* justify-content: center; */
 }
 
-.FFXIPackageHelper_Equipsets_equipList {
+.HXI_Equipsets_equipList {
     width: 50%;
     /* padding: 10px 0px 10px 10px; */
 }
 
-.FFXIPackageHelper_Equipsets_equipList h2{
+.HXI_Equipsets_equipList h2{
     margin-top: 0em;
 }
 
-.FFXIPackageHelper_Equipsets_equipList h3{
+.HXI_Equipsets_equipList h3{
     display: inline-block;
     margin: 0em;
     padding: 0px;
     font-size: 1.3em;
 }
 
-.FFXIPackageHelper_Equipsets_equipList table{
+.HXI_Equipsets_equipList table{
     font-size:16px;
     line-height:15px;
     border-collapse: collapse;
 
 }
-.FFXIPackageHelper_Equipsets_equipList p {
+.HXI_Equipsets_equipList p {
     margin: 0px !important;
 }
 
 
 
 
-.FFXIPackageHelper_dynamiccontent_showMerits{
+.HXI_dynamiccontent_showMerits{
     /* width: 2250px; */
     /* height: 90%; */
     /* overflow: auto; */
@@ -512,7 +512,7 @@ Equipsets equipment grid (table)
     /* line-height: 1; */
 }
 
-.FFXIPackageHelper_dynamiccontent_showMerits h4{
+.HXI_dynamiccontent_showMerits h4{
     margin-top: 0px;
     line-height: 1;
 }
@@ -570,7 +570,7 @@ Weather table
 /*
 Character Header label at top
 */
-.FFXIPackageHelper_characterHeader {
+.HXI_characterHeader {
     /* background-color: rgb(255, 178, 178); */
     width: 100%;
     height: 22px;

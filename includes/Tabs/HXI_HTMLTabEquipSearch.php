@@ -7,28 +7,28 @@ class HXI_HTMLTabEquipSearch {
       }
 
       public function searchForm(){
-        $html = "<div id=\"FFXIPackageHelper_tabs_equipment_searchForm\">" .
+        $html = "<div id=\"HXI_tabs_equipment_searchForm\">" .
                     "<div ><i><b>Disclosure:</b>  This table is for experimentation only. Everything listed here is available in retail at lvl 75 and below. We are still working with this data to filter OOE content. </i></div>
                     <table><tbody><tr><td>
                         <tr>
-                            <td>Equipment <input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"equipmentNameSearch\" size=\"25\" />
+                            <td>Equipment <input class=\"HXI_dynamiccontent_textinput\" name=\"equipmentNameSearch\" size=\"25\" />
                         </tr>
                         <tr>
-                            <td>Job " . HXI_HTMLOptions::jobDropDown("FFXIPackageHelper_dynamiccontent_selectJob") . "
+                            <td>Job " . HXI_HTMLOptions::jobDropDown("HXI_dynamiccontent_selectJob") . "
                             <br>Slot ". $this->slotTypeDropDown() . "
-                            <br>Max Item Level " . $this->minItemLevel("FFXIPackageHelper_dynamiccontent_selectMinItemLvl") . "</td>
+                            <br>Max Item Level " . $this->minItemLevel("HXI_dynamiccontent_selectMinItemLvl") . "</td>
                         </tr>
                         <tr>
-                            <td><button id=\"FFXIPackageHelper_dynamiccontent_searchEquipmentSubmit\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button></td>
+                            <td><button id=\"HXI_dynamiccontent_searchEquipmentSubmit\" class=\"HXI_dynamiccontent_customButton\">Search</button></td>
                         </tr>
                         </td></tr></tbody></table>
-                    <div id=\"FFXIPackageHelper_tabs_equipment_queryresult\"></div>
+                    <div id=\"HXI_tabs_equipment_queryresult\"></div>
                 </div>";
         return $html;
     }
 
     private function minItemLevel($classname){
-        $html = "<select id=\"". $classname ."\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        $html = "<select id=\"". $classname ."\" class=\"HXI_dynamiccontent_customDropDown\">";
         
         $html .= "<option value=\"0\">None</option>";
         
@@ -54,7 +54,7 @@ class HXI_HTMLTabEquipSearch {
         // waist 1024
         // legs 128
         // feet 256
-        $html = "<select id=\"FFXIPackageHelper_dynamiccontent_selectSlotType\" defaultValue=\"0\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        $html = "<select id=\"HXI_dynamiccontent_selectSlotType\" defaultValue=\"0\" class=\"HXI_dynamiccontent_customDropDown\">";
         $html .= "<option value=\"0\">Any</option>";
         $html .= "<option value=\"1\">Main</option>";
         $html .= "<option value=\"2\">Sub</option>";

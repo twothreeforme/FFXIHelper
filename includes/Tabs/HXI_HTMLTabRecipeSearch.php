@@ -6,36 +6,36 @@ class HXI_HTMLTabRecipeSearch {
       }
 
     public function searchForm(){
-        $html = "<div id=\"FFXIPackageHelper_tabs_recipes_searchForm\">" .
+        $html = "<div id=\"HXI_tabs_recipes_searchForm\">" .
                     "<table><tbody><tr><td>
                         <table><tbody>
                         <tr>
-                            <td>Recipe Name <input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"recipeNameSearch\" size=\"25\"></td>
+                            <td>Recipe Name <input class=\"HXI_dynamiccontent_textinput\" name=\"recipeNameSearch\" size=\"25\"></td>
                         </tr>
                         <tr>
-                            <td>Ingredient <input class=\"FFXIPackageHelper_dynamiccontent_textinput\" name=\"ingredientSearch\" size=\"25\"></td>
+                            <td>Ingredient <input class=\"HXI_dynamiccontent_textinput\" name=\"ingredientSearch\" size=\"25\"></td>
                         </tr>
                         <tr>
-                            <td>Crystal<br>" . $this->crystalDropDown() . "<br><br><button id=\"FFXIPackageHelper_dynamiccontent_searchRecipeSubmit\" class=\"FFXIPackageHelper_dynamiccontent_customButton\">Search</button>
+                            <td>Crystal<br>" . $this->crystalDropDown() . "<br><br><button id=\"HXI_dynamiccontent_searchRecipeSubmit\" class=\"HXI_dynamiccontent_customButton\">Search</button>
                         </tr>
                         </tbody></table>
                     </td><td>
                             <td>Craft " . $this->craftDropDown() .
                             "<br>Skill Rank " . $this->skillRankDropDown() .
-                            "<br>Min. Craft Level " . $this->craftLvlDropDown("FFXIPackageHelper_dynamiccontent_selectMinCraftLvl") .
-                            "<br>Max. Craft Level " . $this->craftLvlDropDown("FFXIPackageHelper_dynamiccontent_selectMaxCraftLvl") .
-                            "<br><label class=\"FFXIPackageHelper_dynamiccontent_checkContainer\"><input id=\"FFXIPackageHelper_dynamiccontent_checkboxIncludeDesynths\" type=\"checkbox\"> Show Desynths</input></label>
+                            "<br>Min. Craft Level " . $this->craftLvlDropDown("HXI_dynamiccontent_selectMinCraftLvl") .
+                            "<br>Max. Craft Level " . $this->craftLvlDropDown("HXI_dynamiccontent_selectMaxCraftLvl") .
+                            "<br><label class=\"HXI_dynamiccontent_checkContainer\"><input id=\"HXI_dynamiccontent_checkboxIncludeDesynths\" type=\"checkbox\"> Show Desynths</input></label>
                         </td>
                     </tr></tbody>
                     </table>
-                    <div id=\"FFXIPackageHelper_tabs_recipeSearch_queryresult\"></div>
+                    <div id=\"HXI_tabs_recipeSearch_queryresult\"></div>
                 </div>";
         return $html;
     }
 
     private function craftDropDown(){
-        // <select id=\"FFXIPackageHelper_dynamiccontent_selectLvlMIN\"></select>
-        $html = "<select id=\"FFXIPackageHelper_dynamiccontent_selectCraft\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\" >";
+        // <select id=\"HXI_dynamiccontent_selectLvlMIN\"></select>
+        $html = "<select id=\"HXI_dynamiccontent_selectCraft\" class=\"HXI_dynamiccontent_customDropDown\" >";
         $html .= "<option value=\"none\">None Specified</option>";
         $html .= "<option value=\"Wood\">Woodworking</option>";
         $html .= "<option value=\"Smith\">Smithing</option>";
@@ -50,8 +50,8 @@ class HXI_HTMLTabRecipeSearch {
     }
 
     private function crystalDropDown(){
-        // <select id=\"FFXIPackageHelper_dynamiccontent_selectLvlMIN\"></select>
-        $html = "<select id=\"FFXIPackageHelper_dynamiccontent_selectCrystal\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\" >";
+        // <select id=\"HXI_dynamiccontent_selectLvlMIN\"></select>
+        $html = "<select id=\"HXI_dynamiccontent_selectCrystal\" class=\"HXI_dynamiccontent_customDropDown\" >";
         $html .= "<option value=\"0\">Any</option>";
         $html .= "<option value=\"4096\">Fire</option>";
         $html .= "<option value=\"4097\">Ice</option>";
@@ -66,8 +66,8 @@ class HXI_HTMLTabRecipeSearch {
     }
 
     private function craftLvlDropDown($classname){
-        // <select id=\"FFXIPackageHelper_dynamiccontent_selectLvlMIN\"></select> FFXIPackageHelper_dynamiccontent_selectMinCraftLvl
-        $html = "<select id=\"". $classname ."\" disabled=\"disabled\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        // <select id=\"HXI_dynamiccontent_selectLvlMIN\"></select> HXI_dynamiccontent_selectMinCraftLvl
+        $html = "<select id=\"". $classname ."\" disabled=\"disabled\" class=\"HXI_dynamiccontent_customDropDown\">";
 
         for ($i = 0; $i <= 120; $i++) {
             if ( $i == 0 ) $html .= "<option value=\"" . $i . "\">None</option>";
@@ -78,8 +78,8 @@ class HXI_HTMLTabRecipeSearch {
     }
 
     private function skillRankDropDown(){
-        // <select id=\"FFXIPackageHelper_dynamiccontent_selectLvlMIN\"></select>
-        $html = "<select id=\"FFXIPackageHelper_dynamiccontent_selectSkillRank\" disabled=\"disabled\" defaultValue=\"0\" class=\"FFXIPackageHelper_dynamiccontent_customDropDown\">";
+        // <select id=\"HXI_dynamiccontent_selectLvlMIN\"></select>
+        $html = "<select id=\"HXI_dynamiccontent_selectSkillRank\" disabled=\"disabled\" defaultValue=\"0\" class=\"HXI_dynamiccontent_customDropDown\">";
         $html .= "<option value=\"0\">Any</option>";
         $html .= "<option value=\"1\">Amatuer</option>";
         $html .= "<option value=\"11\">Recruit</option>";

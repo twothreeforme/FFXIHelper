@@ -31,19 +31,19 @@ class ModalSetManagement {
         this.content += `<h3>` + this.options.setName + `</h3><i>This action cannot be undone</i><br><br>`;
 
         const contentWrapper = document.createElement('div');
-        contentWrapper.id = `FFXIPackageHelper_equipsets_contentWrapperUserSets`;
+        contentWrapper.id = `HXI_equipsets_contentWrapperUserSets`;
         contentWrapper.classList.add('modal-content');
         contentWrapper.innerHTML = this.content;
         //contentWrapper.appendChild(removeItemButton(this.slot));
 
             const closeButton = document.createElement('button');
-            closeButton.id = 'FFXIPackageHelper_dynamiccontent_closeCharsRemove';
-            closeButton.classList.add("close-modal", "FFXIPackageHelper_dynamiccontent_customButton", "customButton_cancel");
+            closeButton.id = 'HXI_dynamiccontent_closeCharsRemove';
+            closeButton.classList.add("close-modal", "HXI_dynamiccontent_customButton", "customButton_cancel");
             closeButton.textContent = 'Cancel';
 
             const removeButton = document.createElement('button');
-            //removeButton.id = 'FFXIPackageHelper_dynamiccontent_removeChar';
-            removeButton.classList.add("FFXIPackageHelper_dynamiccontent_customButton", "customButton_removeItem");
+            //removeButton.id = 'HXI_dynamiccontent_removeChar';
+            removeButton.classList.add("HXI_dynamiccontent_customButton", "customButton_removeItem");
             removeButton.textContent = 'Remove';
 
             contentWrapper.appendChild(removeButton);
@@ -54,7 +54,7 @@ class ModalSetManagement {
         document.body.appendChild(this.modal);
 
         //Show Remove button
-        // const removeButton = this.modal.querySelector('#FFXIPackageHelper_deleteSetButton');
+        // const removeButton = this.modal.querySelector('#HXI_deleteSetButton');
         // removeButton.style.visibility = "visible";
         // console.log(removeButton);
 
@@ -69,7 +69,7 @@ class ModalSetManagement {
         const closeButtons = this.getCloseButtons();
             closeButtons.forEach(button => {
             button.addEventListener('click', (e) => {
-                // if ( button.id == `FFXIPackageHelper_equipsets_removeButton${this.slot}` ){
+                // if ( button.id == `HXI_equipsets_removeButton${this.slot}` ){
                 //     //console.log(button);
                 //     this.options.returnCallback(0, this.slot, this);
                 // }

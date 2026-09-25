@@ -1,10 +1,10 @@
-var TabDropRates = require("./FFXIPackageHelper_TabDropRates.js");
-var TabRecipes = require("./FFXIPackageHelper_TabRecipes.js");
-var TabEquipment = require("./FFXIPackageHelper_TabEquipment.js");
-// var TabEquipsets = require("./Equipsets/FFXIPackageHelper_TabEquipsets.js");
-var TabFishing = require("./FFXIPackageHelper_TabFishing.js");
-var TabCombatSim = require("./FFXIPackageHelper_TabMobSearch.js");
-var Tabs = require("./FFXIPackageHelper_ShowTabs.js");
+var TabDropRates = require("./HXI_TabDropRates.js");
+var TabRecipes = require("./HXI_TabRecipes.js");
+var TabEquipment = require("./HXI_TabEquipment.js");
+// var TabEquipsets = require("./Equipsets/HXI_TabEquipsets.js");
+var TabFishing = require("./HXI_TabFishing.js");
+var TabCombatSim = require("./HXI_TabMobSearch.js");
+var Tabs = require("./HXI_ShowTabs.js");
 
 
 // function showTab(evt, tabName) { //https://www.w3schools.com/howto/howto_js_tabs.asp
@@ -32,7 +32,7 @@ var Tabs = require("./FFXIPackageHelper_ShowTabs.js");
 function onPageLoad(){
 //console.log("onReady")
 
-  const tabsButton_droprates = document.getElementById("FFXIPackageHelper_tabs_droprates");
+  const tabsButton_droprates = document.getElementById("HXI_tabs_droprates");
   if ( tabsButton_droprates == null ) {
     //console.log("droprates null");
     return ;
@@ -43,7 +43,7 @@ function onPageLoad(){
   // set the current tab to be "Drop Rates"
   tabsButton_droprates.click();
 
-  const tabsButton_recipes = document.getElementById("FFXIPackageHelper_tabs_recipes");
+  const tabsButton_recipes = document.getElementById("HXI_tabs_recipes");
   if ( tabsButton_recipes == null ) {
     //console.log("recipes null");
     return ;
@@ -52,7 +52,7 @@ function onPageLoad(){
       Tabs.showTab(e,tabsButton_recipes.id);
   });
 
-  const tabsButton_equipment = document.getElementById("FFXIPackageHelper_tabs_equipment");
+  const tabsButton_equipment = document.getElementById("HXI_tabs_equipment");
   if ( tabsButton_equipment == null )  {
     //console.log("equipment null");
     return ;
@@ -61,7 +61,7 @@ function onPageLoad(){
       Tabs.showTab(e,tabsButton_equipment.id);
   });
 
-  // const tabsButton_equipsets = document.getElementById("FFXIPackageHelper_tabs_equipsets");
+  // const tabsButton_equipsets = document.getElementById("HXI_tabs_equipsets");
   // if ( tabsButton_equipsets == null )  {
   //   //console.log("equipsets null");
   //   return ;
@@ -71,7 +71,7 @@ function onPageLoad(){
   // });
   //tabsButton_equipsets.click();
 
-  const tabsButton_fishing = document.getElementById("FFXIPackageHelper_tabs_fishing");
+  const tabsButton_fishing = document.getElementById("HXI_tabs_fishing");
   if ( tabsButton_fishing == null )  {
     //console.log("fishing tab null");
     return ;
@@ -81,7 +81,7 @@ function onPageLoad(){
   });
   //tabsButton_fishing.click();
 
-  const tabsButton_mobsearch = document.getElementById("FFXIPackageHelper_tabs_mobsearch");
+  const tabsButton_mobsearch = document.getElementById("HXI_tabs_mobsearch");
   if ( tabsButton_mobsearch == null )  {
     //console.log("mobsearch tab null");
     return ;
@@ -91,7 +91,7 @@ function onPageLoad(){
   });
   //tabsButton_mobsearch.click();
 
-  const tabsButton_admin = document.getElementById("FFXIPackageHelper_tabs_admin");
+  const tabsButton_admin = document.getElementById("HXI_tabs_admin");
   if ( tabsButton_admin == null )  {
     //console.log("fishing tab null");
     return ;

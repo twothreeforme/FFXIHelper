@@ -20,7 +20,7 @@
         "HXI_BaseStatCalculator": "includes/Models/HXI_BaseStatCalculator.php",
         "HXI_MobStatCalculator": "includes/Models/HXI_MobStatCalculator.php",
         "HXI_StatsUtils": "includes/helpers/data/HXI_StatsUtils.php",
-        "FFXIPH_ItemDescription": "includes/Models/FFXIPH_Item.php",
+        "HXI_ItemDescription": "includes/Models/HXI_ItemDescription.php",
 
         "HXI_EquipSlot": "includes/Models/HXI_EquipSlot.php",
         "HXI_Item": "includes/Models/HXI_Item.php",
@@ -107,36 +107,36 @@
         ]
     },
 	"ResourceModules": {
-        "FFXIPackageHelper_WeatherForecast" : {
+        "HXI_WeatherForecast" : {
 			"localBasePath": "",
 			"remoteExtPath": "LSBSearch",
 			"packageFiles": [
-				"includes/js/FFXIPackageHelper_sortTable.js"
+				"includes/js/HXI_sortTable.js"
 			],
 			"styles": [
-				"includes/WeatherForecast/FFXIPackageHelper_WeatherForecast_Styles.css"
+				"includes/WeatherForecast/HXI_WeatherForecast_Styles.css"
 			]
 		},
-        "FFXIPackageHelper_TabsController" : {
+        "HXI_TabsController" : {
 			"localBasePath": "",
 			"remoteExtPath": "LSBSearch",
 			"packageFiles": [
-                "includes/js/tabs/FFXIPackageHelper_TabsController.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_ActionAPI.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_DataManager.js",
-                "includes/js/tabs/FFXIPackageHelper_ShowTabs.js",
-                "includes/js/tabs/FFXIPackageHelper_TabFishing.js",
-                "includes/js/tabs/FFXIPackageHelper_TabRecipes.js",
-                "includes/js/tabs/FFXIPackageHelper_TabEquipment.js",
-                "includes/js/tabs/FFXIPackageHelper_TabDropRates.js",
-                "includes/js/tabs/FFXIPackageHelper_TabMobSearch.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_Tooltips.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_LuaSets.js",
-                "includes/js/tabs/Equipsets/Modals/FFXIPackageHelper_ModalCombatSimMobSelect.js"
+                "includes/js/tabs/HXI_TabsController.js",
+                "includes/js/tabs/Equipsets/HXI_ActionAPI.js",
+                "includes/js/tabs/Equipsets/HXI_DataManager.js",
+                "includes/js/tabs/HXI_ShowTabs.js",
+                "includes/js/tabs/HXI_TabFishing.js",
+                "includes/js/tabs/HXI_TabRecipes.js",
+                "includes/js/tabs/HXI_TabEquipment.js",
+                "includes/js/tabs/HXI_TabDropRates.js",
+                "includes/js/tabs/HXI_TabMobSearch.js",
+                "includes/js/tabs/Equipsets/HXI_Tooltips.js",
+                "includes/js/tabs/Equipsets/HXI_LuaSets.js",
+                "includes/js/tabs/Equipsets/Modals/HXI_ModalCombatSimMobSelect.js"
             ],
             "styles": [
-				"resources/styles/FFXIPackageHelper_Forms.css",
-                "resources/styles/FFXIPH_MobSearch.css",
+				"resources/styles/HXI_Forms.css",
+                "resources/styles/HXI_MobSearch.css",
                 "resources/styles/tabs.css",
                 "resources/styles/hint.css"
 			]
@@ -145,33 +145,33 @@
 			"localBasePath": "",
             "remoteExtPath": "LSBSearch",
 			"packageFiles": [
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_Equipsets_TabsController.js",
-                "includes/js/tabs/FFXIPackageHelper_ShowTabs.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_ActionAPI.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_ActionButtons.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_DataManager.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_LuaSets.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_Tooltips.js",
+                "includes/js/tabs/Equipsets/HXI_Equipsets_TabsController.js",
+                "includes/js/tabs/HXI_ShowTabs.js",
+                "includes/js/tabs/Equipsets/HXI_ActionAPI.js",
+                "includes/js/tabs/Equipsets/HXI_ActionButtons.js",
+                "includes/js/tabs/Equipsets/HXI_DataManager.js",
+                "includes/js/tabs/Equipsets/HXI_LuaSets.js",
+                "includes/js/tabs/Equipsets/HXI_Tooltips.js",
 
-                "includes/js/tabs/Equipsets/Modals/FFXIPackageHelper_ModalWindow.js",
-                "includes/js/tabs/Equipsets/Modals/FFXIPackageHelper_ModalSetManagement.js",
-                "includes/js/tabs/Equipsets/Modals/FFXIPackageHelper_ModalCharManagement.js",
-                "includes/js/tabs/Equipsets/Modals/FFXIPackageHelper_ModalCharAdd.js",
-                "includes/js/tabs/Equipsets/Modals/FFXIPackageHelper_ModalCharRemove.js",
-                "includes/js/tabs/Equipsets/Modals/FFXIPackageHelper_ModalCombatSimMobSelect.js",
+                "includes/js/tabs/Equipsets/Modals/HXI_ModalWindow.js",
+                "includes/js/tabs/Equipsets/Modals/HXI_ModalSetManagement.js",
+                "includes/js/tabs/Equipsets/Modals/HXI_ModalCharManagement.js",
+                "includes/js/tabs/Equipsets/Modals/HXI_ModalCharAdd.js",
+                "includes/js/tabs/Equipsets/Modals/HXI_ModalCharRemove.js",
+                "includes/js/tabs/Equipsets/Modals/HXI_ModalCombatSimMobSelect.js",
 
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_TabEquipsets.js",
-                "includes/js/tabs/Equipsets/FFXIPackageHelper_TabCharacters.js",
-                "includes/js/tabs/FFXIPackageHelper_TabMobSearch.js",
-                "includes/js/tabs/Equipsets/FFXIPH_TabImportLua.js",
+                "includes/js/tabs/Equipsets/HXI_TabEquipsets.js",
+                "includes/js/tabs/Equipsets/HXI_TabCharacters.js",
+                "includes/js/tabs/HXI_TabMobSearch.js",
+                "includes/js/tabs/Equipsets/HXI_TabImportLua.js",
 
-                "includes/js/FFXIPackageHelper_copyURLToClipboard.js"
+                "includes/js/HXI_copyURLToClipboard.js"
 			],
 			"styles": [
-                "resources/styles/FFXIPackageHelper_Forms.css",
-                "resources/styles/FFXIPackageHelper_Equipsets_Styles.css",
-                "resources/styles/FFXIPackageHelper_Equipsets_SetList.css",
-                "resources/styles/FFXIPackageHelper_MWOverrides.css",
+                "resources/styles/HXI_Forms.css",
+                "resources/styles/HXI_Equipsets_Styles.css",
+                "resources/styles/HXI_Equipsets_SetList.css",
+                "resources/styles/HXI_MWOverrides.css",
                 "resources/styles/tabs.css",
                 "resources/styles/hint.css"
 			]

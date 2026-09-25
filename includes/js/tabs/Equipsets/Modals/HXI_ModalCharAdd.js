@@ -14,7 +14,7 @@ class ModalCharAddWindow {
         this.modal.classList.add('modal');
 
         const contentWrapper = document.createElement('div');
-        //contentWrapper.id = `FFXIPackageHelper_equipsets_contentWrapperUserChars`;
+        //contentWrapper.id = `HXI_equipsets_contentWrapperUserChars`;
         contentWrapper.classList.add('modal-content');
 
         const titleText = document.createElement("h2");
@@ -33,20 +33,20 @@ class ModalCharAddWindow {
         inputWrapper.setAttribute('style', 'display: inline-flex; gap: 20px;');
 
             const closeButton = document.createElement('button');
-            closeButton.id = 'FFXIPackageHelper_dynamiccontent_closeCharsAdd';
-            closeButton.classList.add("close-modal", "FFXIPackageHelper_dynamiccontent_customButton", "customButton_cancel");
+            closeButton.id = 'HXI_dynamiccontent_closeCharsAdd';
+            closeButton.classList.add("close-modal", "HXI_dynamiccontent_customButton", "customButton_cancel");
             closeButton.textContent = 'Cancel';
 
             const inputElement = document.createElement('input');
             inputElement.type = 'text';
-            inputElement.id = 'FFXIPackageHelper_dynamiccontent_addCharInput';
+            inputElement.id = 'HXI_dynamiccontent_addCharInput';
             //inputElement.setAttribute('style', 'margin-right: auto;margin-left: auto;display: block;');
             inputElement.placeholder = 'Character Name';
             inputElement.maxLength = 25;
 
             const saveButton = document.createElement('button');
-            saveButton.id = 'FFXIPackageHelper_dynamiccontent_saveChar';
-            saveButton.classList.add("FFXIPackageHelper_dynamiccontent_customButton");
+            saveButton.id = 'HXI_dynamiccontent_saveChar';
+            saveButton.classList.add("HXI_dynamiccontent_customButton");
             saveButton.textContent = 'Save';
 
             inputWrapper.append(inputElement, saveButton, closeButton);
@@ -71,17 +71,17 @@ class ModalCharAddWindow {
         // </label>
 
         const defaultToggleLabel = document.createElement("label");
-        // defaultToggleLabel.setAttribute('for', 'FFXIPackageHelper_dynamiccontent_addCharDefault');
-        defaultToggleLabel.classList.add("FFXIPackageHelper_dynamiccontent_addCharDefaultLabel");
+        // defaultToggleLabel.setAttribute('for', 'HXI_dynamiccontent_addCharDefault');
+        defaultToggleLabel.classList.add("HXI_dynamiccontent_addCharDefaultLabel");
 
             const defaultInput = document.createElement("input");
             defaultInput.setAttribute('type', 'checkbox');
-            //defaultToggle.id = "FFXIPackageHelper_dynamiccontent_addCharDefault";
-            defaultInput.classList.add("FFXIPackageHelper_dynamiccontent_addCharDefaultInput");
+            //defaultToggle.id = "HXI_dynamiccontent_addCharDefault";
+            defaultInput.classList.add("HXI_dynamiccontent_addCharDefaultInput");
 
             const defaultSpan = document.createElement("span");
-            defaultSpan.classList.add("FFXIPackageHelper_dynamiccontent_addCharDefaultSpan");
-            defaultSpan.classList.add("FFXIPackageHelper_dynamiccontent_addCharDefaultSpanround");
+            defaultSpan.classList.add("HXI_dynamiccontent_addCharDefaultSpan");
+            defaultSpan.classList.add("HXI_dynamiccontent_addCharDefaultSpanround");
         defaultToggleLabel.appendChild(defaultInput);
         defaultToggleLabel.appendChild(defaultSpan);
 
@@ -105,21 +105,21 @@ class ModalCharAddWindow {
     }
   
     addEventListeners() {
-        const closeButton =  document.getElementById("FFXIPackageHelper_dynamiccontent_closeCharsAdd" );
+        const closeButton =  document.getElementById("HXI_dynamiccontent_closeCharsAdd" );
         closeButton.addEventListener('click', (e) => {
                 this.close();
             });
 
-        const saveButton = document.getElementById("FFXIPackageHelper_dynamiccontent_saveChar");
+        const saveButton = document.getElementById("HXI_dynamiccontent_saveChar");
         saveButton.addEventListener('click', (e) =>  {
-            const inputElement = document.getElementById("FFXIPackageHelper_dynamiccontent_addCharInput");
-            const defaultToggle = (document.querySelector('.FFXIPackageHelper_dynamiccontent_addCharDefaultInput').checked == true) ? 1 : 0;
+            const inputElement = document.getElementById("HXI_dynamiccontent_addCharInput");
+            const defaultToggle = (document.querySelector('.HXI_dynamiccontent_addCharDefaultInput').checked == true) ? 1 : 0;
 
             this.options.saveCallback(inputElement.value, defaultToggle);
             this.close();
         });
 
-        const inputElement = document.getElementById("FFXIPackageHelper_dynamiccontent_addCharInput");
+        const inputElement = document.getElementById("HXI_dynamiccontent_addCharInput");
         inputElement.addEventListener('input', function(event) {
             const value = event.target.value;
             const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, '');
@@ -129,10 +129,10 @@ class ModalCharAddWindow {
   
 
     open() {
-        const inputElement = document.getElementById("FFXIPackageHelper_dynamiccontent_addCharInput");
+        const inputElement = document.getElementById("HXI_dynamiccontent_addCharInput");
         inputElement.value = "";
 
-        document.querySelector('.FFXIPackageHelper_dynamiccontent_addCharDefaultInput').checked = false;
+        document.querySelector('.HXI_dynamiccontent_addCharDefaultInput').checked = false;
 
         this.modal.classList.add('open');
         inputElement.focus();

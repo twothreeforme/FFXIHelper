@@ -10,8 +10,8 @@ class SpecialLSBSearch extends SpecialPage {
     }
 
 	static function onBeforePageDisplay( $out, $skin ) : void  {
-		//$out->addModules(['FFXIPackageHelper_LSBSearch']);
-		if ( $out->getTitle() == "Special:LSBSearch" ) $out->addModules(['FFXIPackageHelper_TabsController']);
+		//$out->addModules(['HXI_LSBSearch']);
+		if ( $out->getTitle() == "Special:LSBSearch" ) $out->addModules(['HXI_TabsController']);
 	}
 
 	function execute( $par ) {

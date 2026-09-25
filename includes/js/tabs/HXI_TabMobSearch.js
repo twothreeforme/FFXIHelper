@@ -1,21 +1,21 @@
-var API = require("./Equipsets/FFXIPackageHelper_ActionAPI.js");
-var Data = require("./Equipsets/FFXIPackageHelper_DataManager.js");
+var API = require("./Equipsets/HXI_ActionAPI.js");
+var Data = require("./Equipsets/HXI_DataManager.js");
 
-var ModalCombatSimMobSelect = require("./Equipsets/Modals/FFXIPackageHelper_ModalCombatSimMobSelect.js");
+var ModalCombatSimMobSelect = require("./Equipsets/Modals/HXI_ModalCombatSimMobSelect.js");
 
 
 let modalMobSelect = null;
 
 module.exports.setLinks = function (){
 
-    let mobName_enterKeySubmit = document.getElementById("FFXIPackageHelper_dynamiccontent_combatsim_mobsearch");
+    let mobName_enterKeySubmit = document.getElementById("HXI_dynamiccontent_combatsim_mobsearch");
     if ( mobName_enterKeySubmit ) mobName_enterKeySubmit.addEventListener("keypress", (e) =>  {
         if (e.key === "Enter") {
             submitMobSearchRequest();
         }
     });
 
-    let searchMobNameSubmit = document.getElementById("FFXIPackageHelper_dynamiccontent_searchForMobAndZone");
+    let searchMobNameSubmit = document.getElementById("HXI_dynamiccontent_searchForMobAndZone");
     if ( searchMobNameSubmit ) searchMobNameSubmit.addEventListener("click", function (e) {
         submitMobSearchRequest();
     });
@@ -30,9 +30,9 @@ function validMobSearchQuery(params){
 function getQueryParams(){
     return {
       action: "combatsim_mobsearch",
-      mobname: document.getElementById("FFXIPackageHelper_dynamiccontent_combatsim_mobsearch").value, 
-      zonename: document.getElementById("FFXIPackageHelper_dynamiccontent_selectMobZoneName").value,
-      moblevel: document.getElementById("FFXIPackageHelper_dynamiccontent_selectLvlMob").value,
+      mobname: document.getElementById("HXI_dynamiccontent_combatsim_mobsearch").value, 
+      zonename: document.getElementById("HXI_dynamiccontent_selectMobZoneName").value,
+      moblevel: document.getElementById("HXI_dynamiccontent_selectLvlMob").value,
     };
 }
 
@@ -40,22 +40,22 @@ function submitMobSearchRequest(){
   let params = getQueryParams();
 
   if( validMobSearchQuery(params) == false ){
-      //document.getElementById("FFXIPackageHelper_tabs_droprates_queryresult").innerHTML = "<i>*Please use the fields above to query a search.</i>";
+      //document.getElementById("HXI_tabs_droprates_queryresult").innerHTML = "<i>*Please use the fields above to query a search.</i>";
       mw.notify( 'Mob name or zone are required.', { autoHide: true,  type: 'error' } );
       return;
     }
 
-  let currentButton = document.getElementById("FFXIPackageHelper_dynamiccontent_searchForMobAndZone");
+  let currentButton = document.getElementById("HXI_dynamiccontent_searchForMobAndZone");
   currentButton.disabled = true;
-  document.getElementById("FFXIPackageHelper_tabs_combatsim_queryresult").innerHTML = "Loading query...";
+  document.getElementById("HXI_tabs_combatsim_queryresult").innerHTML = "Loading query...";
 
-  API.actionAPI(params, "combatsim_mobsearch", "FFXIPackageHelper_dynamiccontent_searchForMobAndZone", mobSearchRequestCallback);
+  API.actionAPI(params, "combatsim_mobsearch", "HXI_dynamiccontent_searchForMobAndZone", mobSearchRequestCallback);
 }
 
 function mobSearchRequestCallback(result){
     //console.log(result);
     if ( result['moblisttable'] ){
-        document.getElementById("FFXIPackageHelper_tabs_combatsim_queryresult").innerHTML = "";
+        document.getElementById("HXI_tabs_combatsim_queryresult").innerHTML = "";
         //updateMobAndZoneTable(result['moblisttable']);
         modalMobSelect = new ModalCombatSimMobSelect({ selectMobCallback: selectMob });
         modalMobSelect.open(result['moblisttable']);
@@ -71,9 +71,9 @@ function mobSearchRequestCallback(result){
 }
 
 function updateMobAndZoneTable(incomingMobAndZoneTable){
-  let combatSimTab = document.getElementById("FFXIPackageHelper_tabs_combatsim_queryresult");
+  let combatSimTab = document.getElementById("HXI_tabs_combatsim_queryresult");
   combatSimTab.innerHTML = incomingMobAndZoneTable;
-  //mw.hook( 'wikipage.content' ).fire($('#FFXIPackageHelper_tabs_combatsim_queryresult'));
+  //mw.hook( 'wikipage.content' ).fire($('#HXI_tabs_combatsim_queryresult'));
 }
 
 function selectMob(zone, mob, moblevel){

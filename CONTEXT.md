@@ -45,11 +45,14 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
   callers) — since deleted.
 
 ## Not done / open
-- `FFXIPH_ItemDescription` (`FFXIPH_Item.php`) — untouched, deferred by request.
 - `HXI_BaseStatCalculator` (abstract, shared modifier accumulator) exists; Mob and Character
   calculators extend it. No `HXI_StatCalculator` interface - their entry points differ.
-- Legacy-named PHP files were renamed to `HXI_*.php` (file names only; class names unchanged).
-  `FFXIPH_Item.php` / `FFXIPH_ItemDescription` still untouched (unused class).
+- All remaining `FFXIPH_` / `FFXIPackageHelper_` prefixes were renamed to `HXI_`: PHP/JS/CSS
+  file names, ResourceLoader module names, DOM ids and CSS classes, and `FFXIPH_ItemDescription`
+  -> `HXI_ItemDescription` (`HXI_ItemDescription.php`). Historical comments naming deleted
+  legacy classes (`FFXIPH_Character`, `FFXIPH_Mob`, `FFXIPH_MobUtils`, `FFXIPackageHelper_ItemDetails`)
+  were deliberately left. Any on-wiki CSS/JS (e.g. MediaWiki:Common.css) targeting the old
+  `FFXIPackageHelper_*` ids/classes must be updated to `HXI_*`.
 - **After any class rename in this project, clear MediaWiki's extension-registration cache /
   reset opcache** before assuming a resulting failure is a code bug — this already happened once
   (LSBSearch briefly broke, cache clear fixed it, not a code issue).
