@@ -54,8 +54,8 @@ class HXI_Equipsets  {
                         "<span class=\"HXI_gs_lvl\"><label for=\"HXI_equipsets_selectMLevel\">Lv</label>" . HXI_HTMLOptions::levelRange("HXI_equipsets_selectMLevel", $this->sharedLink['mlvl']) . "</span>" .
                     "</div>" .
                     "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_equipsets_selectSJob\">Sub</label>" .
-                        HXI_HTMLOptions::jobDropDown("HXI_equipsets_selectSJob", $this->sharedLink['sjob']) .
-                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_equipsets_selectSLevel\">Lv</label>" . HXI_HTMLOptions::subLevelRange("HXI_equipsets_selectSLevel", $this->sharedLink['slvl']) . $maxedSub . "</span>" .
+                        HXI_HTMLOptions::jobDropDown("HXI_equipsets_selectSJob", $this->sharedLink['sjob']) . $maxedSub .
+                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_equipsets_selectSLevel\">Lv</label>" . HXI_HTMLOptions::subLevelRange("HXI_equipsets_selectSLevel", $this->sharedLink['slvl']) . "</span>" .
                     "</div>" .
                 "</div>";
         return $html;
