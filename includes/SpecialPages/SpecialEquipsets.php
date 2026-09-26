@@ -72,7 +72,7 @@ class SpecialEquipsets extends SpecialPage {
 		
 		$tabMobs = new HXI_HTMLTabMobSearch();
 		$apiHelper = new HXI_APIHelper();
-        if ( $apiHelper->userIsAuth() == false ) $combatsimContent = "This page is restricted to administrators and senior-editors while under continued construction.</div>";
+        if ( $apiHelper->userIsAuth() == false ) $combatsimContent = "This page is restricted to administrators and senior-editors while under continued construction.";
 		else $combatsimContent = $tabMobs->searchForm();
 
 		$html = HXI_HTMLTableHelper::characterSelectedHeader($this->currentCharacter) .

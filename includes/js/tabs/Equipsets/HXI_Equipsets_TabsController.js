@@ -56,10 +56,12 @@ mw.hook('wikipage.content').add( function () {
 
   document.getElementById("initialHide").style.display = "block";
 
-  TabEquipsets.setLinks();
-  TabCharacters.setLinks();
-  TabCombatSim.setLinks();
-  TabImportLua.setLinks();
+  // One tab failing to initialise (e.g. Combat Sim elements missing for logged-out
+  // users) must not stop the others from loading.
+  for ( const [name, tab] of [ ["Gear Sets", TabEquipsets], ["Characters", TabCharacters], ["Combat Sim", TabCombatSim], ["Import Lua", TabImportLua] ] ) {
+    try { tab.setLinks(); }
+    catch (e) { console.error("Equipsets - Tab Controller: '" + name + "' failed to initialise", e); }
+  }
 
   initiallyLoaded = true;
   console.log("Equipsets - Tab Controller: initiallyLoaded");

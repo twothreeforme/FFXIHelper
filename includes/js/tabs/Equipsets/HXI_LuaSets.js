@@ -17,7 +17,7 @@ module.exports.adjustLuaSet = function (set) {
   }
   //console.log(ashitacast);
   luashitacast += "},</pre>";
-  ashitacast += "&lt;/set&gt;";
+  ashitacast += "&lt;/set&gt;</pre>";
 
   document.getElementById("HXI_Equipsets_showLuaSets").innerHTML = luashitacast + ashitacast;
 }
@@ -48,7 +48,7 @@ function AC_slotName(slot,item){
     case 0: return `\t&lt;main&gt;${item}&lt;/main&gt;`;
     case 1: return `\t&lt;sub&gt;${item}&lt;/sub&gt;`;
     case 2: return `\t&lt;range&gt;${item}&lt;/range&gt;`;
-    case 3: return  `\t&lt;ammo&gt;${item}&lt;/main&gt;`;
+    case 3: return  `\t&lt;ammo&gt;${item}&lt;/ammo&gt;`;
     case 4: return  `\t&lt;head&gt;${item}&lt;/head&gt;`;
     case 5: return  `\t&lt;neck&gt;${item}&lt;/neck&gt;`;
     case 6: return  `\t&lt;ear1&gt;${item}&lt;/ear1&gt;`;
