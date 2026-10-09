@@ -192,3 +192,34 @@ DROP TABLE IF EXISTS `dat_details`;
 source DAT_details.sql;
 \! echo dat_details done
 
+\! echo item_puppet
+DROP TABLE IF EXISTS `item_puppet`;
+source item_puppet.sql;
+\! echo item_puppet done
+
+\! echo item_puppet
+DROP TABLE IF EXISTS `item_puppet`;
+source item_puppet.sql;
+\! echo item_puppet done
+
+\! echo spell_list
+DROP TABLE IF EXISTS `spell_list`;
+source spell_list.sql;
+\! echo spell_list done
+
+\! echo blue_spell_list
+DROP TABLE IF EXISTS `blue_spell_list`;
+source blue_spell_list.sql;
+\! echo blue_spell_list done
+
+\! echo blue_spell_mods
+DROP TABLE IF EXISTS `blue_spell_mods`;
+source blue_spell_mods.sql;
+\! echo blue_spell_mods done
+
+\! echo blue_traits
+DROP TABLE IF EXISTS `blue_traits`;
+source blue_traits.sql;
+\! echo blue_traits done
+
+
