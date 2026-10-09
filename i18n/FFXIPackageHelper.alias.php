@@ -16,5 +16,7 @@ $specialPageAliases['en'] = [
 	'WeatherForecast' => [ 'WeatherForecast' ],
 	'DiggingWeatherForecast' => [ 'DiggingWeatherForecast' ],
 	'DiggingWeatherForecast_Retail' => [ 'DiggingWeatherForecast_Retail' ],
-	'Equipsets' => [ 'Equipsets' ]
+	'Equipsets' => [ 'Equipsets' ],
+	'AutomatonBuilder' => [ 'AutomatonBuilder' ],
+	'BLUBuilder' => [ 'BLUBuilder' ]
 ];

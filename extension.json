@@ -15,6 +15,8 @@
         "SpecialDiggingWeatherForecast_Retail": "includes/WeatherForecast/SpecialDiggingWeatherForecast_Retail.php",
         "ZoneForecast": "includes/WeatherForecast/HXI_ZoneForecast.php",
         "SpecialEquipsets": "includes/SpecialPages/SpecialEquipsets.php",
+        "SpecialAutomatonBuilder": "includes/SpecialPages/SpecialAutomatonBuilder.php",
+        "SpecialBLUBuilder": "includes/SpecialPages/SpecialBLUBuilder.php",
 
         "HXI_Mob": "includes/Models/HXI_Mob.php",
         "HXI_BaseStatCalculator": "includes/Models/HXI_BaseStatCalculator.php",
@@ -34,12 +36,24 @@
         "HXI_EquipmentSet": "includes/Models/HXI_EquipmentSet.php",
         "HXI_Skill": "includes/Models/HXI_Skill.php",
         "HXI_MobType": "includes/Models/HXI_MobType.php",
+        "HXI_AutomatonElement": "includes/Models/HXI_AutomatonElement.php",
+        "HXI_AutomatonHead": "includes/Models/HXI_AutomatonHead.php",
+        "HXI_AutomatonFrame": "includes/Models/HXI_AutomatonFrame.php",
+        "HXI_PuppetItem": "includes/Models/HXI_PuppetItem.php",
+        "HXI_Automaton": "includes/Models/HXI_Automaton.php",
+        "HXI_AutomatonInputs": "includes/Models/HXI_AutomatonInputs.php",
+        "HXI_MagicElement": "includes/Models/HXI_MagicElement.php",
+        "HXI_BLUTraitCategory": "includes/Models/HXI_BLUTraitCategory.php",
+        "HXI_BLUSpell": "includes/Models/HXI_BLUSpell.php",
+        "HXI_BLUBuild": "includes/Models/HXI_BLUBuild.php",
+        "HXI_BLUBuilderInputs": "includes/Models/HXI_BLUBuilderInputs.php",
 
         "APIModuleDropRateSearch" : "includes/APIModules/APIModuleDropRateSearch.php",
         "APIModuleRecipeSearch" : "includes/APIModules/APIModuleRecipeSearch.php",
         "APIModuleEquipmentSearch" : "includes/APIModules/APIModuleEquipmentSearch.php",
         "APIModuleEquipsets" : "includes/APIModules/APIModuleEquipsets.php",
         "APIModuleFishingSearch" : "includes/APIModules/APIModuleFishingSearch.php",
+        "APIModuleBLUBuilder" : "includes/APIModules/APIModuleBLUBuilder.php",
 
         "HXI_SkillGrades": "includes/helpers/data/HXI_SkillGrades.php",
         "HXI_MathHelper": "includes/helpers/data/HXI_MathHelper.php",
@@ -48,6 +62,12 @@
         "HXI_EquipmentParser": "includes/helpers/data/HXI_EquipmentParser.php",
         "HXI_Variables": "includes/helpers/data/HXI_Variables.php",
         "HXI_ModDictionary": "includes/helpers/data/HXI_ModDictionary.php",
+        "HXI_AutomatonData": "includes/helpers/data/HXI_AutomatonData.php",
+        "HXI_AutomatonAttachmentMods": "includes/helpers/data/HXI_AutomatonAttachmentMods.php",
+        "HXI_AutomatonFrameData": "includes/helpers/data/HXI_AutomatonFrameData.php",
+        "HXI_HTMLTabAutomaton": "includes/tabs/HXI_HTMLTabAutomaton.php",
+        "HXI_BLUBuilderData": "includes/helpers/data/HXI_BLUBuilderData.php",
+        "HXI_HTMLTabBLUBuilder": "includes/tabs/HXI_HTMLTabBLUBuilder.php",
         "HXI_ItemDetails": "includes/helpers/data/HXI_ItemDetails.php",
         "HXI_HTMLTableHelper": "includes/helpers/HXI_HTMLTableHelper.php",
         "HXI_HTMLTabFishingSearch": "includes/tabs/HXI_HTMLTabFishingSearch.php",
@@ -81,7 +101,9 @@
         "WeatherForecast": "SpecialWeatherForecast",
         "DiggingWeatherForecast": "SpecialDiggingWeatherForecast",
         "DiggingWeatherForecast_Retail": "SpecialDiggingWeatherForecast_Retail",
-        "Equipsets": "SpecialEquipsets"
+        "Equipsets": "SpecialEquipsets",
+        "AutomatonBuilder": "SpecialAutomatonBuilder",
+        "BLUBuilder": "SpecialBLUBuilder"
     },
     "MessagesDirs": {
 		"FFXIPackageHelper": [
@@ -91,7 +113,9 @@
 	"ExtensionMessagesFiles": {
 		"LSBSearchAlias": "i18n/FFXIPackageHelper.alias.php",
 		"WeatherForecastAlias": "i18n/FFXIPackageHelper.alias.php",
-        "EquipsetsAlias": "i18n/FFXIPackageHelper.alias.php"
+        "EquipsetsAlias": "i18n/FFXIPackageHelper.alias.php",
+        "AutomatonBuilderAlias": "i18n/FFXIPackageHelper.alias.php",
+        "BLUBuilderAlias": "i18n/FFXIPackageHelper.alias.php"
 	},
     "Hooks": {
         "BeforePageDisplay": [
@@ -99,7 +123,9 @@
             "SpecialWeatherForecast::onBeforePageDisplay",
             "SpecialDiggingWeatherForecast::onBeforePageDisplay",
             "SpecialDiggingWeatherForecast_Retail::onBeforePageDisplay",
-            "SpecialEquipsets::onBeforePageDisplay"
+            "SpecialEquipsets::onBeforePageDisplay",
+            "SpecialAutomatonBuilder::onBeforePageDisplay",
+            "SpecialBLUBuilder::onBeforePageDisplay"
         ],
         "ParserFirstCallInit": [
             "ZoneForecast::onParserInit",
@@ -175,6 +201,38 @@
                 "resources/styles/tabs.css",
                 "resources/styles/hint.css"
 			]
+		},
+        "HXI_AutomatonBuilder" : {
+			"localBasePath": "",
+            "remoteExtPath": "LSBSearch",
+			"packageFiles": [
+                "includes/js/tabs/Automaton/HXI_AutomatonController.js",
+                "includes/js/tabs/Automaton/HXI_TabAutomaton.js",
+                "includes/js/tabs/Automaton/HXI_AutomatonModel.js",
+                "includes/js/tabs/Automaton/HXI_AutomatonStats.js"
+			],
+			"styles": [
+                "resources/styles/HXI_Automaton.css"
+			],
+            "dependencies": [
+                "mediawiki.notification"
+            ]
+		},
+        "HXI_BLUBuilder" : {
+			"localBasePath": "",
+            "remoteExtPath": "LSBSearch",
+			"packageFiles": [
+                "includes/js/tabs/BLUBuilder/HXI_BLUBuilderController.js",
+                "includes/js/tabs/BLUBuilder/HXI_TabBLUBuilder.js",
+                "includes/js/tabs/BLUBuilder/HXI_BLUBuilderModel.js"
+			],
+			"styles": [
+                "resources/styles/HXI_BLUBuilder.css"
+			],
+            "dependencies": [
+                "mediawiki.api",
+                "mediawiki.notification"
+            ]
 		}
 	},
     "APIModules": {
@@ -234,6 +292,9 @@
 		},
         "importlua_commit": {
 			"class": "APIModuleEquipsets"
+		},
+        "blubuilder_stats": {
+			"class": "APIModuleBLUBuilder"
 		}
 	},
     "manifest_version": 2,

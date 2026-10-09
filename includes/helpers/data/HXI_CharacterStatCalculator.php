@@ -64,8 +64,12 @@ class HXI_CharacterStatCalculator extends HXI_BaseStatCalculator {
     /**
      * @param array<int, ?HXI_Item> $e equipped items keyed by HXI_EquipSlot value (0-15),
      * e.g. from HXI_EquipmentParser::getItemObjects()
+     * @param array<int,int> $extraTraits modid => value of traits from outside the job tables (blue magic traits,
+     *                                    HXI_BLUBuild::blueTraits()). Like LSB blueutils::CalculateTraits, a trait
+     *                                    never stacks with the same trait from the jobs: the higher value wins.
+     * @param array<int,int> $extraMods   modid => value added like gear (set blue magic stat bonuses)
      */
-    public function __construct($race, $mlvl, $slvl, $mjob, $sjob, $merits, $e) {
+    public function __construct($race, $mlvl, $slvl, $mjob, $sjob, $merits, $e, array $extraTraits = [], array $extraMods = []) {
 
 
 
@@ -80,7 +84,11 @@ class HXI_CharacterStatCalculator extends HXI_BaseStatCalculator {
         // Pull traits from SQL
         $traits = $this->getTraits( $mlvl, $slvl, $mjob, $sjob );
         //$traits = HXI_StatsUtils::getTraits( $mlvl, $slvl, $mjob, $sjob );
+        foreach ( $extraTraits as $modId => $value ) {
+            if ( !isset($traits[$modId]) || $traits[$modId] < $value ) $traits[$modId] = $value;
+        }
         $this->applyToModifiers($traits);
+        $this->applyToModifiers($extraMods);
 
         // Pull equipment from SQL
         if ( $e != null){
@@ -506,9 +514,9 @@ class HXI_CharacterStatCalculator extends HXI_BaseStatCalculator {
 
     private function setStatsWithMods(){
 
-        $this->HP += $this->modifiers["HP"];
+        $this->HP += $this->modifiers["BASE_HP"] + $this->modifiers["HP"];
 
-        $this->MP += $this->modifiers["MP"];
+        $this->MP += $this->modifiers["BASE_MP"] + $this->modifiers["MP"];
 
         $this->STR += $this->baseSTR + $this->modifiers["STR"];
         $this->DEX += $this->baseDEX + $this->modifiers["DEX"];

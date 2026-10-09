@@ -1,0 +1,894 @@
+/*
+ * BLU Builder - FFXI menu-window look (same palette as the Gear Sets tab and the Automaton Builder).
+ *
+ * Layout (mobile first):
+ *   phone   (<700px)   : blue mage -> set spells -> blue magic -> traits -> stats -> abilities -> details, one column
+ *   tablet  (700-1399px, incl. laptops once the wiki sidebar takes its share):
+ *                        blue mage | set spells, blue magic | traits, blue magic | stats, details | abilities
+ *   desktop (>=1400px) : 3 independent columns (.HXI_blu_col): blue mage+set+abilities | blue magic+details | traits+stats
+ * Below 1400px the .HXI_blu_col wrappers are display:contents, so their windows are placed by grid areas.
+ *
+ * Everything is scoped under .HXI_blu so it can sit inside Equipsets next to .HXI_gs / .HXI_ab without leaking.
+ */
+
+.HXI_blu {
+    --blu-top: #4a5170;
+    --blu-mid: #363c56;
+    --blu-bot: #262b3d;
+    --blu-edge: #c9d0c8;
+    --blu-gold: #ecdc9a;
+    --blu-text: #f4f5ee;
+    --blu-muted: #ccd2c8;
+    --blu-well: rgba(12, 14, 22, 0.42);
+    --blu-line: rgba(201, 208, 200, 0.3);
+    --blu-good: #a6f5a0;
+    --blu-neg: #ff6f6f;
+    --blu-over: #ff5a4f;
+    --blu-mp: #b9d8f2;
+    --blu-blue: #6fb6ff; /* "set" marks - Blue Mage */
+
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 10px 0 0;
+    font-size: 15px;
+}
+
+.HXI_blu *,
+.HXI_blu *::before,
+.HXI_blu *::after {
+    box-sizing: border-box;
+}
+
+/* ---------- Page layout ---------- */
+
+.HXI_blu_layout {
+    display: grid;
+    gap: 14px;
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+        "inputs"
+        "set"
+        "spells"
+        "traits"
+        "stats"
+        "abilities"
+        "details";
+}
+
+.HXI_blu_col { display: contents; }
+
+.HXI_blu_inputs { grid-area: inputs; min-width: 0; }
+.HXI_blu_set { grid-area: set; min-width: 0; }
+.HXI_blu_spells { grid-area: spells; min-width: 0; }
+.HXI_blu_traits { grid-area: traits; min-width: 0; }
+.HXI_blu_stats { grid-area: stats; min-width: 0; }
+.HXI_blu_abilities { grid-area: abilities; min-width: 0; }
+.HXI_blu_details { grid-area: details; min-width: 0; }
+
+@media (min-width: 700px) {
+    .HXI_blu_layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "inputs set"
+            "spells set"
+            "spells traits"
+            "spells stats"
+            "details abilities";
+    }
+}
+
+@media (min-width: 1400px) {
+    .HXI_blu_layout {
+        grid-template-columns: minmax(320px, 380px) minmax(360px, 1fr) minmax(300px, 380px);
+        grid-template-areas: none;
+    }
+
+    /* each column stacks its own windows, so a tall window never stretches its neighbours */
+    .HXI_blu_col {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 0;
+    }
+}
+
+.HXI_blu .HXI_blu_note {
+    margin: 6px 0;
+    font-size: 13px;
+    color: var(--blu-muted);
+}
+
+.HXI_blu .HXI_blu_note[hidden] { display: none; }
+
+/* ---------- FFXI window ---------- */
+
+.HXI_blu .HXI_win {
+    margin: 0;
+    padding: 0 0 12px;
+    color: var(--blu-text);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.65);
+    background: linear-gradient(180deg, var(--blu-top) 0%, var(--blu-mid) 42%, var(--blu-bot) 100%);
+    border: 2px solid var(--blu-edge);
+    border-radius: 10px;
+    box-shadow:
+        0 0 0 1px #12141c,
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        inset 0 0 18px rgba(0, 0, 0, 0.4);
+}
+
+.HXI_blu .HXI_win > :not(.HXI_win_title) {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.HXI_blu .HXI_win_title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 0 0 10px;
+    padding: 7px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blu-gold);
+    border-bottom: 1px solid var(--blu-line);
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
+}
+
+.HXI_blu .HXI_blu_subtitle {
+    margin-top: 12px;
+    margin-bottom: 6px;
+    padding: 0;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blu-gold);
+    border: 0;
+}
+
+.HXI_blu .HXI_blu_count {
+    font-variant-numeric: tabular-nums;
+    color: var(--blu-text);
+    letter-spacing: 0.02em;
+}
+
+.HXI_blu button:focus-visible,
+.HXI_blu select:focus-visible,
+.HXI_blu input:focus-visible {
+    outline: 2px solid var(--blu-gold);
+    outline-offset: 2px;
+}
+
+.HXI_blu .HXI_blu_elIcon { display: block; width: 16px; height: 16px; flex: none; }
+
+.HXI_blu .HXI_blu_iconMissing {
+    background: linear-gradient(135deg, #6b7280, #3f4451);
+    border: 1px solid var(--blu-line);
+    border-radius: 50%;
+}
+
+/* collapsible window (<details>), same as Gear Sets */
+.HXI_blu summary.HXI_win_title {
+    min-height: 40px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.HXI_blu summary.HXI_win_title::-webkit-details-marker { display: none; }
+
+.HXI_blu summary.HXI_win_title::after {
+    content: "\25B8";
+    font-size: 14px;
+    transition: transform 0.15s ease;
+}
+
+.HXI_blu details[open] > summary.HXI_win_title::after { transform: rotate(90deg); }
+.HXI_blu details:not([open]) { padding-bottom: 0; }
+.HXI_blu details:not([open]) > summary.HXI_win_title { margin-bottom: 0; border-bottom: 0; border-radius: 8px; }
+
+/* ---------- Blue Mage inputs ---------- */
+
+/* Race / job / level rows: the Equipsets controls (HXI_HTMLOptions dropdowns), styled as in HXI_Equipsets_GearSets.css */
+.HXI_blu .HXI_gs_jobs { margin: 0 0 4px; padding: 0; }
+
+.HXI_blu .HXI_gs_jobRow {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px 10px;
+    margin: 0 0 8px;
+}
+
+.HXI_blu .HXI_gs_jobLabel {
+    flex: 0 0 44px;
+    font-weight: 700;
+    color: var(--blu-gold);
+}
+
+.HXI_blu .HXI_gs_lvl {
+    flex: 0 0 auto;
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--blu-muted);
+}
+
+.HXI_blu select.HXI_dynamiccontent_customDropDown,
+.HXI_blu select.HXI_blu_select {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 40px;
+    margin: 0;
+    padding: 0 8px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #1c2030;
+    border: 1px solid #8d968f;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+}
+
+.HXI_blu .HXI_gs_lvl select.HXI_dynamiccontent_customDropDown { flex: 0 0 auto; width: 76px; }
+.HXI_blu .HXI_gs_jobRow > select.HXI_dynamiccontent_customDropDown { min-width: 72px; }
+.HXI_blu select option { background-color: #1c2030; color: #fff; }
+
+.HXI_blu .HXI_gs_max {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.HXI_blu .HXI_gs_max input { width: 20px; height: 20px; margin: 0; accent-color: var(--blu-gold); }
+
+.HXI_blu table.HXI_blu_inputTable {
+    width: calc(100% - 24px);
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 14px;
+    border-collapse: collapse;
+    background: var(--blu-well);
+    border: 1px solid var(--blu-line);
+}
+
+.HXI_blu .HXI_blu_inputTable th,
+.HXI_blu .HXI_blu_inputTable td {
+    padding: 5px 8px;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.HXI_blu .HXI_blu_inputTable thead th {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--blu-gold);
+    border-bottom: 1px solid rgba(201, 208, 200, 0.12);
+}
+
+.HXI_blu .HXI_blu_inputTable thead .HXI_blu_count { float: right; text-transform: none; }
+.HXI_blu .HXI_blu_inputTable tbody th { font-weight: 600; }
+.HXI_blu .HXI_blu_inputTable td:last-child { width: 1%; white-space: nowrap; }
+.HXI_blu .HXI_blu_inputTable select.HXI_dynamiccontent_customDropDown { width: 76px; }
+
+/* merits that don't apply (not BLU main Lv75): values kept, shown dimmed */
+.HXI_blu .HXI_blu_inactive tbody th,
+.HXI_blu .HXI_blu_inactive .HXI_blu_hint { color: var(--blu-muted); opacity: 0.75; }
+
+.HXI_blu .HXI_blu_hint {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--blu-muted);
+}
+
+/* ---------- Set spells ---------- */
+
+.HXI_blu .HXI_blu_points {
+    padding: 8px 10px;
+    background: var(--blu-well);
+    border: 1px solid var(--blu-line);
+    border-radius: 8px;
+}
+
+.HXI_blu .HXI_blu_meterHead {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.HXI_blu .HXI_blu_meterLabel { font-weight: 700; color: var(--blu-gold); }
+.HXI_blu .HXI_blu_meterNum { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.HXI_blu .HXI_blu_meter {
+    display: block;
+    height: 12px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 6px;
+}
+
+.HXI_blu .HXI_blu_meterFill {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #4f8fd6, var(--blu-blue));
+    transition: width 0.15s ease;
+}
+
+.HXI_blu .HXI_blu_warning {
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #fff;
+    background: rgba(160, 30, 24, 0.55);
+    border: 1px solid var(--blu-over);
+    border-radius: 6px;
+}
+
+.HXI_blu .HXI_blu_warning[hidden] { display: none; }
+
+.HXI_blu ol.HXI_blu_slots {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    padding: 6px;
+    list-style: none;
+    background: var(--blu-well);
+    border: 1px solid var(--blu-line);
+    border-radius: 8px;
+}
+
+@media (min-width: 520px) and (max-width: 699px) {
+    .HXI_blu ol.HXI_blu_slots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.HXI_blu .HXI_blu_slot {
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+    min-height: 36px;
+    margin: 0;
+    background: radial-gradient(circle at 50% 30%, #4f5754 0%, #2f3534 85%);
+    border: 1px solid #7f8a83;
+    border-radius: 6px;
+}
+
+.HXI_blu .HXI_blu_slotEmpty {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-style: dashed;
+    border-color: var(--blu-line);
+}
+
+.HXI_blu .HXI_blu_slotBad {
+    border-color: var(--blu-over);
+    box-shadow: 0 0 0 1px rgba(255, 90, 79, 0.6), inset 0 0 10px rgba(255, 60, 50, 0.4);
+}
+
+.HXI_blu .HXI_blu_slotMain {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    margin: 0;
+    padding: 4px 6px;
+    font: inherit;
+    font-size: 14px;
+    text-align: left;
+    color: var(--blu-text);
+    text-shadow: inherit;
+    cursor: pointer;
+    background: none;
+    border: 0;
+}
+
+.HXI_blu .HXI_blu_slotNum {
+    flex: none;
+    width: 20px;
+    font-size: 11px;
+    text-align: right;
+    color: var(--blu-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.HXI_blu .HXI_blu_slotText {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.HXI_blu .HXI_blu_slotName,
+.HXI_blu .HXI_blu_slotTrait {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.HXI_blu .HXI_blu_slotName { font-weight: 600; }
+.HXI_blu .HXI_blu_slotTrait { font-size: 11px; color: var(--blu-muted); }
+
+.HXI_blu .HXI_blu_remove {
+    flex: none;
+    width: 36px;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--blu-gold);
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.25);
+    border: 0;
+    border-left: 1px solid var(--blu-line);
+    border-radius: 0 5px 5px 0;
+}
+
+.HXI_blu .HXI_blu_selected { border-color: var(--blu-gold); box-shadow: 0 0 0 1px var(--blu-gold); }
+
+/* set point badge */
+.HXI_blu .HXI_blu_pts {
+    flex: none;
+    min-width: 22px;
+    padding: 0 5px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    color: var(--blu-blue);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--blu-blue);
+    border-radius: 9px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Horizon change marker */
+.HXI_blu .HXI_blu_hz {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 0 4px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0.04em;
+    vertical-align: 1px;
+    color: #2a2000;
+    text-shadow: none;
+    cursor: help;
+    background: var(--blu-gold);
+    border-radius: 3px;
+}
+
+.HXI_blu .HXI_blu_tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 0 5px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 15px;
+    vertical-align: 1px;
+    color: var(--blu-muted);
+    border: 1px solid var(--blu-line);
+    border-radius: 3px;
+}
+
+/* ---------- Buttons ---------- */
+
+.HXI_blu .HXI_blu_actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.HXI_blu .HXI_blu_btn {
+    display: inline-flex;
+    flex: 1 1 140px;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    margin: 0;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blu-text);
+    cursor: pointer;
+    background: linear-gradient(180deg, #5b6386, #363c56);
+    border: 1px solid var(--blu-edge);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: filter 0.12s ease, transform 0.05s ease;
+}
+
+.HXI_blu .HXI_blu_btn:hover { filter: brightness(1.15); }
+.HXI_blu .HXI_blu_btn:active { transform: translateY(1px); }
+
+.HXI_blu .HXI_blu_btnPrimary {
+    color: #2a2000;
+    text-shadow: none;
+    background: linear-gradient(180deg, #f4e6a6, #b9963a);
+    border-color: #f7edc4;
+}
+
+/* ---------- Blue magic list ---------- */
+
+.HXI_blu .HXI_blu_tools { display: grid; gap: 8px; }
+
+.HXI_blu input.HXI_blu_search {
+    box-sizing: border-box; /* the skin sets content-box on search inputs, which beats the .HXI_blu * reset */
+    width: 100%;
+    height: 42px;
+    margin: 0;
+    padding: 0 12px;
+    font-size: 16px; /* >=16px stops iOS from zooming the page on focus */
+    color: #fff;
+    background: #1c2030;
+    border: 1px solid #8d968f;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.HXI_blu .HXI_blu_toolRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+}
+
+.HXI_blu .HXI_blu_toolRow select.HXI_blu_select { flex: 1 1 180px; }
+
+.HXI_blu .HXI_blu_check {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+    color: var(--blu-muted);
+    cursor: pointer;
+}
+
+.HXI_blu .HXI_blu_check input { width: 18px; height: 18px; margin: 0; accent-color: var(--blu-gold); }
+
+.HXI_blu .HXI_blu_spellList {
+    max-height: min(70vh, 720px);
+    margin-top: 10px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--blu-well);
+    border: 1px solid var(--blu-line);
+    border-radius: 8px;
+}
+
+.HXI_blu .HXI_blu_spell {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid rgba(201, 208, 200, 0.12);
+}
+
+.HXI_blu .HXI_blu_spell.HXI_blu_selected { box-shadow: inset 3px 0 0 var(--blu-gold); border-color: rgba(201, 208, 200, 0.12); }
+.HXI_blu .HXI_blu_spellSet { background: rgba(111, 182, 255, 0.14); }
+
+.HXI_blu .HXI_blu_spellMain {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    margin: 0;
+    padding: 7px 8px;
+    font: inherit;
+    text-align: left;
+    color: var(--blu-text);
+    text-shadow: inherit;
+    cursor: pointer;
+    background: none;
+    border: 0;
+}
+
+.HXI_blu .HXI_blu_spellMain:hover { background: rgba(255, 255, 255, 0.08); }
+
+.HXI_blu .HXI_blu_spellNo .HXI_blu_spellMain { opacity: 0.55; }
+.HXI_blu .HXI_blu_spellNo .HXI_blu_spellSub { color: #ffb3ad; }
+
+.HXI_blu .HXI_blu_lv {
+    flex: none;
+    width: 26px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: right;
+    color: var(--blu-gold);
+    font-variant-numeric: tabular-nums;
+}
+
+.HXI_blu .HXI_blu_lvLocked { color: var(--blu-muted); }
+
+.HXI_blu .HXI_blu_spellText {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.HXI_blu .HXI_blu_spellName { font-weight: 600; overflow-wrap: anywhere; }
+
+.HXI_blu .HXI_blu_spellSub {
+    overflow: hidden;
+    font-size: 12px;
+    color: var(--blu-muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.HXI_blu .HXI_blu_mark {
+    flex: none;
+    width: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--blu-muted);
+}
+
+.HXI_blu .HXI_blu_spellSet .HXI_blu_mark { color: var(--blu-blue); }
+
+.HXI_blu .HXI_blu_info {
+    flex: none;
+    width: 40px;
+    margin: 0;
+    padding: 0;
+    font: italic 700 14px/1 Georgia, serif;
+    color: var(--blu-gold);
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.2);
+    border: 0;
+    border-left: 1px solid rgba(201, 208, 200, 0.12);
+}
+
+/* ---------- Traits ---------- */
+
+.HXI_blu .HXI_blu_trait {
+    margin-bottom: 6px;
+    padding: 6px 10px;
+    background: var(--blu-well);
+    border: 1px solid var(--blu-line);
+    border-radius: 6px;
+}
+
+.HXI_blu .HXI_blu_traitOn { border-color: rgba(166, 245, 160, 0.55); }
+
+.HXI_blu .HXI_blu_traitHead {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.HXI_blu .HXI_blu_traitName { min-width: 0; font-weight: 700; overflow-wrap: anywhere; }
+.HXI_blu .HXI_blu_traitPts { flex: none; font-size: 13px; font-variant-numeric: tabular-nums; color: var(--blu-muted); }
+
+.HXI_blu .HXI_blu_tierPips {
+    display: flex;
+    gap: 3px;
+    margin: 4px 0 2px;
+}
+
+.HXI_blu .HXI_blu_tierPip {
+    flex: 0 1 28px;
+    min-width: 8px;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 2px;
+}
+
+.HXI_blu .HXI_blu_tierOn { background: var(--blu-good); border-color: var(--blu-good); }
+
+.HXI_blu .HXI_blu_traitState { display: block; font-size: 12px; color: var(--blu-muted); }
+.HXI_blu .HXI_blu_good { color: var(--blu-good); }
+.HXI_blu .HXI_blu_muted { color: var(--blu-muted); font-style: italic; }
+.HXI_blu .HXI_blu_pending { cursor: help; }
+
+.HXI_blu .HXI_blu_flag {
+    font-style: normal;
+    color: var(--blu-gold);
+    cursor: help;
+}
+
+.HXI_blu ul.HXI_blu_fx,
+.HXI_blu ul.HXI_blu_abilities {
+    margin: 0 0 8px; /* the skin indents lists; these sit inside a body div, not directly in .HXI_win */
+    padding: 4px 10px;
+    list-style: none;
+    background: var(--blu-well);
+    border: 1px solid var(--blu-line);
+    border-radius: 6px;
+}
+
+.HXI_blu ul.HXI_blu_fx li {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(201, 208, 200, 0.12);
+}
+
+.HXI_blu ul.HXI_blu_fx li:last-child,
+.HXI_blu ul.HXI_blu_abilities li:last-child { border-bottom: 0; }
+
+.HXI_blu .HXI_blu_fxLabel { min-width: 0; overflow-wrap: anywhere; }
+.HXI_blu .HXI_blu_fxVal { flex: none; max-width: 60%; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--blu-good); }
+
+/* ---------- Stats ---------- */
+
+.HXI_blu #HXI_blu_statsBody { transition: opacity 0.15s ease; }
+.HXI_blu #HXI_blu_statsBody.HXI_blu_loading { opacity: 0.55; }
+
+.HXI_blu .HXI_blu_statGroup {
+    margin-bottom: 8px;
+    padding: 6px 10px;
+    background: var(--blu-well);
+    border: 1px solid var(--blu-line);
+    border-radius: 6px;
+}
+
+.HXI_blu .HXI_blu_vitals { display: flex; gap: 6px 24px; }
+.HXI_blu .HXI_blu_vitals .HXI_blu_stat { flex: 1 1 0; }
+.HXI_blu .HXI_blu_vitals .HXI_blu_statV { font-size: 18px; }
+.HXI_blu .HXI_blu_hp .HXI_blu_statV { color: var(--blu-good); }
+.HXI_blu .HXI_blu_mp .HXI_blu_statV { color: var(--blu-mp); }
+
+.HXI_blu .HXI_blu_stat {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+}
+
+.HXI_blu .HXI_blu_statL { font-weight: 700; color: var(--blu-gold); }
+.HXI_blu .HXI_blu_statV { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.HXI_blu .HXI_blu_attrs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 4px 16px;
+}
+
+.HXI_blu .HXI_blu_delta {
+    margin-left: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blu-good);
+    font-variant-numeric: tabular-nums;
+}
+
+.HXI_blu .HXI_blu_delta.HXI_blu_neg { color: var(--blu-neg); }
+.HXI_blu .HXI_blu_changed .HXI_blu_statL,
+.HXI_blu li.HXI_blu_changed .HXI_blu_fxLabel { color: var(--blu-blue); }
+
+/* ---------- Abilities ---------- */
+
+.HXI_blu ul.HXI_blu_abilities li {
+    margin: 0;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(201, 208, 200, 0.12);
+}
+
+.HXI_blu .HXI_blu_abilityHead {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.HXI_blu .HXI_blu_abilityName { min-width: 0; font-weight: 700; }
+.HXI_blu .HXI_blu_abilityState { flex: none; font-size: 13px; font-weight: 700; color: var(--blu-muted); }
+.HXI_blu .HXI_blu_abilitySub { display: block; font-size: 12px; color: var(--blu-muted); }
+.HXI_blu .HXI_blu_abilityMerit { display: block; font-size: 12px; color: var(--blu-good); }
+.HXI_blu .HXI_blu_locked .HXI_blu_abilityName { color: var(--blu-muted); }
+
+/* ---------- Details ---------- */
+
+.HXI_blu .HXI_blu_detailHead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.HXI_blu .HXI_blu_detailName {
+    min-width: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blu-gold);
+}
+
+.HXI_blu .HXI_blu_descr {
+    margin: 8px 0;
+    line-height: 1.45;
+}
+
+.HXI_blu .HXI_blu_descrPending { font-style: italic; color: var(--blu-muted); }
+
+.HXI_blu dl.HXI_blu_facts {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 3px 12px;
+    margin: 0;
+    padding: 6px 10px;
+    font-size: 13px;
+    background: var(--blu-well);
+    border: 1px solid var(--blu-line);
+    border-radius: 6px;
+}
+
+.HXI_blu .HXI_blu_facts dt { margin: 0; font-weight: 700; color: var(--blu-gold); }
+.HXI_blu .HXI_blu_facts dd { margin: 0; overflow-wrap: anywhere; }
+
+.HXI_blu .HXI_blu_hzNote {
+    margin: 8px 0 0;
+    padding: 6px 10px;
+    font-size: 13px;
+    line-height: 1.45;
+    background: rgba(236, 220, 154, 0.12);
+    border: 1px solid rgba(236, 220, 154, 0.5);
+    border-radius: 6px;
+}
+
+/* ---------- Small phones (job rows match the Gear Sets tab) ---------- */
+
+@media (max-width: 420px) {
+    .HXI_blu .HXI_gs_jobRow { gap: 6px; }
+    .HXI_blu .HXI_gs_jobLabel { flex-basis: 34px; }
+    .HXI_blu select.HXI_dynamiccontent_customDropDown { height: 36px; padding: 0 4px; font-size: 13px; }
+    .HXI_blu .HXI_gs_lvl { gap: 4px; }
+    .HXI_blu .HXI_gs_lvl select.HXI_dynamiccontent_customDropDown { width: 62px; }
+    .HXI_blu .HXI_gs_max { gap: 3px; font-size: 12px; }
+    .HXI_blu .HXI_gs_max input { width: 16px; height: 16px; }
+    .HXI_blu .HXI_blu_vitals { flex-direction: column; gap: 0; }
+}
+
+@media (max-width: 340px) {
+    .HXI_blu .HXI_gs_jobLabel { flex-basis: 30px; font-size: 12px; }
+    .HXI_blu .HXI_gs_lvl { font-size: 12px; }
+    .HXI_blu .HXI_gs_lvl select.HXI_dynamiccontent_customDropDown { width: 54px; }
+}
+
+/* ---------- Narrow phones ---------- */
+
+@media (max-width: 360px) {
+    .HXI_blu .HXI_win > :not(.HXI_win_title) { margin-left: 8px; margin-right: 8px; }
+    .HXI_blu table.HXI_blu_inputTable { width: calc(100% - 16px); }
+    .HXI_blu .HXI_blu_attrs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 10px; }
+    .HXI_blu .HXI_blu_spellMain { gap: 6px; padding: 7px 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .HXI_blu * { transition: none !important; scroll-behavior: auto !important; }
+}

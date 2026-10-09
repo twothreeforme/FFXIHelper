@@ -13,6 +13,11 @@ abstract class HXI_BaseStatCalculator {
     /**
      * Adds $modValue to the running total for $modlabel (a HXI_ModDictionary / mob mod name).
      */
+    /** Running total for one modifier (HXI_ModDictionary / mob mod name), 0 if never added. */
+    public function modifier( string $modlabel ): int {
+        return (int)( $this->modifiers[$modlabel] ?? 0 );
+    }
+
     protected function addMod($modlabel, $modValue){
         if ( !isset($this->modifiers[$modlabel]) ) $this->modifiers[$modlabel] = intval($modValue);
         else $this->modifiers[$modlabel] += intval($modValue);
