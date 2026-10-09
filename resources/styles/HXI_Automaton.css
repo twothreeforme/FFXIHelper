@@ -1,0 +1,936 @@
+/*
+ * Automaton Builder - FFXI menu-window look (same palette as the Gear Sets tab, HXI_Equipsets_GearSets.css).
+ *
+ * Layout (mobile first):
+ *   phone   (<700px)   : puppetmaster -> automaton -> attachments -> effects -> stats -> details, one column
+ *   tablet  (700-1399px, incl. laptops once the wiki sidebar takes its share): puppetmaster | automaton, attachments (full), effects | stats, details (full)
+ *   desktop (>=1400px) : 3 independent columns (.HXI_ab_col): puppetmaster+automaton+details | attachments+stats | effects
+ * Below 1400px the .HXI_ab_col wrappers are display:contents, so their windows are placed by grid areas.
+ *
+ * Everything is scoped under .HXI_ab so it can sit inside Equipsets next to .HXI_gs without leaking.
+ */
+
+.HXI_ab {
+    --ab-top: #4a5170;
+    --ab-mid: #363c56;
+    --ab-bot: #262b3d;
+    --ab-edge: #c9d0c8;
+    --ab-gold: #ecdc9a;
+    --ab-text: #f4f5ee;
+    --ab-muted: #ccd2c8;
+    --ab-well: rgba(12, 14, 22, 0.42);
+    --ab-line: rgba(201, 208, 200, 0.3);
+    --ab-neg: #ff6f6f;
+    --ab-over: #ff5a4f;
+
+    /* element colours (capacity pips, cost badges, filter chips) */
+    --ab-el0: #ff7a5c; /* Fire */
+    --ab-el1: #8fdcff; /* Ice */
+    --ab-el2: #7fe08d; /* Wind */
+    --ab-el3: #d9b56c; /* Earth */
+    --ab-el4: #c792ff; /* Thunder */
+    --ab-el5: #5fa8ff; /* Water */
+    --ab-el6: #fff2a8; /* Light */
+    --ab-el7: #a99bd0; /* Dark */
+
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 10px 0 0;
+    font-size: 15px;
+}
+
+.HXI_ab *,
+.HXI_ab *::before,
+.HXI_ab *::after {
+    box-sizing: border-box;
+}
+
+.HXI_ab .HXI_ab_el0 { --el: var(--ab-el0); }
+.HXI_ab .HXI_ab_el1 { --el: var(--ab-el1); }
+.HXI_ab .HXI_ab_el2 { --el: var(--ab-el2); }
+.HXI_ab .HXI_ab_el3 { --el: var(--ab-el3); }
+.HXI_ab .HXI_ab_el4 { --el: var(--ab-el4); }
+.HXI_ab .HXI_ab_el5 { --el: var(--ab-el5); }
+.HXI_ab .HXI_ab_el6 { --el: var(--ab-el6); }
+.HXI_ab .HXI_ab_el7 { --el: var(--ab-el7); }
+
+/* ---------- Page layout ---------- */
+
+.HXI_ab_layout {
+    display: grid;
+    gap: 14px;
+    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+        "inputs"
+        "build"
+        "attach"
+        "effects"
+        "stats"
+        "details";
+}
+
+.HXI_ab_col { display: contents; }
+
+.HXI_ab_inputs { grid-area: inputs; min-width: 0; }
+.HXI_ab_build { grid-area: build; min-width: 0; }
+.HXI_ab_attach { grid-area: attach; min-width: 0; }
+.HXI_ab_effects { grid-area: effects; min-width: 0; }
+.HXI_ab_stats { grid-area: stats; min-width: 0; }
+.HXI_ab_details { grid-area: details; min-width: 0; }
+
+@media (min-width: 700px) {
+    .HXI_ab_layout {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "inputs build"
+            "attach attach"
+            "effects stats"
+            "details details";
+    }
+}
+
+@media (min-width: 1400px) {
+    .HXI_ab_layout {
+        grid-template-columns: minmax(340px, 380px) minmax(380px, 1fr) minmax(280px, 360px);
+        grid-template-areas: none;
+    }
+
+    /* each column stacks its own windows, so a tall window never stretches its neighbours */
+    .HXI_ab_col {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 0;
+    }
+}
+
+.HXI_ab .HXI_ab_note {
+    margin: 6px 0;
+    font-size: 13px;
+    color: var(--ab-muted);
+}
+
+/* ---------- FFXI window ---------- */
+
+.HXI_ab .HXI_win {
+    margin: 0;
+    padding: 0 0 12px;
+    color: var(--ab-text);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.65);
+    background: linear-gradient(180deg, var(--ab-top) 0%, var(--ab-mid) 42%, var(--ab-bot) 100%);
+    border: 2px solid var(--ab-edge);
+    border-radius: 10px;
+    box-shadow:
+        0 0 0 1px #12141c,
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        inset 0 0 18px rgba(0, 0, 0, 0.4);
+}
+
+.HXI_ab .HXI_win > :not(.HXI_win_title) {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.HXI_ab .HXI_win_title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 0 0 10px;
+    padding: 7px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ab-gold);
+    border-bottom: 1px solid var(--ab-line);
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0));
+}
+
+.HXI_ab .HXI_ab_subtitle {
+    margin-top: 12px;
+    margin-bottom: 6px;
+    padding: 0;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ab-gold);
+    border: 0;
+}
+
+.HXI_ab .HXI_ab_count {
+    font-variant-numeric: tabular-nums;
+    color: var(--ab-text);
+    letter-spacing: 0.02em;
+}
+
+.HXI_ab button:focus-visible,
+.HXI_ab select:focus-visible,
+.HXI_ab input:focus-visible {
+    outline: 2px solid var(--ab-gold);
+    outline-offset: 2px;
+}
+
+.HXI_ab .HXI_ab_icon { display: block; width: 32px; height: 32px; flex: none; }
+.HXI_ab .HXI_ab_elIcon { display: block; width: 16px; height: 16px; flex: none; }
+
+.HXI_ab .HXI_ab_iconNone {
+    border: 1px dashed var(--ab-line);
+    border-radius: 4px;
+}
+
+.HXI_ab .HXI_ab_iconMissing {
+    background: linear-gradient(135deg, #6b7280, #3f4451);
+    border: 1px solid var(--ab-line);
+    border-radius: 4px;
+}
+
+/* collapsible window (<details>), same as Gear Sets */
+.HXI_ab summary.HXI_win_title {
+    min-height: 40px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.HXI_ab summary.HXI_win_title::-webkit-details-marker { display: none; }
+
+.HXI_ab summary.HXI_win_title::after {
+    content: "\25B8";
+    font-size: 14px;
+    transition: transform 0.15s ease;
+}
+
+.HXI_ab details[open] > summary.HXI_win_title::after { transform: rotate(90deg); }
+.HXI_ab details:not([open]) { padding-bottom: 0; }
+.HXI_ab details:not([open]) > summary.HXI_win_title { margin-bottom: 0; border-bottom: 0; border-radius: 8px; }
+
+/* ---------- Puppetmaster inputs ---------- */
+
+/* Job / level rows: the Equipsets controls (HXI_HTMLOptions dropdowns), styled as in HXI_Equipsets_GearSets.css */
+.HXI_ab .HXI_gs_jobs { margin: 0 0 4px; padding: 0; }
+
+.HXI_ab .HXI_gs_jobRow {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px 10px;
+    margin: 0 0 8px;
+}
+
+.HXI_ab .HXI_gs_jobLabel {
+    flex: 0 0 44px;
+    font-weight: 700;
+    color: var(--ab-gold);
+}
+
+.HXI_ab .HXI_gs_lvl {
+    flex: 0 0 auto;
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ab-muted);
+}
+
+.HXI_ab select.HXI_dynamiccontent_customDropDown {
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 40px;
+    margin: 0;
+    padding: 0 8px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #1c2030;
+    border: 1px solid #8d968f;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+}
+
+.HXI_ab .HXI_gs_lvl select.HXI_dynamiccontent_customDropDown { flex: 0 0 auto; width: 76px; }
+.HXI_ab .HXI_gs_jobRow > select.HXI_dynamiccontent_customDropDown { min-width: 72px; }
+.HXI_ab select.HXI_dynamiccontent_customDropDown option { background-color: #1c2030; color: #fff; }
+
+.HXI_ab .HXI_gs_max {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.HXI_ab .HXI_gs_max input { width: 20px; height: 20px; margin: 0; accent-color: var(--ab-gold); }
+
+.HXI_ab table.HXI_ab_inputTable {
+    width: calc(100% - 24px);
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 14px;
+    border-collapse: collapse;
+    background: var(--ab-well);
+    border: 1px solid var(--ab-line);
+}
+
+.HXI_ab .HXI_ab_inputTable th,
+.HXI_ab .HXI_ab_inputTable td {
+    padding: 5px 8px;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(201, 208, 200, 0.12);
+    text-align: left;
+    vertical-align: middle;
+}
+
+.HXI_ab .HXI_ab_inputTable thead th {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ab-gold);
+}
+
+.HXI_ab .HXI_ab_inputTable tbody th { font-weight: 600; }
+.HXI_ab .HXI_ab_inputTable td:last-child { width: 1%; white-space: nowrap; }
+.HXI_ab .HXI_ab_inputTable .HXI_ab_center { text-align: center; }
+.HXI_ab .HXI_ab_inputTable input[type="checkbox"] { width: 20px; height: 20px; margin: 0; accent-color: var(--ab-gold); }
+.HXI_ab .HXI_ab_inputTable select.HXI_dynamiccontent_customDropDown { width: 76px; }
+
+.HXI_ab input.HXI_ab_num {
+    box-sizing: border-box;
+    width: 76px;
+    height: 36px;
+    margin: 0;
+    padding: 0 8px;
+    font-size: 16px; /* >=16px stops iOS zooming on focus */
+    color: #fff;
+    background: #1c2030;
+    border: 1px solid #8d968f;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.HXI_ab input.HXI_ab_num::placeholder { color: var(--ab-muted); opacity: 0.8; }
+
+/* "At cap" ticked: the box is locked but its placeholder (the cap) is the value in use, so keep it readable */
+.HXI_ab input.HXI_ab_num:disabled { opacity: 0.75; cursor: not-allowed; }
+.HXI_ab input.HXI_ab_num:disabled::placeholder { color: var(--ab-text); opacity: 1; }
+
+.HXI_ab .HXI_ab_plusSign { margin-right: 4px; color: var(--ab-muted); }
+
+.HXI_ab .HXI_ab_hint {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--ab-muted);
+}
+
+.HXI_ab .HXI_ab_inputs .HXI_ab_note[hidden] { display: none; }
+
+/* ---------- Automaton stats ---------- */
+
+.HXI_ab .HXI_ab_statGroup {
+    margin-bottom: 8px;
+    padding: 6px 10px;
+    background: var(--ab-well);
+    border: 1px solid var(--ab-line);
+    border-radius: 6px;
+}
+
+.HXI_ab .HXI_ab_vitals { display: flex; gap: 6px 24px; }
+.HXI_ab .HXI_ab_vitals .HXI_ab_stat { flex: 1 1 0; }
+.HXI_ab .HXI_ab_vitals .HXI_ab_statV { font-size: 18px; }
+.HXI_ab .HXI_ab_hp .HXI_ab_statV { color: #a6f5a0; }
+.HXI_ab .HXI_ab_mp .HXI_ab_statV { color: #b9d8f2; }
+
+.HXI_ab .HXI_ab_stat {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+}
+
+.HXI_ab .HXI_ab_statL { font-weight: 700; color: var(--ab-gold); }
+.HXI_ab .HXI_ab_statV { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+.HXI_ab .HXI_ab_statBonus { font-size: 12px; color: #a6f5a0; }
+
+.HXI_ab .HXI_ab_attrs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 4px 16px;
+}
+
+.HXI_ab .HXI_ab_skillTable td:last-child { text-align: right; }
+.HXI_ab .HXI_ab_skillTable .HXI_ab_capped { color: #a6f5a0; }
+.HXI_ab .HXI_ab_skillTable .HXI_ab_noSkill { color: var(--ab-muted); }
+
+/* ---------- Head / frame ---------- */
+
+.HXI_ab .HXI_ab_parts {
+    display: grid;
+    gap: 8px;
+}
+
+.HXI_ab .HXI_ab_part {
+    display: grid;
+    grid-template-columns: 44px 52px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.HXI_ab .HXI_ab_partIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    background: radial-gradient(circle at 50% 30%, #5a635e 0%, #333938 80%);
+    border: 1px solid #7f8a83;
+    border-radius: 6px;
+}
+
+.HXI_ab .HXI_ab_partLabel {
+    font-weight: 700;
+    color: var(--ab-gold);
+}
+
+.HXI_ab select.HXI_ab_select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 40px;
+    margin: 0;
+    padding: 0 8px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #1c2030;
+    border: 1px solid #8d968f;
+    border-radius: 6px;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    text-shadow: none;
+}
+
+.HXI_ab select.HXI_ab_select option { background-color: #1c2030; color: #fff; }
+
+/* ---------- Capacity ---------- */
+
+.HXI_ab .HXI_ab_capacity {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 10px;
+    padding: 8px;
+    background: var(--ab-well);
+    border: 1px solid var(--ab-line);
+    border-radius: 8px;
+}
+
+.HXI_ab .HXI_ab_capRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.HXI_ab .HXI_ab_pips {
+    display: flex;
+    flex: 1 1 auto;
+    gap: 2px;
+    min-width: 0;
+}
+
+/* pips shrink (never wrap) so high-capacity builds stay on one line in narrow columns */
+.HXI_ab .HXI_ab_pip {
+    flex: 0 1 8px;
+    min-width: 3px;
+    height: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.HXI_ab .HXI_ab_pipUsed { background: var(--el); border-color: var(--el); }
+.HXI_ab .HXI_ab_pipOver { background: var(--ab-over); border-color: #ffd0cc; }
+
+.HXI_ab .HXI_ab_capNum {
+    flex: none;
+    min-width: 30px;
+    font-size: 13px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.HXI_ab .HXI_ab_capOver .HXI_ab_capNum { color: var(--ab-over); font-weight: 700; }
+
+/* ---------- Attachment slots ---------- */
+
+.HXI_ab .HXI_ab_warning {
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #fff;
+    background: rgba(160, 30, 24, 0.55);
+    border: 1px solid var(--ab-over);
+    border-radius: 6px;
+}
+
+.HXI_ab .HXI_ab_warning[hidden] { display: none; }
+
+.HXI_ab .HXI_ab_slots {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px;
+    background: var(--ab-well);
+    border: 1px solid var(--ab-line);
+    border-radius: 8px;
+}
+
+@media (min-width: 420px) {
+    .HXI_ab .HXI_ab_slots { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.HXI_ab .HXI_ab_slotWrap { position: relative; min-width: 0; }
+
+.HXI_ab .HXI_ab_slot {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3px;
+    width: 100%;
+    min-width: 0;
+    min-height: 92px;
+    margin: 0;
+    padding: 8px 4px 6px;
+    color: var(--ab-text);
+    font: inherit;
+    text-shadow: inherit;
+    cursor: pointer;
+    background: radial-gradient(circle at 50% 30%, #5a635e 0%, #333938 80%);
+    border: 1px solid #7f8a83;
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.65), inset 0 2px 6px rgba(0, 0, 0, 0.6);
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.HXI_ab .HXI_ab_slot:hover {
+    border-color: var(--ab-gold);
+    box-shadow: 0 0 0 2px rgba(245, 217, 139, 0.55), inset 0 0 0 1px rgba(0, 0, 0, 0.65);
+}
+
+.HXI_ab .HXI_ab_slotEmpty { justify-content: center; opacity: 0.75; }
+
+.HXI_ab .HXI_ab_plus {
+    font-size: 28px;
+    line-height: 1;
+    color: var(--ab-muted);
+}
+
+.HXI_ab .HXI_ab_slotOver {
+    border-color: var(--ab-over);
+    box-shadow: 0 0 0 2px rgba(255, 90, 79, 0.65), inset 0 0 12px rgba(255, 60, 50, 0.45);
+}
+
+.HXI_ab .HXI_ab_slotName {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 11px;
+    line-height: 1.2;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.HXI_ab .HXI_ab_info {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    padding: 0;
+    font: italic 700 13px/22px Georgia, serif;
+    color: var(--ab-gold);
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid var(--ab-line);
+    border-radius: 50%;
+}
+
+/* element cost badge */
+.HXI_ab .HXI_ab_cost {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 5px 0 2px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 18px;
+    color: var(--el);
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--el);
+    border-radius: 9px;
+    white-space: nowrap;
+}
+
+/* ---------- Buttons ---------- */
+
+.HXI_ab .HXI_ab_actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.HXI_ab .HXI_ab_btn {
+    display: inline-flex;
+    flex: 1 1 140px;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    margin: 0;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ab-text);
+    cursor: pointer;
+    background: linear-gradient(180deg, #5b6386, #363c56);
+    border: 1px solid var(--ab-edge);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: filter 0.12s ease, transform 0.05s ease;
+}
+
+.HXI_ab .HXI_ab_btn:hover { filter: brightness(1.15); }
+.HXI_ab .HXI_ab_btn:active { transform: translateY(1px); }
+.HXI_ab .HXI_ab_btn[hidden] { display: none; }
+
+.HXI_ab .HXI_ab_btnPrimary {
+    color: #2a2000;
+    text-shadow: none;
+    background: linear-gradient(180deg, #f4e6a6, #b9963a);
+    border-color: #f7edc4;
+}
+
+.HXI_ab .HXI_ab_link {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: var(--ab-gold);
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: 0;
+}
+
+/* ---------- Effects ---------- */
+
+.HXI_ab .HXI_ab_maneuvers {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.HXI_ab .HXI_ab_maneuver {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+    margin: 0;
+    font-size: 12px;
+    color: var(--ab-muted);
+}
+
+.HXI_ab .HXI_ab_boost {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--ab-el6);
+}
+
+.HXI_ab ul.HXI_ab_fx,
+.HXI_ab ul.HXI_ab_special {
+    margin-top: 0;
+    margin-bottom: 8px;
+    padding: 4px 10px;
+    list-style: none;
+    background: var(--ab-well);
+    border: 1px solid var(--ab-line);
+    border-radius: 6px;
+}
+
+.HXI_ab ul.HXI_ab_fx li,
+.HXI_ab ul.HXI_ab_special li {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(201, 208, 200, 0.12);
+}
+
+.HXI_ab ul.HXI_ab_fx li:last-child,
+.HXI_ab ul.HXI_ab_special li:last-child { border-bottom: 0; }
+
+.HXI_ab .HXI_ab_fxLabel { min-width: 0; overflow-wrap: anywhere; }
+.HXI_ab .HXI_ab_fxVal { flex: none; max-width: 60%; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; color: #a6f5a0; }
+.HXI_ab .HXI_ab_fxVal.HXI_ab_neg { color: #b9d8f2; }
+
+/* ---------- Details ---------- */
+
+.HXI_ab .HXI_ab_detailHead {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.HXI_ab .HXI_ab_detailName {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ab-gold);
+}
+
+.HXI_ab .HXI_ab_descr {
+    margin: 8px 0;
+    line-height: 1.45;
+    white-space: pre-line;
+}
+
+.HXI_ab .HXI_ab_descrPending { font-style: italic; color: var(--ab-muted); }
+
+.HXI_ab .HXI_ab_flag {
+    font-style: normal;
+    color: var(--ab-gold);
+    cursor: help;
+}
+
+.HXI_ab .HXI_ab_partCaps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.HXI_ab .HXI_ab_tableWrap {
+    max-width: 100%;
+    overflow-x: auto; /* the 5-column table scrolls inside itself, never the page */
+}
+
+.HXI_ab table.HXI_ab_table {
+    width: 100%;
+    margin: 0;
+    font-size: 13px;
+    border-collapse: collapse;
+    background: var(--ab-well);
+    border: 1px solid var(--ab-line);
+}
+
+.HXI_ab .HXI_ab_table th,
+.HXI_ab .HXI_ab_table td {
+    padding: 4px 6px;
+    text-align: center;
+    border: 1px solid rgba(201, 208, 200, 0.15);
+    font-variant-numeric: tabular-nums;
+    background: transparent;
+    color: inherit;
+}
+
+.HXI_ab .HXI_ab_table tbody th { text-align: left; font-weight: 600; }
+.HXI_ab .HXI_ab_table thead th { color: var(--ab-gold); }
+
+/* ---------- Picker dialog ---------- */
+
+.HXI_ab dialog.HXI_ab_picker {
+    width: min(560px, calc(100vw - 16px));
+    max-width: none;
+    max-height: calc(100dvh - 16px);
+    margin: auto;
+    padding: 0;
+    color: var(--ab-text);
+    background: transparent;
+    border: 0;
+    overflow: visible;
+}
+
+.HXI_ab dialog.HXI_ab_picker::backdrop { background: rgba(5, 6, 10, 0.7); }
+
+.HXI_ab .HXI_ab_picker > .HXI_win {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 16px);
+    padding-bottom: 10px;
+}
+
+.HXI_ab .HXI_ab_pickerHead { flex: none; }
+
+.HXI_ab .HXI_ab_close {
+    width: 36px;
+    height: 36px;
+    margin: -4px -6px -4px 0;
+    padding: 0;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--ab-gold);
+    cursor: pointer;
+    background: none;
+    border: 0;
+}
+
+.HXI_ab .HXI_ab_pickerTools { flex: none; display: grid; gap: 8px; }
+
+.HXI_ab input.HXI_ab_search {
+    box-sizing: border-box; /* the skin sets content-box on search inputs, which beats the .HXI_ab * reset */
+    width: 100%;
+    height: 42px;
+    margin: 0;
+    padding: 0 12px;
+    font-size: 16px; /* >=16px stops iOS from zooming the page on focus */
+    color: #fff;
+    background: #1c2030;
+    border: 1px solid #8d968f;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.HXI_ab .HXI_ab_filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.HXI_ab .HXI_ab_chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 34px;
+    margin: 0;
+    padding: 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ab-text);
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--el, var(--ab-line));
+    border-radius: 17px;
+}
+
+.HXI_ab .HXI_ab_chipOn {
+    background: rgba(236, 220, 154, 0.22);
+    border-color: var(--ab-gold);
+    box-shadow: 0 0 0 1px var(--ab-gold);
+}
+
+.HXI_ab .HXI_ab_fitsOnly {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+    color: var(--ab-muted);
+}
+
+.HXI_ab .HXI_ab_fitsOnly input { width: 18px; height: 18px; margin: 0; accent-color: var(--ab-gold); }
+
+.HXI_ab .HXI_ab_pickerList {
+    flex: 1 1 auto;
+    min-height: 120px;
+    margin-top: 10px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--ab-well);
+    border: 1px solid var(--ab-line);
+    border-radius: 8px;
+}
+
+.HXI_ab .HXI_ab_pick {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 0;
+    padding: 8px 10px;
+    font: inherit;
+    text-align: left;
+    color: var(--ab-text);
+    text-shadow: inherit;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid rgba(201, 208, 200, 0.12);
+}
+
+.HXI_ab .HXI_ab_pick:hover { background: rgba(255, 255, 255, 0.08); }
+
+.HXI_ab .HXI_ab_pickNo { opacity: 0.5; cursor: not-allowed; }
+.HXI_ab .HXI_ab_pickNo .HXI_ab_pickSub { color: #ffb3ad; }
+
+.HXI_ab .HXI_ab_pickText {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.HXI_ab .HXI_ab_pickName { font-weight: 600; }
+
+.HXI_ab .HXI_ab_pickSub {
+    overflow: hidden;
+    font-size: 12px;
+    color: var(--ab-muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.HXI_ab .HXI_ab_pickerFoot { flex: none; display: flex; margin-top: 10px; }
+
+/* ---------- Small phones (job rows match the Gear Sets tab) ---------- */
+
+@media (max-width: 420px) {
+    .HXI_ab .HXI_gs_jobRow { gap: 6px; }
+    .HXI_ab .HXI_gs_jobLabel { flex-basis: 34px; }
+    .HXI_ab select.HXI_dynamiccontent_customDropDown { height: 36px; padding: 0 4px; font-size: 13px; }
+    .HXI_ab .HXI_gs_lvl { gap: 4px; }
+    .HXI_ab .HXI_gs_lvl select.HXI_dynamiccontent_customDropDown { width: 62px; }
+    .HXI_ab .HXI_gs_max { gap: 3px; font-size: 12px; }
+    .HXI_ab .HXI_gs_max input { width: 16px; height: 16px; }
+    .HXI_ab .HXI_ab_vitals { flex-direction: column; gap: 0; }
+}
+
+@media (max-width: 340px) {
+    .HXI_ab .HXI_gs_jobLabel { flex-basis: 30px; font-size: 12px; }
+    .HXI_ab .HXI_gs_lvl { font-size: 12px; }
+    .HXI_ab .HXI_gs_lvl select.HXI_dynamiccontent_customDropDown { width: 54px; }
+}
+
+/* ---------- Narrow phones ---------- */
+
+@media (max-width: 360px) {
+    .HXI_ab .HXI_win > :not(.HXI_win_title) { margin-left: 8px; margin-right: 8px; }
+    .HXI_ab .HXI_ab_capacity { grid-template-columns: minmax(0, 1fr); }
+    .HXI_ab .HXI_ab_maneuvers { grid-template-columns: minmax(0, 1fr); }
+    .HXI_ab .HXI_ab_part { grid-template-columns: 44px minmax(0, 1fr); }
+    .HXI_ab .HXI_ab_partLabel { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .HXI_ab * { transition: none !important; scroll-behavior: auto !important; }
+}

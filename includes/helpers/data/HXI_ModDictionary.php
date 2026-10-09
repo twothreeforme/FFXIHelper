@@ -836,6 +836,8 @@ class HXI_ModDictionary {
         1077 => "STEP_TP_CONSUMED",
         1080 => "DAMAGE_LIMIT",
         1081 => "DAMAGE_LIMITP",
+        1095 => "BASE_HP",  // Max HP Boost traits; added to max HP before the HP mod (LSB battle_entity.cpp UpdateHealth)
+        1096 => "BASE_MP",  // Max MP Boost traits
     ];
 
     public static function getName(int $modId): string {

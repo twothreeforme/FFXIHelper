@@ -753,10 +753,17 @@ class DatabaseQueryWrapper {
         return ;
     }
 
+    /**
+     * Expansion tags whose traits don't exist on a 75-era server (SoA/RoV/Abyssea traits that LSB puts at
+     * Lv75 or below, e.g. WAR "max hp boost" SOA, "double attack" ROV). NULL/COP/TOAU/WOTG rows are kept.
+     */
+    private $traitsContent = "( traits.content_tag IS NULL OR traits.content_tag NOT IN ('SOA', 'ROV', 'ABYSSEA') )";
+
     public function getTraits( $mlvl, $slvl, $mjob, $sjob){
         $dbr = $this->openLSBSearchConnection();
         $query = [
             "( traits.job = '$mjob' AND traits.level <= '$mlvl') OR (traits.job = '$sjob' AND traits.level <= '$slvl')",
+            $this->traitsContent,
         ];
 
         return $dbr->newSelectQueryBuilder()
@@ -1142,11 +1149,171 @@ class DatabaseQueryWrapper {
         ->fetchResultSet();
     }
 
+    /**
+     * Every automaton head/frame/attachment (item_puppet), with its client display text.
+     * dat_details is LEFT JOINed so rows still come back while puppet items are missing from
+     * dat_details (displayName/descr are NULL until then - see CONTEXT.md).
+     */
+    public function getPuppetItems(){
+        $dbr = $this->openLSBSearchConnection();
+
+        return $dbr->newSelectQueryBuilder()
+        ->select( [ 'item_puppet.itemid',
+                    'item_puppet.name',
+                    'item_puppet.slot',
+                    'item_puppet.element',
+                    'dat_details.name AS displayName',
+                    'dat_details.descr',
+                    ] )
+        ->from( 'item_puppet' )
+        ->leftjoin( 'dat_details', null, 'dat_details.itemid=item_puppet.itemid' )
+        ->orderBy( 'item_puppet.itemid' )
+        ->fetchResultSet();
+    }
+
+    /**
+     * Gear that carries any of the given mods and is wearable by $jobMask at or below $maxLevel.
+     * Used to work out the highest gear bonus a player can actually reach (Automaton Builder input ceilings).
+     */
+    public function getItemsWithMods( array $modIds, int $maxLevel, int $jobMask ){
+        $dbr = $this->openLSBSearchConnection();
+
+        return $dbr->newSelectQueryBuilder()
+        ->select( [ 'item_mods.modId AS modid',
+                    'item_mods.value',
+                    'item_equipment.itemId AS itemid',
+                    'item_equipment.name',
+                    'item_equipment.level',
+                    'item_equipment.slot',
+                    'dat_details.longname',
+                    ] )
+        ->from( 'item_mods' )
+        ->join( 'item_equipment', null, 'item_equipment.itemId=item_mods.itemId' )
+        ->leftjoin( 'dat_details', null, 'dat_details.itemid=item_mods.itemId' )
+        ->where( [ 'item_mods.modId' => $modIds,
+                   'item_equipment.level <= ' . (int)$maxLevel,
+                   '(item_equipment.jobs & ' . (int)$jobMask . ') != 0',
+                   'item_mods.value > 0' ] )
+        ->fetchResultSet();
+    }
+
+    /**
+     * The whole skill_caps table (levels 0-99, ranks r0-r13) - small enough to send to the browser once.
+     * @return array level => [r0..r13]
+     */
+    public function getSkillCapsTable(){
+        $dbr = $this->openLSBSearchConnection();
+
+        $cols = [ 'level' ];
+        for ( $r = 0; $r <= 13; $r++ ) $cols[] = "r$r";
+
+        $rows = $dbr->newSelectQueryBuilder()
+        ->select( $cols )
+        ->from( 'skill_caps' )
+        ->orderBy( 'level' )
+        ->fetchResultSet();
+
+        $table = [];
+        foreach ( $rows as $row ) {
+            $ranks = [];
+            for ( $r = 0; $r <= 13; $r++ ) $ranks[] = (int)$row->{"r$r"};
+            $table[ (int)$row->level ] = $ranks;
+        }
+        return $table;
+    }
+
+    /**
+     * Every blue magic spell: spell_list (name, BLU level = byte 16 of `jobs`, element, MP, times) joined with
+     * blue_spell_list (set points, trait category/weight, skillchains). blue_spell_list has one row per monster
+     * skill the spell is learned from, so it is reduced to one row per spell first.
+     * All levels are returned - Horizon moves some post-75 spells down (HXI_BLUBuilderData::OVERRIDES).
+     */
+    public function getBlueSpells(){
+        $dbr = $this->openLSBSearchConnection();
+
+        return $dbr->newSelectQueryBuilder()
+        ->select( [ 'spell_list.spellid',
+                    'MIN(spell_list.name) AS name',
+                    'MIN(ORD(SUBSTRING(spell_list.jobs, 16, 1))) AS level',
+                    'MIN(spell_list.element) AS element',
+                    'MIN(spell_list.mpCost) AS mpCost',
+                    'MIN(spell_list.castTime) AS castTime',
+                    'MIN(spell_list.recastTime) AS recastTime',
+                    'MIN(blue_spell_list.set_points) AS set_points',
+                    'MIN(blue_spell_list.trait_category) AS trait_category',
+                    'MIN(blue_spell_list.trait_category_weight) AS trait_category_weight',
+                    'MIN(blue_spell_list.primary_sc) AS primary_sc',
+                    'MIN(blue_spell_list.secondary_sc) AS secondary_sc',
+                    'MIN(blue_spell_list.tertiary_sc) AS tertiary_sc',
+                    ] )
+        ->from( 'spell_list' )
+        ->join( 'blue_spell_list', null, 'blue_spell_list.spellid=spell_list.spellid' )
+        ->groupBy( 'spell_list.spellid' )
+        ->orderBy( 'spell_list.spellid' )
+        ->fetchResultSet();
+    }
+
+    /** blue_spell_mods: stat bonuses while a spell is set (modid 0 = "no stats" placeholder rows, skipped). */
+    public function getBlueSpellMods(){
+        $dbr = $this->openLSBSearchConnection();
+
+        return $dbr->newSelectQueryBuilder()
+        ->select( [ 'spellId AS spellid', 'modid', 'value' ] )
+        ->from( 'blue_spell_mods' )
+        ->where( [ 'modid != 0' ] )
+        ->orderBy( [ 'spellId', 'modid' ] )
+        ->fetchResultSet();
+    }
+
+    /**
+     * blue_traits tiers, ordered by category then tier - LSB blueutils::CalculateTraits relies on ascending tiers.
+     */
+    public function getBlueTraits(){
+        $dbr = $this->openLSBSearchConnection();
+
+        return $dbr->newSelectQueryBuilder()
+        ->select( [ 'trait_category', 'trait_points_needed', 'traitid', 'modifier', 'value', 'tier', 'job_points_only' ] )
+        ->from( 'blue_traits' )
+        ->orderBy( [ 'trait_category', 'tier', 'trait_points_needed', 'modifier' ] )
+        ->fetchResultSet();
+    }
+
+    /**
+     * Spell descriptions from dat_spell_details (spellid, descr) - a table that doesn't exist yet (no source for
+     * spell text). Returns no rows until it is created, so the BLU Builder shows its placeholder.
+     */
+    public function getSpellDescriptions(){
+        $dbr = $this->openLSBSearchConnection();
+        if ( !$dbr->tableExists( 'dat_spell_details', __METHOD__ ) ) return [];
+
+        return $dbr->newSelectQueryBuilder()
+        ->select( [ 'spellid', 'descr' ] )
+        ->from( 'dat_spell_details' )
+        ->fetchResultSet();
+    }
+
+    /**
+     * Native job traits for every job at or below $maxLevel (same era filter as getTraits()). Small enough
+     * to send to the browser once, so the BLU Builder can compare blue traits with the jobs' own traits live.
+     */
+    public function getJobTraits( int $maxLevel ){
+        $dbr = $this->openLSBSearchConnection();
+
+        return $dbr->newSelectQueryBuilder()
+        ->select( [ 'traits.traitid', 'traits.name', 'traits.job', 'traits.level', 'traits.rank AS traitRank',
+                    'traits.modifier', 'traits.value', 'traits.meritid' ] )
+        ->from( 'traits' )
+        ->where( [ 'traits.level <= ' . (int)$maxLevel, 'traits.level > 0', $this->traitsContent ] )
+        ->orderBy( [ 'traits.job', 'traits.traitid', 'traits.rank', 'traits.modifier' ] )
+        ->fetchResultSet();
+    }
+
     public function getSkillRanks( $mjob, $sjob ){
         $dbr = $this->openLSBSearchConnection();
 
-        $mjobLabel =  strtolower(HXI_Variables::$jobArrayByID[$mjob]);
-        $sjobLabel =  strtolower(HXI_Variables::$jobArrayByID[$sjob]);
+        // job 0 ("NONE", e.g. no sub job) has no skill_ranks column: it has rank 0 in every skill
+        $mjobLabel = $mjob ? strtolower(HXI_Variables::$jobArrayByID[$mjob]) : "0";
+        $sjobLabel = $sjob ? strtolower(HXI_Variables::$jobArrayByID[$sjob]) : "0";
 
         $query = [ "$mjobLabel > 0 OR $sjobLabel > 0" ];
 
