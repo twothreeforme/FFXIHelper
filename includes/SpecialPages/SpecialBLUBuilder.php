@@ -37,7 +37,9 @@ class SpecialBLUBuilder extends SpecialPage {
 		$build = HXI_BLUBuild::fromRequest( $request->getText( 'spells' ), $spells );
 
 		// Player inputs: ?race=&mjob=&mlvl=&sjob=&slvl=&bmerit=  (see HXI_BLUBuilderInputs::fromRequest())
+		// The page is for Blue Mage only: BLU main or BLU sub, nothing else (see bluOnly())
 		$inputs = HXI_BLUBuilderInputs::fromRequest( $request );
+		$inputs->bluOnly();
 
 		$categories = [];
 		foreach ( HXI_BLUTraitCategory::cases() as $c ) $categories[ $c->value ] = $c->label();

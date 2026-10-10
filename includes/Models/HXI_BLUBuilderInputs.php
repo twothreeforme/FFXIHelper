@@ -5,7 +5,8 @@
  * native traits) and the Assimilation merit (extra blue magic points). The spell set itself is HXI_BLUBuild.
  *
  * Two sources fill this in:
- *  - standalone Special:BLUBuilder: the "Blue Mage" inputs window (fromRequest() for shared links)
+ *  - standalone Special:BLUBuilder: the "Blue Mage" inputs window (fromRequest() + bluOnly() for shared links:
+ *    BLU main or BLU sub only, see bluOnly())
  *  - Equipsets (later): fromEquipmentSet() for race/jobs/levels; Assimilation once Equipsets tracks BLU merits.
  * The browser keeps the same shape (HXI_TabBLUBuilder.js setInputs()), so the rest of the code doesn't care which.
  */
@@ -64,6 +65,40 @@ class HXI_BLUBuilderInputs {
         else $in->slvl = self::maxSubLevel( $in->mlvl );
         $in->setMerits( explode( '-', $request->getText( 'bmerit' ) ) );
         return $in;
+    }
+
+    /**
+     * Standalone page: the player is always a Blue Mage, either main (Lv1-75, no sub) or sub (Lv1-37, no main
+     * job; main level is the lowest that allows the sub level). A link with any other jobs is pulled to the
+     * closest of those two. Equipsets keeps the full jobs/levels from the gear set and doesn't call this.
+     */
+    public function bluOnly(): void {
+        if ( $this->sjob == self::BLU && $this->mjob != self::BLU ) {
+            $this->setBluLevel( true, $this->slvl > 0 ? $this->slvl : self::MAX_SUB_LEVEL );
+        }
+        else $this->setBluLevel( false, $this->mlvl > 0 ? $this->mlvl : self::MAX_LEVEL );
+    }
+
+    /** BLU main at $level, or BLU sub at $level (clamped to the main/sub cap). Same rule as the JS form. */
+    public function setBluLevel( bool $sub, int $level ): void {
+        if ( $sub ) {
+            $this->sjob = self::BLU;
+            $this->slvl = self::clamp( $level, 1, self::MAX_SUB_LEVEL );
+            $this->mjob = 0;
+            $this->mlvl = min( self::MAX_LEVEL, $this->slvl * 2 );
+        }
+        else {
+            $this->mjob = self::BLU;
+            $this->mlvl = self::clamp( $level, 1, self::MAX_LEVEL );
+            $this->sjob = 0;
+            $this->slvl = 0;
+        }
+        $this->maxSub = false;
+    }
+
+    /** BLU as sub job (and not main). */
+    public function bluSub(): bool {
+        return $this->sjob == self::BLU && $this->mjob != self::BLU;
     }
 
     /**
