@@ -148,36 +148,43 @@ module.exports.getInputs = function () {
 
 /* ---------- Blue Mage inputs form (standalone page) ---------- */
 
+const MAX_LEVEL = 75, MAX_SUB_LEVEL = 37; // HXI_BLUBuilderInputs::MAX_LEVEL / MAX_SUB_LEVEL
+
+/**
+ * The page is for Blue Mage only: BLU main (no sub) or BLU sub (no main job, main level the lowest that allows
+ * the sub level). Same rule as HXI_BLUBuilderInputs::setBluLevel().
+ */
 function readInputsForm() {
     const $ = id => document.getElementById(id);
-    return {
+    const sub = $("HXI_blu_selectRole").value === "sub";
+    const level = parseInt($("HXI_blu_selectLevel").value, 10);
+    const jobs = sub
+        ? { mjob: 0, mlvl: Math.min(MAX_LEVEL, level * 2), sjob: data.blu, slvl: level }
+        : { mjob: data.blu, mlvl: level, sjob: 0, slvl: 0 };
+    return Object.assign({
         race: parseInt($("HXI_blu_selectRace").value, 10),
-        mjob: parseInt($("HXI_blu_selectMJob").value, 10), mlvl: parseInt($("HXI_blu_selectMLevel").value, 10),
-        sjob: parseInt($("HXI_blu_selectSJob").value, 10), slvl: parseInt($("HXI_blu_selectSLevel").value, 10),
-        maxSub: $("HXI_blu_checkboxMaxSub").checked,
+        maxSub: false,
         merits: Object.fromEntries(data.merits.map(m => [m.key, parseInt($("HXI_blu_merit_" + m.key).value, 10)])),
-    };
+    }, jobs);
 }
 
 function setupInputsForm() {
     const $ = id => document.getElementById(id);
     const update = () => module.exports.setInputs(readInputsForm());
 
-    // Same main/sub level behaviour as Equipsets (HXI_TabEquipsets.js)
-    const mlvl = $("HXI_blu_selectMLevel");
-    const slvl = $("HXI_blu_selectSLevel");
-    const maxSub = $("HXI_blu_checkboxMaxSub");
-    const maxSubLevel = () => (mlvl.value > 1) ? Math.floor(mlvl.value / 2) : 1;
-    mlvl.addEventListener("change", () => {
-        if (maxSub.checked) slvl.value = maxSubLevel();
+    // Main = Lv1-75, Sub = Lv1-37: refill the levels on a role change. At the old cap -> the new cap, else clamped.
+    const role = $("HXI_blu_selectRole");
+    const level = $("HXI_blu_selectLevel");
+    role.addEventListener("change", () => {
+        const oldCap = level.options.length;
+        const cap = role.value === "sub" ? MAX_SUB_LEVEL : MAX_LEVEL;
+        const current = parseInt(level.value, 10);
+        const next = current >= oldCap ? cap : Math.min(current, cap);
+        level.replaceChildren(...Array.from({ length: cap }, (_, i) => new Option(String(i + 1), String(i + 1))));
+        level.value = String(next);
         update();
     });
-    slvl.addEventListener("change", () => { maxSub.checked = false; update(); });
-    maxSub.addEventListener("change", () => {
-        if (maxSub.checked) slvl.value = maxSubLevel();
-        update();
-    });
-    for (const id of ["HXI_blu_selectRace", "HXI_blu_selectMJob", "HXI_blu_selectSJob"]) {
+    for (const id of ["HXI_blu_selectRace", "HXI_blu_selectLevel"]) {
         $(id).addEventListener("change", update);
     }
 
@@ -304,11 +311,11 @@ function renderSet() {
             el("button", { type: "button", class: "HXI_blu_slotMain", title: ok ? s.name : `${s.name}: ${STATE_TEXT[r.state](s)}`,
                 onclick: () => { selectedId = s.id; renderDetails(true); renderSet(); } }, [
                 el("span", { class: "HXI_blu_slotNum", text: String(i + 1) }),
-                elementBadge(s.element),
                 el("span", { class: "HXI_blu_slotText" }, [
                     el("span", { class: "HXI_blu_slotName", text: s.name }),
                     s.category ? el("span", { class: "HXI_blu_slotTrait", text: categoryLabel(s.category) }) : null,
                 ]),
+                elementBadge(s.element),
                 pointsBadge(s),
             ]),
             el("button", { type: "button", class: "HXI_blu_remove", "aria-label": `Remove ${s.name}`, title: "Remove", text: "×",
@@ -497,7 +504,7 @@ function renderStats() {
     if (!lastStats) return;
     const b = lastStats.base, s = lastStats.set;
     document.getElementById("HXI_blu_statsLevel").textContent =
-        `${jobName(inputs.mjob)}${inputs.mlvl}` + (inputs.sjob ? `/${jobName(inputs.sjob)}${inputs.slvl}` : "");
+        (inputs.mjob ? `${jobName(inputs.mjob)}${inputs.mlvl}` : "") + (inputs.sjob ? `/${jobName(inputs.sjob)}${inputs.slvl}` : "");
 
     const vitals = el("div", { class: "HXI_blu_statGroup HXI_blu_vitals" }, [
         el("div", { class: "HXI_blu_stat HXI_blu_hp" }, [el("span", { class: "HXI_blu_statL", text: "HP" }), el("span", { class: "HXI_blu_statV", text: String(s.HP) }), delta(b.HP, s.HP)]),

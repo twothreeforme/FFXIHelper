@@ -47,31 +47,37 @@ class HXI_HTMLTabBLUBuilder {
     }
 
     /**
-     * Race/jobs/levels are the exact Equipsets controls (HXI_HTMLOptions dropdowns + Max sub checkbox,
-     * see HXI_Equipsets::querySection()).
+     * Race + BLU as Main or Sub + one level select (1-75 main, 1-37 sub). The page is for Blue Mage only, so
+     * there are no job dropdowns; HXI_TabBLUBuilder.js setupInputsForm() refills the levels when the role changes.
      */
     private function inputsWindow( HXI_BLUBuilderInputs $in ): string {
-        $maxedSub = "<label class=\"HXI_gs_max\"><input id=\"HXI_blu_checkboxMaxSub\" type=\"checkbox\"" . ( $in->maxSub ? " checked=\"checked\"" : "" ) . "><span>Max</span></label>";
-
         // raceDropDown() renders disabled (Equipsets takes race from the character); here it's an input
         $race = str_replace( " disabled>", ">", HXI_HTMLOptions::raceDropDown( "HXI_blu_selectRace", $in->race ) );
 
+        $sub = $in->bluSub();
+        $role = "<select id=\"HXI_blu_selectRole\" class=\"HXI_dynamiccontent_customDropDown\">" .
+                    "<option value=\"main\"" . ( $sub ? "" : " selected" ) . ">Main</option>" .
+                    "<option value=\"sub\"" . ( $sub ? " selected" : "" ) . ">Sub</option>" .
+                "</select>";
+
+        $cap = $sub ? HXI_BLUBuilderInputs::MAX_SUB_LEVEL : HXI_BLUBuilderInputs::MAX_LEVEL;
+        $current = $sub ? $in->slvl : $in->mlvl;
+        $levels = "";
+        for ( $i = 1; $i <= $cap; $i++ ) {
+            $levels .= "<option value=\"$i\"" . ( $i == $current ? " selected" : "" ) . ">$i</option>";
+        }
+        $level = "<select id=\"HXI_blu_selectLevel\" class=\"HXI_dynamiccontent_customDropDown\">$levels</select>";
+
         $jobs = "<div class=\"HXI_gs_jobs\">" .
                     "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_blu_selectRace\">Race</label>" . $race . "</div>" .
-                    "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_blu_selectMJob\">Main</label>" .
-                        HXI_HTMLOptions::jobDropDown( "HXI_blu_selectMJob", $in->mjob ) .
-                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_blu_selectMLevel\">Lv</label>" . HXI_HTMLOptions::levelRange( "HXI_blu_selectMLevel", $in->mlvl ) . "</span>" .
-                    "</div>" .
-                    "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_blu_selectSJob\">Sub</label>" .
-                        HXI_HTMLOptions::jobDropDown( "HXI_blu_selectSJob", $in->sjob ) . $maxedSub .
-                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_blu_selectSLevel\">Lv</label>" . HXI_HTMLOptions::subLevelRange( "HXI_blu_selectSLevel", $in->slvl ) . "</span>" .
+                    "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_blu_selectRole\">BLU</label>" . $role .
+                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_blu_selectLevel\">Lv</label>" . $level . "</span>" .
                     "</div>" .
                 "</div>";
 
         return "<details class=\"HXI_win HXI_blu_inputs\" open>" .
                     "<summary class=\"HXI_win_title\">Blue Mage</summary>" .
                     $jobs .
-                    "<p id=\"HXI_blu_bluNote\" class=\"HXI_blu_note\" hidden>Set Blue Mage as your main or sub job to set blue magic.</p>" .
                     "<p id=\"HXI_blu_meritNote\" class=\"HXI_blu_note\" hidden>Merits only count for Blue Mage main at Lv" . HXI_BLUBuilderInputs::MERIT_LEVEL . ".</p>" .
                     $this->meritTable( $in, 1 ) .
                     $this->meritTable( $in, 2 ) .
