@@ -54,7 +54,8 @@ class HXI_HTMLTabBLUBuilder {
     private function inputsWindow( HXI_BLUBuilderInputs $in ): string {
         $mainLevel = str_replace( "<option value=\"0\">None</option>", "", HXI_HTMLOptions::levelRange( "HXI_blu_selectMLevel", $in->mlvl ) );
         $subJob = str_replace( "<option value=\"" . HXI_BLUBuilderInputs::BLU . "\">Blue Mage</option>", "", HXI_HTMLOptions::jobDropDown( "HXI_blu_selectSJob", $in->sjob ) );
-        $maxedSub = "<label class=\"HXI_gs_max\"><input id=\"HXI_blu_checkboxMaxSub\" type=\"checkbox\"" . ( $in->maxSub ? " checked=\"checked\"" : "" ) . "><span>Max</span></label>";
+        // autocomplete off: browsers otherwise restore the last checked state on reload instead of the default
+        $maxedSub = "<label class=\"HXI_gs_max\"><input id=\"HXI_blu_checkboxMaxSub\" type=\"checkbox\" autocomplete=\"off\"" . ( $in->maxSub ? " checked=\"checked\"" : "" ) . "><span>Max</span></label>";
 
         $jobs = "<div class=\"HXI_gs_jobs\">" .
                     "<div class=\"HXI_gs_jobRow\"><span class=\"HXI_gs_jobLabel\">Main</span>" .
