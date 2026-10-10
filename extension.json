@@ -53,7 +53,6 @@
         "APIModuleEquipmentSearch" : "includes/APIModules/APIModuleEquipmentSearch.php",
         "APIModuleEquipsets" : "includes/APIModules/APIModuleEquipsets.php",
         "APIModuleFishingSearch" : "includes/APIModules/APIModuleFishingSearch.php",
-        "APIModuleBLUBuilder" : "includes/APIModules/APIModuleBLUBuilder.php",
 
         "HXI_SkillGrades": "includes/helpers/data/HXI_SkillGrades.php",
         "HXI_MathHelper": "includes/helpers/data/HXI_MathHelper.php",
@@ -292,9 +291,6 @@
 		},
         "importlua_commit": {
 			"class": "APIModuleEquipsets"
-		},
-        "blubuilder_stats": {
-			"class": "APIModuleBLUBuilder"
 		}
 	},
     "manifest_version": 2,

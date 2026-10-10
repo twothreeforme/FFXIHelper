@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Everything about the PLAYER that a blue magic set depends on: race (base stats), jobs/levels (BLU level,
+ * Everything about the PLAYER that a blue magic set depends on: jobs/levels (BLU level,
  * native traits) and the Assimilation merit (extra blue magic points). The spell set itself is HXI_BLUBuild.
  *
  * Two sources fill this in:
  *  - standalone Special:BLUBuilder: the "Blue Mage" inputs window (fromRequest() for shared links)
- *  - Equipsets (later): fromEquipmentSet() for race/jobs/levels; Assimilation once Equipsets tracks BLU merits.
+ *  - Equipsets (later): fromEquipmentSet() for jobs/levels; Assimilation once Equipsets tracks BLU merits.
  * The browser keeps the same shape (HXI_TabBLUBuilder.js setInputs()), so the rest of the code doesn't care which.
  */
 class HXI_BLUBuilderInputs {
@@ -33,7 +33,6 @@ class HXI_BLUBuilderInputs {
         'enchainment'         => 2,
     ];
 
-    public int $race = 0;                   // HXI_Race
     public int $mjob = self::BLU;
     public int $mlvl = self::MAX_LEVEL;
     public int $sjob = 0;
@@ -48,15 +47,15 @@ class HXI_BLUBuilderInputs {
     }
 
     /**
-     * Shared link params. Race/jobs/levels use the same names as Equipsets (race/mjob/mlvl/sjob/slvl);
+     * Shared link params. Jobs/levels use the same names as Equipsets (mlvl/sjob/slvl); the main job is always
+     * Blue Mage here, so mjob is ignored and a Blue Mage sub job is dropped;
      * bmerit = merit upgrades as a dash list in MERITS order (a single number = Assimilation only).
      */
     public static function fromRequest( WebRequest $request ): self {
         $in = new self();
-        if ( $request->getCheck( 'race' ) ) $in->race = HXI_Race::tryFrom( $request->getInt( 'race' ) )?->value ?? 0;
-        if ( $request->getCheck( 'mjob' ) ) $in->mjob = self::clamp( $request->getInt( 'mjob' ), 0, 18 );
-        if ( $request->getCheck( 'mlvl' ) ) $in->mlvl = self::clamp( $request->getInt( 'mlvl' ), 0, self::MAX_LEVEL );
+        if ( $request->getCheck( 'mlvl' ) ) $in->mlvl = self::clamp( $request->getInt( 'mlvl' ), 1, self::MAX_LEVEL );
         if ( $request->getCheck( 'sjob' ) ) $in->sjob = self::clamp( $request->getInt( 'sjob' ), 0, 18 );
+        if ( $in->sjob == self::BLU ) $in->sjob = 0;
         if ( $request->getCheck( 'slvl' ) ) {
             $in->slvl = self::clamp( $request->getInt( 'slvl' ), 0, self::MAX_SUB_LEVEL );
             $in->maxSub = $in->slvl == self::maxSubLevel( $in->mlvl );
@@ -92,12 +91,11 @@ class HXI_BLUBuilderInputs {
     }
 
     /**
-     * Equipsets seam: race/jobs/levels from a gear set. Assimilation stays 0 until Equipsets tracks BLU merits
+     * Equipsets seam: jobs/levels from a gear set. Assimilation stays 0 until Equipsets tracks BLU merits
      * (see CONTEXT.md - BLU Builder).
      */
-    public static function fromEquipmentSet( HXI_EquipmentSet $set, int $race = 0 ): self {
+    public static function fromEquipmentSet( HXI_EquipmentSet $set ): self {
         $in = new self();
-        $in->race = $race;
         $in->mjob = $set->mjob;
         $in->mlvl = $set->mlvl;
         $in->sjob = $set->sjob;
@@ -137,7 +135,7 @@ class HXI_BLUBuilderInputs {
 
     public function toArray(): array {
         return [
-            'race' => $this->race, 'mjob' => $this->mjob, 'mlvl' => $this->mlvl, 'sjob' => $this->sjob, 'slvl' => $this->slvl,
+            'mjob' => $this->mjob, 'mlvl' => $this->mlvl, 'sjob' => $this->sjob, 'slvl' => $this->slvl,
             'maxSub' => $this->maxSub, 'merits' => $this->merits,
         ];
     }

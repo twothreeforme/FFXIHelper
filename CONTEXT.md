@@ -115,22 +115,23 @@ New/renamed classes use `HXI_` prefix. Class autoloading = `AutoloadClasses` map
 - Horizon-only trait "Magic Accuracy Bonus" = `HXI_BLUTraitCategory::MagicAccuracy` (100), no tiers in blue_traits:
   points are shown, value flagged pending (`EXTRA_CATEGORIES`), adds nothing to stats.
 - Models: `HXI_BLUBuild` (set + LSB blueutils rules: status() mirrors ValidateBlueSpells, blueTraits() = CalculateTraits),
-  `HXI_BLUBuilderInputs` (race/jobs/levels/BLU merits; slots()/bluePoints()/merit()), `HXI_BLUSpell`, `HXI_MagicElement`.
+  `HXI_BLUBuilderInputs` (jobs/levels/BLU merits; slots()/bluePoints()/merit()), `HXI_BLUSpell`, `HXI_MagicElement`.
   JS: `includes/js/tabs/BLUBuilder/` (`HXI_BLUBuilderModel.js` = same rules, no DOM; `HXI_TabBLUBuilder.js` = UI;
-  `HXI_BLUBuilderController.js` = standalone entry). Share link: `?spells=id-id-..&race&mjob&mlvl&sjob&slvl&bmerit=a-b-..` (merits in `HXI_BLUBuilderInputs::MERITS` order;
+  `HXI_BLUBuilderController.js` = standalone entry). Share link: `?spells=id-id-..&mlvl&sjob&slvl&bmerit=a-b-..` (merits in `HXI_BLUBuilderInputs::MERITS` order;
   a single number = Assimilation).
-- Stats: `api.php?action=blubuilder_stats` (`APIModuleBLUBuilder`) runs `HXI_CharacterStatCalculator` twice (without/with
-  set); the calculator now takes `$extraTraits` (max-merged with job traits = no stacking) and `$extraMods` (summed).
-  No gear. Trait points are displayed x4 (`TRAIT_POINT_SCALE`, Horizon's "8 per tier"); LSB stores 2 per tier.
+- Character Bonuses (client side, `renderBonuses()`): the set spells' stat bonuses + the blue traits that apply, summed per
+  modifier. No character stats are calculated and there is no race input (decided by the user, 2026-10-10). The stat
+  calculator still takes `$extraTraits` (max-merged with job traits = no stacking) and `$extraMods` (summed) for the
+  Equipsets integration (`HXI_BLUBuild::blueTraits()` / `spellMods()`). Trait points are displayed x4 (`TRAIT_POINT_SCALE`, Horizon's "8 per tier"); LSB stores 2 per tier.
 - Job abilities are a Horizon list in `HXI_BLUBuilderData::JOB_ABILITIES` (Convergence = Lv45 JA on Horizon).
 - Spell descriptions: none yet. Create `dat_spell_details (spellid, descr)` in LSB_Data and they appear - no code change.
 - Shared-code fixes made for this tool (they change Equipsets numbers): `BASE_HP`/`BASE_MP` (1095/1096) added to
   `HXI_ModDictionary` and to HP/MP (Max HP/MP Boost traits were silently dropped); `getTraits()` excludes
   SOA/ROV/ABYSSEA traits (e.g. WAR Max HP Boost, WAR DA II); `getSkillRanks()` no longer errors with no sub job.
 - Equipsets integration: render `HXI_HTMLTabBLUBuilder::render($inputs, $categories, false)` in a tab div,
-  `addJsConfigVars('HXI_BLUBuilder', ...)` with `HXI_BLUBuilderInputs::fromEquipmentSet($set, $race)`, add the JS/CSS
+  `addJsConfigVars('HXI_BLUBuilder', ...)` with `HXI_BLUBuilderInputs::fromEquipmentSet($set)`, add the JS/CSS
   (+ `mediawiki.api`) to the Equipsets module, `setLinks({ syncUrl: false, inputs: "external" })`, `setInputs({...})` on
-  race/job/level change. Equipsets has no BLU merits yet (Assimilation). Ideally pass the set's gear into the stats API.
+  job/level change. Equipsets has no BLU merits yet (Assimilation).
 - Decided (user, 2026-10-09): the SOA/ROV/ABYSSEA trait filter is correct for Horizon; saving follows the Automaton plan
   (share link now, saving required in Equipsets); other BLU merits become inputs once Horizon publishes usable values.
 

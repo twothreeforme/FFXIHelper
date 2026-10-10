@@ -36,7 +36,7 @@ class SpecialBLUBuilder extends SpecialPage {
 		// Shared link state: ?spells=513-547-...  (see HXI_BLUBuild::toQuery())
 		$build = HXI_BLUBuild::fromRequest( $request->getText( 'spells' ), $spells );
 
-		// Player inputs: ?race=&mjob=&mlvl=&sjob=&slvl=&bmerit=  (see HXI_BLUBuilderInputs::fromRequest())
+		// Player inputs: ?mlvl=&sjob=&slvl=&bmerit=  (see HXI_BLUBuilderInputs::fromRequest())
 		$inputs = HXI_BLUBuilderInputs::fromRequest( $request );
 
 		$categories = [];

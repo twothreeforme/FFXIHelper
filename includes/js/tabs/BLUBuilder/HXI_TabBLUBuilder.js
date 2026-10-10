@@ -5,31 +5,25 @@
  * HXI_HTMLTabBLUBuilder.php using the 'HXI_BLUBuilder' mw.config payload. To move this into Equipsets:
  * render HXI_HTMLTabBLUBuilder with $showInputs = false inside a tab div, add the payload, call
  * setLinks({ syncUrl: false, inputs: "external" }) from HXI_Equipsets_TabsController.js, and call
- * setInputs({...}) whenever the gear set's race/jobs/levels change.
+ * setInputs({...}) whenever the gear set's jobs/levels change.
  *
  * options.syncUrl - keep the set + inputs in the address bar (standalone page only;
  *                   inside Equipsets the URL belongs to the gear set, so leave it off there).
  * options.inputs  - "form": read player inputs from the Blue Mage window (standalone)
  *                   "external": the host page supplies them through setInputs()
  *
- * Rules live in HXI_BLUBuilderModel.js. Character stats come from the server (api.php?action=blubuilder_stats,
- * the Equipsets stat calculator) so both tools always agree.
+ * Rules live in HXI_BLUBuilderModel.js. Character Bonuses lists what the set adds; no character stats are calculated.
  */
 
 var Model = require("./HXI_BLUBuilderModel.js");
 
 const DESCR_PENDING_TITLE = "Blue magic descriptions have not been added to the wiki's data yet (known issue).";
-const ATTRS = ["STR", "DEX", "VIT", "AGI", "INT", "MND", "CHR"];
-const COMBAT = ["DEF", "ATT", "ACC", "EVA"];
 
 let model = null;
 let data = null;
 let set = [];
 let inputs = null;
 let options = { syncUrl: false, inputs: "form" };
-let statsRequest = 0;     // id of the newest stats request; older answers are ignored
-let statsTimer = null;
-let lastStats = null;
 let selectedId = null;    // spell shown in Details
 
 /* ---------- small DOM helper ---------- */
@@ -151,8 +145,7 @@ module.exports.getInputs = function () {
 function readInputsForm() {
     const $ = id => document.getElementById(id);
     return {
-        race: parseInt($("HXI_blu_selectRace").value, 10),
-        mjob: parseInt($("HXI_blu_selectMJob").value, 10), mlvl: parseInt($("HXI_blu_selectMLevel").value, 10),
+        mjob: data.blu, mlvl: parseInt($("HXI_blu_selectMLevel").value, 10),
         sjob: parseInt($("HXI_blu_selectSJob").value, 10), slvl: parseInt($("HXI_blu_selectSLevel").value, 10),
         maxSub: $("HXI_blu_checkboxMaxSub").checked,
         merits: Object.fromEntries(data.merits.map(m => [m.key, parseInt($("HXI_blu_merit_" + m.key).value, 10)])),
@@ -177,9 +170,7 @@ function setupInputsForm() {
         if (maxSub.checked) slvl.value = maxSubLevel();
         update();
     });
-    for (const id of ["HXI_blu_selectRace", "HXI_blu_selectMJob", "HXI_blu_selectSJob"]) {
-        $(id).addEventListener("change", update);
-    }
+    $("HXI_blu_selectSJob").addEventListener("change", update); // main job is always Blue Mage here
 
     // a merit group holds 10 upgrades: a pick past that is pulled back to what's left, with a message
     for (const m of data.merits) {
@@ -242,7 +233,7 @@ function render() {
     renderTraits();
     renderAbilities();
     renderDetails();
-    requestStats();
+    renderBonuses();
     if (options.syncUrl) syncUrl();
 }
 
@@ -452,75 +443,33 @@ function renderAbilities() {
     document.getElementById("HXI_blu_abilityBody").replaceChildren(el("ul", { class: "HXI_blu_abilities" }, items));
 }
 
-/* ---------- stats (server) ---------- */
+/* ---------- character bonuses ---------- */
 
-function requestStats() {
-    // inputs/sets change in bursts (typing in search doesn't call this); wait a moment, then ask once
-    clearTimeout(statsTimer);
-    statsTimer = setTimeout(fetchStats, 150);
-    document.getElementById("HXI_blu_statsBody").classList.add("HXI_blu_loading");
-}
+/**
+ * What the set spells add, summed per modifier: their own stat bonuses plus the blue traits they unlock
+ * (only traits that apply - a job trait as strong or stronger replaces them). No character stats are calculated.
+ */
+function renderBonuses() {
+    const totals = {};
+    const add = (modid, value) => { totals[modid] = (totals[modid] || 0) + value; };
+    for (const s of model.active(set, inputs)) for (const m of s.mods) add(m.id, m.value);
+    const traitNames = {};
+    for (const t of model.traitSummary(set, inputs).traits) {
+        if (t.source !== "blu" || !t.modid) continue;
+        add(t.modid, t.value);
+        traitNames[t.modid] = traitName(Object.assign({}, t, { rank: 1 }));
+    }
 
-function fetchStats() {
-    const id = ++statsRequest;
-    new mw.Api().get({
-        action: "blubuilder_stats", race: inputs.race, mjob: inputs.mjob, mlvl: inputs.mlvl, sjob: inputs.sjob,
-        slvl: inputs.slvl, bmerit: meritQuery(), spells: Model.encode(set),
-    }).done(d => {
-        if (id !== statsRequest) return; // a newer request is on its way
-        lastStats = d.blubuilder;
-        renderStats();
-    }).fail(() => {
-        if (id !== statsRequest) return;
-        document.getElementById("HXI_blu_statsBody").classList.remove("HXI_blu_loading");
-        mw.notify("Couldn't calculate stats. Please try again or report on our Discord.", { type: "error", autoHide: true, tag: "HXI_blu_stats" });
-    });
-}
-
-function delta(base, now) {
-    const d = now - base;
-    if (!d) return null;
-    return el("span", { class: "HXI_blu_delta" + (d < 0 ? " HXI_blu_neg" : ""), text: (d > 0 ? "+" : "") + d });
-}
-
-function statCell(key, base, now) {
-    return el("div", { class: "HXI_blu_stat" + (now !== base ? " HXI_blu_changed" : "") }, [
-        el("span", { class: "HXI_blu_statL", text: key }),
-        el("span", { class: "HXI_blu_statV", text: String(now) }),
-        delta(base, now),
-    ]);
-}
-
-function renderStats() {
-    const body = document.getElementById("HXI_blu_statsBody");
-    body.classList.remove("HXI_blu_loading");
-    if (!lastStats) return;
-    const b = lastStats.base, s = lastStats.set;
-    document.getElementById("HXI_blu_statsLevel").textContent =
-        `${jobName(inputs.mjob)}${inputs.mlvl}` + (inputs.sjob ? `/${jobName(inputs.sjob)}${inputs.slvl}` : "");
-
-    const vitals = el("div", { class: "HXI_blu_statGroup HXI_blu_vitals" }, [
-        el("div", { class: "HXI_blu_stat HXI_blu_hp" }, [el("span", { class: "HXI_blu_statL", text: "HP" }), el("span", { class: "HXI_blu_statV", text: String(s.HP) }), delta(b.HP, s.HP)]),
-        el("div", { class: "HXI_blu_stat HXI_blu_mp" }, [el("span", { class: "HXI_blu_statL", text: "MP" }), el("span", { class: "HXI_blu_statV", text: String(s.MP) }), delta(b.MP, s.MP)]),
-    ]);
-    const attrs = el("div", { class: "HXI_blu_statGroup HXI_blu_attrs" }, ATTRS.map(k => statCell(k, b[k], s[k])));
-    const combat = el("div", { class: "HXI_blu_statGroup HXI_blu_attrs" }, COMBAT.map(k => statCell(k, b[k], s[k])));
-
-    // other modifiers: only the ones something sets (HP/MP/attributes are shown above; the calculator's DEF
-    // modifier also holds the level-based DEF, so only the DEF total above is meaningful)
-    const shown = new Set([1, 2, 5, 8, 9, 10, 11, 12, 13, 14, 1095, 1096]);
-    const other = Object.keys(s.mods).map(Number).filter(id => !shown.has(id) && (s.mods[id] || b.mods[id]));
-    const rows = other.map(id => {
+    const rows = Object.keys(totals).map(Number).filter(id => totals[id]).sort((a, b) => a - b).map(id => {
         const m = modLabel(id);
-        return el("li", { class: s.mods[id] !== b.mods[id] ? "HXI_blu_changed" : null }, [
-            el("span", { class: "HXI_blu_fxLabel", text: m.label }),
-            el("span", { class: "HXI_blu_fxVal" }, [Model.formatValue(m.format, s.mods[id]), delta(b.mods[id], s.mods[id])]),
+        return el("li", {}, [
+            el("span", { class: "HXI_blu_fxLabel", text: m.label || traitNames[id] }),
+            el("span", { class: "HXI_blu_fxVal" + (totals[id] < 0 ? " HXI_blu_neg" : ""), text: Model.formatValue(m.format, totals[id]) }),
         ]);
     });
-
-    body.replaceChildren(vitals, attrs, combat,
-        el("h3", { class: "HXI_blu_subtitle", text: "Other bonuses" }),
-        rows.length ? el("ul", { class: "HXI_blu_fx" }, rows) : el("p", { class: "HXI_blu_note", text: "None." }));
+    document.getElementById("HXI_blu_bonusBody").replaceChildren(rows.length
+        ? el("ul", { class: "HXI_blu_fx" }, rows)
+        : el("p", { class: "HXI_blu_note", text: "None. Set spells to see their bonuses." }));
 }
 
 /* ---------- details ---------- */
@@ -577,7 +526,7 @@ function renderDetails(scroll) {
 function query() {
     let q = `&spells=${Model.encode(set)}`;
     if (options.inputs !== "form") return q;
-    q += `&race=${inputs.race}&mjob=${inputs.mjob}&mlvl=${inputs.mlvl}&sjob=${inputs.sjob}&slvl=${inputs.slvl}`;
+    q += `&mlvl=${inputs.mlvl}&sjob=${inputs.sjob}&slvl=${inputs.slvl}`;
     if (data.merits.some(m => inputs.merits[m.key])) q += "&bmerit=" + meritQuery();
     return q;
 }

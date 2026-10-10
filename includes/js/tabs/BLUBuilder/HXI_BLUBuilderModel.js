@@ -12,7 +12,7 @@
  *                                                                             CalculateTraits + battleutils::AddTraits
  *
  * `data` is the 'HXI_BLUBuilder' mw.config payload (HXI_BLUBuilderData::clientPayload()).
- * `inputs` is { race, mjob, mlvl, sjob, slvl, maxSub, merits: { key: upgrades } } (HXI_BLUBuilderInputs::toArray()).
+ * `inputs` is { mjob, mlvl, sjob, slvl, maxSub, merits: { key: upgrades } } (HXI_BLUBuilderInputs::toArray()).
  * A set is an array of spell ids in set order.
  */
 

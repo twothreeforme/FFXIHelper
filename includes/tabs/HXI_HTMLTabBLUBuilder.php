@@ -5,13 +5,13 @@
  * returns one root element (#HXI_blu), and HXI_TabBLUBuilder.js's setLinks() wires it up from the
  * 'HXI_BLUBuilder' mw.config payload (HXI_BLUBuilderData::clientPayload()).
  *
- * PHP renders the static shell; everything that changes as the user builds (set, points, traits, stats,
+ * PHP renders the static shell; everything that changes as the user builds (set, points, traits, bonuses,
  * spell list) is rendered client side.
  */
 class HXI_HTMLTabBLUBuilder {
 
     /**
-     * @param bool $showInputs false inside Equipsets: race/jobs/levels come from the gear set there, passed in
+     * @param bool $showInputs false inside Equipsets: jobs/levels come from the gear set there, passed in
      *                         through HXI_TabBLUBuilder.js setInputs() instead of this form.
      */
     public function render( HXI_BLUBuilderInputs $inputs, array $categories, bool $showInputs = true ): string {
@@ -30,7 +30,7 @@ class HXI_HTMLTabBLUBuilder {
                         "</div>" .
                         "<div class=\"HXI_blu_col\">" .
                             $this->traitsWindow() .
-                            $this->statsWindow() .
+                            $this->bonusesWindow() .
                         "</div>" .
                     "</div>" .
                     "<noscript><p class=\"HXI_blu_note\">The BLU Builder needs JavaScript enabled.</p></noscript>" .
@@ -47,23 +47,22 @@ class HXI_HTMLTabBLUBuilder {
     }
 
     /**
-     * Race/jobs/levels are the exact Equipsets controls (HXI_HTMLOptions dropdowns + Max sub checkbox,
-     * see HXI_Equipsets::querySection()).
+     * Jobs/levels are the Equipsets controls (HXI_HTMLOptions dropdowns + Max sub checkbox, see
+     * HXI_Equipsets::querySection()), except the main job: this page is always Blue Mage main, so it's fixed
+     * text, the main level has no "None", and Blue Mage isn't offered as a sub job.
      */
     private function inputsWindow( HXI_BLUBuilderInputs $in ): string {
+        $mainLevel = str_replace( "<option value=\"0\">None</option>", "", HXI_HTMLOptions::levelRange( "HXI_blu_selectMLevel", $in->mlvl ) );
+        $subJob = str_replace( "<option value=\"" . HXI_BLUBuilderInputs::BLU . "\">Blue Mage</option>", "", HXI_HTMLOptions::jobDropDown( "HXI_blu_selectSJob", $in->sjob ) );
         $maxedSub = "<label class=\"HXI_gs_max\"><input id=\"HXI_blu_checkboxMaxSub\" type=\"checkbox\"" . ( $in->maxSub ? " checked=\"checked\"" : "" ) . "><span>Max</span></label>";
 
-        // raceDropDown() renders disabled (Equipsets takes race from the character); here it's an input
-        $race = str_replace( " disabled>", ">", HXI_HTMLOptions::raceDropDown( "HXI_blu_selectRace", $in->race ) );
-
         $jobs = "<div class=\"HXI_gs_jobs\">" .
-                    "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_blu_selectRace\">Race</label>" . $race . "</div>" .
-                    "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_blu_selectMJob\">Main</label>" .
-                        HXI_HTMLOptions::jobDropDown( "HXI_blu_selectMJob", $in->mjob ) .
-                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_blu_selectMLevel\">Lv</label>" . HXI_HTMLOptions::levelRange( "HXI_blu_selectMLevel", $in->mlvl ) . "</span>" .
+                    "<div class=\"HXI_gs_jobRow\"><span class=\"HXI_gs_jobLabel\">Main</span>" .
+                        "<span class=\"HXI_blu_mainJob\">Blue Mage</span>" .
+                        "<span class=\"HXI_gs_lvl\"><label for=\"HXI_blu_selectMLevel\">Lv</label>" . $mainLevel . "</span>" .
                     "</div>" .
                     "<div class=\"HXI_gs_jobRow\"><label class=\"HXI_gs_jobLabel\" for=\"HXI_blu_selectSJob\">Sub</label>" .
-                        HXI_HTMLOptions::jobDropDown( "HXI_blu_selectSJob", $in->sjob ) . $maxedSub .
+                        $subJob . $maxedSub .
                         "<span class=\"HXI_gs_lvl\"><label for=\"HXI_blu_selectSLevel\">Lv</label>" . HXI_HTMLOptions::subLevelRange( "HXI_blu_selectSLevel", $in->slvl ) . "</span>" .
                     "</div>" .
                 "</div>";
@@ -139,11 +138,11 @@ class HXI_HTMLTabBLUBuilder {
                 "</section>";
     }
 
-    private function statsWindow(): string {
+    private function bonusesWindow(): string {
         return "<section class=\"HXI_win HXI_blu_stats\">" .
-                    "<h2 class=\"HXI_win_title\">Character Stats <span id=\"HXI_blu_statsLevel\" class=\"HXI_blu_count\"></span></h2>" .
-                    "<div id=\"HXI_blu_statsBody\" aria-live=\"polite\"></div>" .
-                    "<p class=\"HXI_blu_note\">No gear: race, jobs and levels only. Gear sets are in Special:Equipsets.</p>" .
+                    "<h2 class=\"HXI_win_title\">Character Bonuses</h2>" .
+                    "<div id=\"HXI_blu_bonusBody\" aria-live=\"polite\"></div>" .
+                    "<p class=\"HXI_blu_note\">From the set spells and the blue traits they unlock.</p>" .
                 "</section>";
     }
 

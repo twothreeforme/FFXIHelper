@@ -244,6 +244,7 @@
 
 .HXI_blu .HXI_gs_lvl select.HXI_dynamiccontent_customDropDown { flex: 0 0 auto; width: 76px; }
 .HXI_blu .HXI_gs_jobRow > select.HXI_dynamiccontent_customDropDown { min-width: 72px; }
+.HXI_blu .HXI_blu_mainJob { flex: 1 1 auto; min-width: 0; font-weight: 700; }
 .HXI_blu select option { background-color: #1c2030; color: #fff; }
 
 .HXI_blu .HXI_gs_max {
@@ -747,52 +748,9 @@
 .HXI_blu .HXI_blu_fxLabel { min-width: 0; overflow-wrap: anywhere; }
 .HXI_blu .HXI_blu_fxVal { flex: none; max-width: 60%; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--blu-good); }
 
-/* ---------- Stats ---------- */
+/* ---------- Character Bonuses ---------- */
 
-.HXI_blu #HXI_blu_statsBody { transition: opacity 0.15s ease; }
-.HXI_blu #HXI_blu_statsBody.HXI_blu_loading { opacity: 0.55; }
-
-.HXI_blu .HXI_blu_statGroup {
-    margin-bottom: 8px;
-    padding: 6px 10px;
-    background: var(--blu-well);
-    border: 1px solid var(--blu-line);
-    border-radius: 6px;
-}
-
-.HXI_blu .HXI_blu_vitals { display: flex; gap: 6px 24px; }
-.HXI_blu .HXI_blu_vitals .HXI_blu_stat { flex: 1 1 0; }
-.HXI_blu .HXI_blu_vitals .HXI_blu_statV { font-size: 18px; }
-.HXI_blu .HXI_blu_hp .HXI_blu_statV { color: var(--blu-good); }
-.HXI_blu .HXI_blu_mp .HXI_blu_statV { color: var(--blu-mp); }
-
-.HXI_blu .HXI_blu_stat {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    min-width: 0;
-}
-
-.HXI_blu .HXI_blu_statL { font-weight: 700; color: var(--blu-gold); }
-.HXI_blu .HXI_blu_statV { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
-
-.HXI_blu .HXI_blu_attrs {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
-    gap: 4px 16px;
-}
-
-.HXI_blu .HXI_blu_delta {
-    margin-left: 4px;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--blu-good);
-    font-variant-numeric: tabular-nums;
-}
-
-.HXI_blu .HXI_blu_delta.HXI_blu_neg { color: var(--blu-neg); }
-.HXI_blu .HXI_blu_changed .HXI_blu_statL,
-.HXI_blu li.HXI_blu_changed .HXI_blu_fxLabel { color: var(--blu-blue); }
+.HXI_blu .HXI_blu_fxVal.HXI_blu_neg { color: var(--blu-neg); }
 
 /* ---------- Abilities ---------- */
 
@@ -871,7 +829,6 @@
     .HXI_blu .HXI_gs_lvl select.HXI_dynamiccontent_customDropDown { width: 62px; }
     .HXI_blu .HXI_gs_max { gap: 3px; font-size: 12px; }
     .HXI_blu .HXI_gs_max input { width: 16px; height: 16px; }
-    .HXI_blu .HXI_blu_vitals { flex-direction: column; gap: 0; }
 }
 
 @media (max-width: 340px) {
