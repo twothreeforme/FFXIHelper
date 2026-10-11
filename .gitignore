@@ -2,3 +2,4 @@
 # local smoke-test scratch output
 .retest_*
 .equipsets_test.json
+.claude/
